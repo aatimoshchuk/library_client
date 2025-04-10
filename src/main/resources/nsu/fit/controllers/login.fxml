@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1536.0" styleClass="bodybg" stylesheets="@style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="nsu.fit.controllers.LoginController">
+   <children>
+      <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#47453c" height="541.0" layoutX="458.0" layoutY="161.0" opacity="0.53" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="619.0" />
+      <Text fill="WHITE" layoutX="622.0" layoutY="295.0" strokeType="OUTSIDE" strokeWidth="0.0" text="библиотечный" wrappingWidth="387.6239013671875">
+         <font>
+            <Font name="Hlebozavod Medium" size="64.0" />
+         </font></Text>
+      <Rectangle arcHeight="8.0" arcWidth="8.0" fill="#1f93ff00" height="40.8" layoutX="569.0" layoutY="398.2" stroke="WHITE" strokeType="INSIDE" width="397.8" />
+      <Line endY="29.6" fill="#fffcfc" layoutX="614.6" layoutY="403.8" stroke="WHITE" />
+      <Rectangle arcHeight="8.0" arcWidth="8.0" fill="#1f93ff00" height="40.8" layoutX="569.0" layoutY="457.88" stroke="WHITE" strokeType="INSIDE" width="397.8" />
+      <Line endY="29.6" fill="#fffcfc" layoutX="614.0" layoutY="463.0" stroke="WHITE" />
+      <TextField fx:id="usernameField" layoutX="626.0" layoutY="401.0" prefHeight="26.0" prefWidth="329.0" promptText="имя пользователя" style="-fx-background-color: transparent; -fx-text-fill: white;">
+         <font>
+            <Font name="Advent Pro Regular" size="18.0" />
+         </font></TextField>
+      <ImageView fx:id="userIcon" fitHeight="26.0" fitWidth="26.0" layoutX="580.0" layoutY="407.0" pickOnBounds="true" smooth="false">
+         <image>
+            <Image url="@/img/user_icon.png" />
+         </image>
+      </ImageView>
+      <PasswordField fx:id="passwordField" layoutX="626.0" layoutY="460.0" prefHeight="36.0" prefWidth="330.0" promptText="пароль" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-text-weight: 10px;">
+         <font>
+            <Font name="Advent Pro Regular" size="18.0" />
+         </font></PasswordField>
+      <ImageView fx:id="passwordIcon" fitHeight="26.0" fitWidth="26.0" layoutX="580.0" layoutY="467.0" pickOnBounds="true" smooth="false">
+         <image>
+            <Image url="@/img/password_icon.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="664.0" layoutY="557.32" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleLogin" prefHeight="40.8" prefWidth="207.2" style="-fx-background-color: BFB390;" text="ВОЙТИ В АККАУНТ" textFill="WHITE">
+         <effect>
+            <DropShadow height="2.28" radius="2.4099999999999997" width="9.36">
+               <color>
+                  <Color opacity="0.4529109597206116" />
+               </color>
+            </DropShadow>
+         </effect>
+         <font>
+            <Font name="Hlebozavod Medium" size="19.0" />
+         </font></Button>
+      <ImageView fx:id="logoIcon" fitHeight="100.0" fitWidth="100.0" layoutX="519.0" layoutY="248.0" pickOnBounds="true" smooth="false">
+         <image>
+            <Image url="@/img/logo.png" />
+         </image>
+      </ImageView>
+      <Text fill="WHITE" layoutX="622.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" text="фонд города" wrappingWidth="387.6239013671875">
+         <font>
+            <Font name="Hlebozavod Medium" size="64.0" />
+         </font>
+      </Text>
+      <Label fx:id="errorLabel" layoutX="558.0" layoutY="518.0" prefHeight="23.0" prefWidth="419.0" textAlignment="CENTER" textFill="#6b0101" wrapText="true">
+         <font>
+            <Font name="Advent Pro Regular" size="18.0" />
+         </font></Label>
+   </children>
+</AnchorPane>

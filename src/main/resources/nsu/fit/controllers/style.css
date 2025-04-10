@@ -1,0 +1,36 @@
+.bodybg {
+    -fx-background-image: url('/img/background.jpg');
+    -fx-background-size: 100% 100%;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #A29F92;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: #FFFFFF;
+}
+
+.table-view .table-row-cell {
+    -fx-text-fill: #6C6C6A;
+}
+
+.table-view .table-cell {
+    -fx-alignment: CENTER;
+    -fx-font-family: "Advent Pro";
+    -fx-font-size: 16px;
+}
+
+.table-view .column-header {
+    -fx-background-color: #A29F92;
+    -fx-font-family: "Hlebozavod Medium";
+    -fx-font-size: 18px;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #BCBAAE;
+}
+
+.button:disabled .graphic {
+    -fx-opacity: 1.0;
+}

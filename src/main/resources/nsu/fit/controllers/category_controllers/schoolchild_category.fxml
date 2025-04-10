@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1536.0" styleClass="bodybg" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nsu.fit.controllers.category_controllers.SchoolchildrenController">
+    <children>
+        <Rectangle fill="#47453c" height="864.0" opacity="0.54" stroke="TRANSPARENT" strokeType="INSIDE" width="1536.0" />
+        <Rectangle fill="#d9d9d9" height="864.0" layoutX="293.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1243.0" />
+        <ImageView fx:id="libraryIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="132.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/library.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Библиотеки">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="126.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToLibraries" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="homeIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="24.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/home.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="домашняя страница">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="19.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToHomePage" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="librarianIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="201.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/librarian.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" text="библиотекари">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="195.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToLibrarians" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="readerIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="270.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/reader.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="302.0" strokeType="OUTSIDE" strokeWidth="0.0" text="читатели">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="264.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToReaders" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="categoriesIcon" fitHeight="42.0" fitWidth="35.13" layoutX="26.0" layoutY="342.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/categories.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="371.0" strokeType="OUTSIDE" strokeWidth="0.0" text="категории читателей">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Rectangle fill="#d9d9d9" height="60.0" layoutY="333.0" opacity="0.28" stroke="#ffffff00" strokeType="INSIDE" width="293.0" />
+        <ImageView fx:id="literaryWorksIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="408.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/literary_works.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="440.0" strokeType="OUTSIDE" strokeWidth="0.0" text="произведения">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="402.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToLiteraryWorks" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="publicationsIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="477.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/publications.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="509.0" strokeType="OUTSIDE" strokeWidth="0.0" text="издания">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="471.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToPublications" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="historyIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="546.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/history.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="578.0" strokeType="OUTSIDE" strokeWidth="0.0" text="история выдачи">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="540.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToHistory" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="writtenOffIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="615.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/writtenoff.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="647.0" strokeType="OUTSIDE" strokeWidth="0.0" text="списанные издания">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="609.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToWrittenOffPublications" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="212.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                   minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="510.0" prefWidth="1135.0" stylesheets="@../style.css">
+            <columns>
+            <TableColumn fx:id="idColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" resizable="false" text="ID школьника" />
+            <TableColumn fx:id="libraryCardNumberColumn" maxWidth="246.25" minWidth="246.25" prefWidth="246.25" resizable="false" text="номер читательского билета" />
+                <TableColumn fx:id="educationalInstitutionNameColumn" maxWidth="246.25" minWidth="246.25" prefWidth="246.25" resizable="false" text="название учебного заведения" />
+                <TableColumn fx:id="gradeColumn" maxWidth="246.25" minWidth="246.25" prefWidth="246.25"
+                             resizable="false" text="учебный класс" />
+            <TableColumn fx:id="extensionDateColumn" maxWidth="246.25" minWidth="246.25" prefWidth="246.25" resizable="false" text="срок продления" />
+            </columns>
+        </TableView>
+        <AnchorPane fx:id="actionPanel" visible="false">
+         <Rectangle fill="#bcbaae" height="34.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1133.0" />
+            <Button fx:id="deleteButton" layoutX="1008.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
+            <graphic>
+                <ImageView fx:id="delete_icon" fitHeight="20.0" fitWidth="20.0" layoutX="1100.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                    <image>
+                        <Image url="@/img/delete.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            </Button>
+            <Button fx:id="saveButton" layoutX="1048.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
+            <graphic>
+                <ImageView fx:id="save_icon" fitHeight="20.0" fitWidth="20.0" layoutX="1060.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                    <image>
+                        <Image url="@/img/save.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            </Button>
+         <Button fx:id="addButton" layoutX="1088.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                 minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0"
+                 style="-fx-background-color: transparent;">
+         <graphic>
+             <ImageView fx:id="add_icon" fitHeight="20.0" fitWidth="20.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                 <image>
+                     <Image url="@/img/add.png" />
+                 </image>
+             </ImageView>
+         </graphic>
+         </Button>
+            <Button fx:id="getLibraryCardButton" layoutX="219.125" layoutY="5.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="читательский билет" textFill="WHITE">
+                <font>
+                    <Font name="Hlebozavod Medium" size="11.0" />
+                </font>
+            </Button>
+        </AnchorPane>
+      <Text fill="#6c6c6a" layoutX="308.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="категории читателей" textAlignment="CENTER" wrappingWidth="1135.0">
+         <font>
+            <Font name="Hlebozavod Medium" size="85.0" />
+         </font>
+      </Text>
+      <Text fill="#505050" layoutX="308.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="сведения о школьниках" textAlignment="CENTER" wrappingWidth="1135.0">
+         <font>
+            <Font name="Hlebozavod Medium" size="45.0" />
+         </font>
+      </Text>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a29f92" height="34.0" layoutX="308.0" layoutY="169.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1135.0" />
+      <TextField fx:id="educationalInstitutionNameField" alignment="CENTER" layoutX="704.0" layoutY="173.0" prefHeight="26.0" prefWidth="249.0" promptText="Название учебного заведения" style="-fx-background-color: #B6B3A8; -fx-text-fill: white; -fx-prompt-text-fill: white;">
+         <font>
+            <Font name="Advent Pro Regular" size="13.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="gradeField" alignment="CENTER" layoutX="957.0" layoutY="173.0" prefHeight="26.0"
+                 prefWidth="239.0" promptText="Учебный класс" style="-fx-background-color: #B6B3A8; -fx-text-fill: white; -fx-prompt-text-fill: white;">
+         <font>
+            <Font name="Advent Pro Regular" size="13.0" />
+         </font>
+      </TextField>
+        <Button fx:id="searchButton" layoutX="1400.0" layoutY="169.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                minHeight="-Infinity" minWidth="-Infinity" onAction="#findEntities" prefHeight="34.0" prefWidth="34.0"
+                style="-fx-background-color: transparent;">
+         <graphic>
+                <ImageView fx:id="searchIcon" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                    <image>
+                        <Image url="@/img/search.png" />
+                    </image>
+                </ImageView>
+         </graphic></Button>
+      <Rectangle arcHeight="60.0" arcWidth="60.0" fill="#c1beb2" height="54.0" layoutX="667.0" layoutY="747.0" stroke="TRANSPARENT" strokeType="INSIDE" width="418.0" />
+        <Button fx:id="studentButton" onAction="#switchToStudentCategory" layoutX="703.0" layoutY="752.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: transparent; -fx-opacity: 1;">
+            <graphic>
+                <ImageView fx:id="studentIcon" fitHeight="44.0" fitWidth="44.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                    <image>
+                        <Image url="@/img/student.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="scienceButton" layoutX="779.0" layoutY="752.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#switchToScienceWorkerCategory" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: transparent;">
+            <graphic>
+                <ImageView fx:id="scienceIcon" fitHeight="44.0" fitWidth="44.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                    <image>
+                        <Image url="@/img/science.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="pensionerButton" layoutX="854.0" layoutY="752.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#switchToPensionerCategory" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: transparent;">
+            <graphic>
+                <ImageView fx:id="pensionerIcon" fitHeight="44.0" fitWidth="44.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                    <image>
+                        <Image url="@/img/pensioner.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="lecturerButton" layoutX="935.0" layoutY="752.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#switchToLecturerCategory" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: transparent;">
+            <graphic>
+                <ImageView fx:id="lecturerIcon" fitHeight="44.0" fitWidth="44.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                    <image>
+                        <Image url="@/img/lecturer.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="schoolButton" disable="true" layoutX="1016.0" layoutY="754.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent; -fx-opacity: 1;">
+            <graphic>
+                <ImageView fx:id="schoolIcon" fitHeight="40.0" fitWidth="40.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                    <image>
+                        <Image url="@/img/school_selected.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </children>
+</AnchorPane>
