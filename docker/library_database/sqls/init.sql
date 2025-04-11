@@ -417,13 +417,6 @@ CREATE TRIGGER "HistoryOfIssuePublicationsCheckInsert"
 CREATE FUNCTION HistoryOfIssuePublicationsCheckUpdate()
     RETURNS TRIGGER AS $$
 BEGIN
-    IF INTERVAL '1 day' * (
-        SELECT "DaysForReturn"
-        FROM "Publication"
-        WHERE "NomenclatureNumber" = NEW."PublicationNomenclatureNumber") + NEW."IssueDate" < NEW."ReturnDate"
-    THEN RAISE WARNING 'return date exceeds allowed period';
-    END IF;
-
     UPDATE "Publication" SET "State" = 'В наличии'
     WHERE "NomenclatureNumber" = NEW."PublicationNomenclatureNumber";
     RETURN NEW;
@@ -892,13 +885,12 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION "getReadersWithPublication"(publicationTitle VARCHAR)
-    RETURNS TABLE("PublicationTitle" VARCHAR, "LibraryCardNumber" INT, "Surname" VARCHAR, "Name" VARCHAR, "Patronymic"
-                                     VARCHAR, "IssueDate" DATE) AS $$
+CREATE OR REPLACE FUNCTION "getReadersWithPublication"(publicationNomenclatureNumber INT)
+    RETURNS TABLE("LibraryCardNumber" INT, "Surname" VARCHAR, "Name" VARCHAR, "Patronymic" VARCHAR, "IssueDate" DATE)
+    AS $$
 BEGIN
     RETURN QUERY
         SELECT
-            "Publication"."Title",
             "Reader"."LibraryCardNumber",
             "Reader"."Surname",
             "Reader"."Name",
@@ -907,9 +899,7 @@ BEGIN
         FROM "Reader"
                  JOIN "HistoryOfIssueOfPublications" ON "Reader"."LibraryCardNumber" =
                                                         "HistoryOfIssueOfPublications"."LibraryCardNumber"
-                 JOIN "Publication" ON "HistoryOfIssueOfPublications"."PublicationNomenclatureNumber" =
-                                       "Publication"."NomenclatureNumber"
-        WHERE "Publication"."Title" ILIKE '%' || publicationTitle || '%'
+        WHERE "HistoryOfIssueOfPublications"."PublicationNomenclatureNumber" = publicationNomenclatureNumber
           AND "HistoryOfIssueOfPublications"."ReturnDate" IS NULL;
 END
 $$ LANGUAGE plpgsql;
@@ -1210,6 +1200,26 @@ BEGIN
         WHERE (educationalInstitutionName IS NULL OR "LecturerInformation"."EducationalInstitutionName" =
                                                      educationalInstitutionName)
           AND (jobTitle IS NULL OR "LecturerInformation"."JobTitle" = jobTitle);
+END
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "getNumberOfDaysOverdue"(publicationNomenclatureNumber INT, returnDate DATE) RETURNS INT
+    AS $$
+DECLARE
+    issueDate DATE;
+    daysForReturn INT;
+BEGIN
+    SELECT "IssueDate"
+    INTO issueDate
+    FROM "HistoryOfIssueOfPublications"
+    WHERE "PublicationNomenclatureNumber" = publicationNomenclatureNumber;
+
+    SELECT "DaysForReturn"
+    INTO daysForReturn
+    FROM "Publication"
+    WHERE "NomenclatureNumber" = publicationNomenclatureNumber;
+
+    RETURN EXTRACT(DAY FROM (returnDate - (issueDate + daysForReturn * INTERVAL '1 day')))::INT;
 END
 $$ LANGUAGE plpgsql;
 

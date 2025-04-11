@@ -122,4 +122,10 @@ public class LibrariansController extends AbstractEntityController<Librarian, Li
     protected Librarian createEntity() {
         return new Librarian();
     }
+
+    @Override
+    protected boolean confirmDeletion(Librarian entity) {
+        return notificationService.showConfirmationWindow("Вы действительно хотите удалить " + entity.getSurname() +
+                " " + entity.getName() + " " + entity.getPatronymic() + " из числа библиотекарей?");
+    }
 }

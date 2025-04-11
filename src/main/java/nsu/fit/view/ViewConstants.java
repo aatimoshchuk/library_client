@@ -23,4 +23,6 @@ public class ViewConstants {
             new Image(ViewConstants.class.getResource("/img/school.png").toExternalForm());
     public static final Image hoverSchoolImage =
             new Image(ViewConstants.class.getResource("/img/school_hover.png").toExternalForm());
+
+    public static final double TABLE_VIEW_LAYOUT_X = 308;
 }

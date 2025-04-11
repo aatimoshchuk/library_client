@@ -5,14 +5,17 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import lombok.RequiredArgsConstructor;
 import net.rgielen.fxweaver.core.FxWeaver;
 import nsu.fit.controllers.ResultViewController;
 import nsu.fit.data.access.Reader;
+import nsu.fit.data.access.StorageLocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +23,14 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class NotificationService {
-    @Autowired
-    private FxWeaver fxWeaver;
-    public void showWarning(String message) {
+    public static final String DEFAULT_WARNING_HEADER = "Невозможно выполнить запрос";
+    private final FxWeaver fxWeaver;
+    public void showWarning(String message, String header) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Предупреждение");
-        alert.setHeaderText(null);
+        alert.setHeaderText(header);
         alert.setContentText(message);
         alert.showAndWait();
     }
@@ -37,6 +41,14 @@ public class NotificationService {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public boolean showConfirmationWindow(String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Подтверждение");
+        alert.setHeaderText(null);
+
+        return alert.showAndWait().orElse(ButtonType.CANCEL).equals(ButtonType.YES);
     }
 
     public void showResults(List<Map<String, Object>> result) {
@@ -69,6 +81,30 @@ public class NotificationService {
                 createInfoRow("Имя:", reader.getName()),
                 createInfoRow("Отчество:", reader.getPatronymic()),
                 createInfoRow("Дата рождения:", reader.getBirthDay())
+        );
+
+        Scene scene = new Scene(vbox, 350, 150);
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+
+    public void showStorageLocationInfo(StorageLocation storageLocation) {
+        Stage stage = new Stage();
+        Parent root = fxWeaver.loadView(ResultViewController.class);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Место хранения");
+        stage.setResizable(false);
+
+        VBox vbox = new VBox(5);
+        vbox.setPadding(new Insets(15));
+        vbox.setAlignment(Pos.CENTER_LEFT);
+
+        vbox.getChildren().addAll(
+                createInfoRow("ID места хранения:", String.valueOf(storageLocation.getId())),
+                createInfoRow("ID библиотеки:", String.valueOf(storageLocation.getLibraryID())),
+                createInfoRow("Номер зала:", String.valueOf(storageLocation.getRoomNumber())),
+                createInfoRow("Номер стеллажа:", String.valueOf(storageLocation.getShelvingNumber())),
+                createInfoRow("Номер полки:", String.valueOf(storageLocation.getShelfNumber()))
         );
 
         Scene scene = new Scene(vbox, 350, 150);

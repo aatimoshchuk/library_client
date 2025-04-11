@@ -8,6 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
+import nsu.fit.data.access.Reader;
 import nsu.fit.data.access.category.Schoolchild;
 import nsu.fit.repository.ReaderRepository;
 import nsu.fit.repository.category_repository.SchoolchildRepository;
@@ -67,5 +68,13 @@ public class SchoolchildrenController extends AbstractCategoryController<Schoolc
     @Override
     protected Schoolchild createEntity() {
         return new Schoolchild();
+    }
+
+    @Override
+    protected boolean confirmDeletion(Schoolchild entity) {
+        Reader reader = readerRepository.findOne(entity.getLibraryCardNumber());
+
+        return notificationService.showConfirmationWindow("Вы действительно хотите удалить " + reader.getSurname() +
+                " " + reader.getName() + " " + reader.getPatronymic() + " из числа школьников?");
     }
 }

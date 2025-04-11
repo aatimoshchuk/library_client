@@ -6,6 +6,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
+import nsu.fit.data.access.Librarian;
 import nsu.fit.data.access.Library;
 import nsu.fit.repository.LibrarianRepository;
 import nsu.fit.repository.LibraryRepository;
@@ -118,5 +119,11 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
     @Override
     protected Library createEntity() {
         return new Library();
+    }
+
+    @Override
+    protected boolean confirmDeletion(Library entity) {
+        return notificationService.showConfirmationWindow("Вы действительно хотите удалить " + entity.getName() +
+                " из списка библиотек?");
     }
 }

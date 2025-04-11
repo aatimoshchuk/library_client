@@ -160,4 +160,10 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
     protected LiteraryWork createEntity() {
         return new LiteraryWork();
     }
+
+    @Override
+    protected boolean confirmDeletion(LiteraryWork entity) {
+        return notificationService.showConfirmationWindow("Вы действительно хотите удалить \"" + entity.getTitle() +
+                "\" из числа произведений?");
+    }
 }

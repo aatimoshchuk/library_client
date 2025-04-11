@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1536.0" styleClass="bodybg" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nsu.fit.controllers.PublicationsController">
+    <children>
+        <Rectangle fill="#47453c" height="864.0" opacity="0.54" stroke="TRANSPARENT" strokeType="INSIDE" width="1536.0" />
+        <Rectangle fill="#d9d9d9" height="864.0" layoutX="293.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1243.0" />
+        <ImageView fx:id="libraryIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="132.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/library.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Библиотеки">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="126.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToLibraries" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="homeIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="24.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/home.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="домашняя страница">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="19.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToHomePage" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="librarianIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="201.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/librarian.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" text="библиотекари">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="195.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToLibrarians" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="readerIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="270.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/reader.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="302.0" strokeType="OUTSIDE" strokeWidth="0.0" text="читатели">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutX="-2.0" layoutY="264.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToReaders" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="categoriesIcon" fitHeight="42.0" fitWidth="35.13" layoutX="26.0" layoutY="342.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/categories.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="371.0" strokeType="OUTSIDE" strokeWidth="0.0" text="категории читателей">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="333.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToCategories" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="literaryWorksIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="408.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/literary_works.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="440.0" strokeType="OUTSIDE" strokeWidth="0.0" text="произведения">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="402.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToLiteraryWorks" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="publicationsIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="477.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/publications.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="509.0" strokeType="OUTSIDE" strokeWidth="0.0" text="издания">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Rectangle fill="#d9d9d9" height="60.0" layoutY="471.0" opacity="0.28" stroke="#ffffff00" strokeType="INSIDE" width="293.0" />
+        <ImageView fx:id="historyIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="546.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/history.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="578.0" strokeType="OUTSIDE" strokeWidth="0.0" text="история выдачи">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="540.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToHistory" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <ImageView fx:id="writtenOffIcon" fitHeight="48.0" fitWidth="48.0" layoutX="20.0" layoutY="615.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@/img/writtenoff.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="647.0" strokeType="OUTSIDE" strokeWidth="0.0" text="списанные издания">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="609.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToWrittenOffPublications" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="137.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="562.0" prefWidth="1135.0" stylesheets="@style.css">
+            <columns>
+            <TableColumn fx:id="nomenclatureNumberColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" resizable="false" text="номер" />
+            <TableColumn fx:id="titleColumn" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" resizable="false" text="Название" />
+            <TableColumn fx:id="publisherColumn" maxWidth="180.0" minWidth="180.0" prefWidth="180.0" resizable="false" text="издательство" />
+            <TableColumn fx:id="receiptDateColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" resizable="false" text="дата поступления" />
+            <TableColumn fx:id="yearOfPrintingColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" resizable="false" text="год печати" />
+            <TableColumn fx:id="categoryColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" resizable="false" text="категория" />
+            <TableColumn fx:id="ageRestrictionColumn" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" resizable="false" text="возрастное ограничение" />
+            <TableColumn fx:id="storageLocationIdColumn" maxWidth="155.0" minWidth="155.0" prefWidth="155.0" resizable="false" text="ID места хранения" />
+            <TableColumn fx:id="stateColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" resizable="false" text="состояние" />
+            <TableColumn fx:id="permissionToIssueColumn" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" resizable="false" text="разрешение на выдачу" />
+            <TableColumn fx:id="daysForReturnColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" resizable="false" text="срок возврата" />
+            </columns>
+        </TableView>
+        <AnchorPane fx:id="actionPanel" visible="false">
+         <Rectangle fill="#bcbaae" height="34.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1123.0" />
+            <Button fx:id="deleteButton" layoutX="928.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
+            <graphic>
+                <ImageView fx:id="delete_icon" fitHeight="20.0" fitWidth="20.0" layoutX="1100.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                    <image>
+                        <Image url="@/img/delete.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            </Button>
+            <Button fx:id="saveButton" layoutX="968.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
+            <graphic>
+                <ImageView fx:id="save_icon" fitHeight="20.0" fitWidth="20.0" layoutX="1060.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                    <image>
+                        <Image url="@/img/save.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            </Button>
+         <Button fx:id="addButton" layoutX="1008.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
+         <graphic>
+             <ImageView fx:id="add_icon" fitHeight="20.0" fitWidth="20.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                 <image>
+                     <Image url="@/img/add.png" />
+                 </image>
+             </ImageView>
+         </graphic>
+         </Button>
+         <Button fx:id="getReadersWithPublicationButton" layoutX="29.0" layoutY="4.0" maxHeight="-Infinity"
+                 minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="читатели, на руках у которых находится данное издание" textFill="WHITE">
+            <font>
+               <Font name="Hlebozavod Medium" size="11.0" />
+            </font>
+         </Button>
+         <Button fx:id="getStorageLocationInfoButton" layoutX="323.0" layoutY="4.0" maxHeight="-Infinity"
+                 minHeight="-Infinity"
+                 mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="место хранения" textFill="WHITE">
+            <font>
+               <Font name="Hlebozavod Medium" size="11.0" />
+            </font>
+         </Button>
+         <Button fx:id="getAllowedCategoriesButton" layoutX="425.0" layoutY="4.0" maxHeight="-Infinity"
+                 minHeight="-Infinity"
+                 mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="категории, которым разрешена выдача" textFill="WHITE">
+            <font>
+               <Font name="Hlebozavod Medium" size="11.0" />
+            </font>
+         </Button>
+         <Button fx:id="markPublicationAsReturnedButton" layoutX="1048.0" layoutY="7.0" maxHeight="-Infinity"
+                 maxWidth="-Infinity"
+                 minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
+            <graphic>
+               <ImageView fx:id="returnIcon" fitHeight="20.0" fitWidth="20.0" layoutX="1020.0" layoutY="5.0"
+                          pickOnBounds="true" smooth="false">
+                  <image>
+                     <Image url="@/img/return_publication.png" />
+                  </image>
+               </ImageView>
+            </graphic>
+             <tooltip>
+                 <Tooltip text="Пометить издание как возвращенное"/>
+             </tooltip>
+         </Button>
+         <Button fx:id="markPublicationAsWrittenOffButton" layoutX="1088.0" layoutY="7.0" maxHeight="-Infinity"
+                 maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
+            <graphic>
+               <ImageView fx:id="writeOffIcon" fitHeight="20.0" fitWidth="20.0" layoutX="1020.0" layoutY="5.0"
+                          pickOnBounds="true" smooth="false">
+                  <image>
+                     <Image url="@/img/write_off_publication.png" />
+                  </image>
+               </ImageView>
+            </graphic>
+             <tooltip>
+                 <Tooltip text="Пометить издание как списанное"/>
+             </tooltip>
+         </Button>
+        </AnchorPane>
+      <Text fill="#6c6c6a" layoutX="308.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="издания" textAlignment="CENTER" wrappingWidth="1135.0">
+         <font>
+            <Font name="Hlebozavod Medium" size="85.0" />
+         </font>
+      </Text>
+      <Button layoutX="308.0" layoutY="728.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="496.0" style="-fx-background-color: #A29F92;" text="список самых популярных произведений" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Hlebozavod Medium" size="23.0" />
+         </font>
+         <effect>
+            <Glow />
+         </effect>
+      </Button>
+      <Button layoutX="812.0" layoutY="728.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="630.0" style="-fx-background-color: #A29F92;" text="издания, содержащие произведения указанного автора" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Hlebozavod Medium" size="23.0" />
+         </font>
+         <effect>
+            <Glow />
+         </effect>
+      </Button>
+      <TextField fx:id="authorNameField" layoutX="956.0" layoutY="795.0" prefHeight="23.0" prefWidth="382.0">
+         <font>
+            <Font name="Advent Pro Regular" size="12.0" />
+         </font>
+      </TextField>
+      <Label layoutX="901.0" layoutY="795.0" text="Автор:" textFill="WHITE">
+         <font>
+            <Font name="Hlebozavod Medium" size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="415.0" layoutY="793.0" text="максимальное кол-во:" textFill="WHITE">
+         <font>
+            <Font name="Hlebozavod Medium" size="19.0" />
+         </font>
+      </Label>
+      <TextField fx:id="maxCountField" layoutX="606.0" layoutY="793.0" prefHeight="23.0" prefWidth="60.0">
+         <font>
+            <Font name="Advent Pro Regular" size="12.0" />
+         </font>
+      </TextField>
+    </children>
+</AnchorPane>

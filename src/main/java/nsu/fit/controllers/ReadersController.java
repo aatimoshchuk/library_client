@@ -90,6 +90,12 @@ public class ReadersController extends AbstractEntityController<Reader, ReaderRe
         return new Reader();
     }
 
+    @Override
+    protected boolean confirmDeletion(Reader entity) {
+        return notificationService.showConfirmationWindow("Вы действительно хотите удалить " + entity.getSurname() +
+                " " + entity.getName() + " " + entity.getPatronymic() + " из числа читателей?");
+    }
+
     public void getPublicationsThatIssuedFromLibraryWhereReaderIsNotRegistered(Reader reader) {
         List<Map<String, Object>> result =
                 publicationRepository.getPublicationsThatIssuedFromLibraryWhereReaderIsNotRegistered(reader);

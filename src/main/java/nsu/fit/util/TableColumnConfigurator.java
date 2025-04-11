@@ -1,8 +1,12 @@
 package nsu.fit.util;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -84,6 +88,50 @@ public class TableColumnConfigurator {
                 logger.error("Method with name " + getSetterName(propertyName) + " doesn't exist");
             }
         });
+    }
+
+    public <S> void configureCheckBoxColumn(TableColumn<S, Boolean> column,
+                                            String propertyName,
+                                            Class<S> rowClass) {
+        column.setCellValueFactory(cellData -> {
+            try {
+                S row = cellData.getValue();
+                Method getter = row.getClass().getMethod("is" + Character.toUpperCase(propertyName.charAt(0)) +
+                        propertyName.substring(1));
+                Object value = getter.invoke(row);
+                if (value instanceof ObservableValue) {
+                    return (ObservableValue<Boolean>) value;
+                } else if (value instanceof Boolean) {
+                    return new SimpleBooleanProperty((Boolean) value);
+                } else {
+                    return new SimpleBooleanProperty(false);
+                }
+            } catch (Exception e) {
+                logger.error("Method with name " + getGetterName(propertyName) + " doesn't exist");
+                return new SimpleBooleanProperty(false);
+            }
+        });
+
+        column.setCellFactory(tc -> new CheckBoxTableCell<>(index -> {
+            S row = column.getTableView().getItems().get(index);
+            try {
+                Method getter = row.getClass().getMethod("is" + Character.toUpperCase(propertyName.charAt(0)) +
+                        propertyName.substring(1));
+                Object value = getter.invoke(row);
+
+                if (value instanceof BooleanProperty) {
+                    return (BooleanProperty) value;
+                } else if (value instanceof Boolean) {
+                    return new SimpleBooleanProperty((Boolean) value);
+                }
+            } catch (Exception e) {
+                logger.error("Failed to access property: " + propertyName, e);
+            }
+
+            return new SimpleBooleanProperty(false);
+        }));
+
+        column.setEditable(true);
     }
     public <S> void configureNotEditableTextColumn(TableColumn<S, String> column,
                                                    String propertyName) {

@@ -3,6 +3,7 @@ package nsu.fit.repository;
 import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.Librarian;
 import nsu.fit.data.access.LiteraryWork;
+import nsu.fit.data.access.Publication;
 import nsu.fit.data.access.Reader;
 import nsu.fit.view.ColumnTranslation;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -123,5 +124,11 @@ public class ReaderRepository extends AbstractEntityRepository<Reader> {
                 "SELECT * FROM \"getReadersWhoReceivedLiteraryWorkDuringThePeriod\"(?, TO_DATE(?, 'YYYY-MM-DD'), " +
                         "TO_DATE(?, 'YYYY-MM-DD'))",
                 literaryWork.getId(), startDate, endDate));
+    }
+
+    public List<Map<String, Object>> getReadersWithPublication(Publication publication) {
+        return ColumnTranslation.formatColumnNames(jdbcTemplate.queryForList(
+                "SELECT * FROM \"getReadersWithPublication\"(?)",
+                publication.getId()));
     }
 }

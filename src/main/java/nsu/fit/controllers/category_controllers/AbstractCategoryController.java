@@ -23,7 +23,7 @@ import java.util.List;
 public abstract class AbstractCategoryController<T extends AbstractCategoryEntity,
         U extends AbstractEntityRepository<T>> extends AbstractEntityController<T, U> {
 
-    private final ReaderRepository readerRepository;
+    public final ReaderRepository readerRepository;
 
     @FXML
     protected Button getLibraryCardButton;

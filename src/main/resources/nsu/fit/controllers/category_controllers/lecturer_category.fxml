@@ -109,8 +109,7 @@
             </font>
         </Text>
         <Button layoutY="609.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToWrittenOffPublications" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
-        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="212.0" maxHeight="-Infinity" maxWidth="-Infinity"
-                   minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="510.0" prefWidth="1135.0" stylesheets="@../style.css">
+        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="212.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="510.0" prefWidth="1135.0" stylesheets="@../style.css">
             <columns>
             <TableColumn fx:id="idColumn" maxWidth="283.75" minWidth="283.75" prefWidth="283.75" resizable="false" text="ID Преподавателя" />
             <TableColumn fx:id="libraryCardNumberColumn" maxWidth="283.75" minWidth="283.75" prefWidth="283.75" resizable="false" text="номер читательского билета" />
@@ -138,8 +137,7 @@
                 </ImageView>
             </graphic>
             </Button>
-         <Button fx:id="addButton" layoutX="1088.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity"
-                 minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
+         <Button fx:id="addButton" layoutX="1088.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
          <graphic>
              <ImageView fx:id="add_icon" fitHeight="20.0" fitWidth="20.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
                  <image>
@@ -175,8 +173,7 @@
             <Font name="Advent Pro Regular" size="13.0" />
          </font>
       </TextField>
-        <Button fx:id="searchButton" layoutX="1400.0" layoutY="169.0" maxHeight="-Infinity" maxWidth="-Infinity"
-                minHeight="-Infinity" minWidth="-Infinity" onAction="#findEntities" prefHeight="34.0" prefWidth="34.0" style="-fx-background-color: transparent;">
+        <Button fx:id="searchButton" layoutX="1400.0" layoutY="169.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#findEntities" prefHeight="34.0" prefWidth="34.0" style="-fx-background-color: transparent;">
          <graphic>
                 <ImageView fx:id="searchIcon" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                     <image>

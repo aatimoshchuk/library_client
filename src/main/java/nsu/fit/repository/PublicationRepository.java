@@ -1,10 +1,13 @@
 package nsu.fit.repository;
 
+import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.Library;
 import nsu.fit.data.access.LiteraryWork;
+import nsu.fit.data.access.Publication;
 import nsu.fit.data.access.Reader;
 import nsu.fit.view.ColumnTranslation;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -12,9 +15,101 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class PublicationRepository {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+@RequiredArgsConstructor
+public class PublicationRepository extends AbstractEntityRepository<Publication> {
+    private static final Logger logger = LoggerFactory.getLogger(PublicationRepository.class);
+    private final JdbcTemplate jdbcTemplate;
+
+    @Override
+    public List<Publication> findAll() {
+        return jdbcTemplate.query(
+                "SELECT * FROM \"Publication\"",
+                (rs, rowNum) -> new Publication(
+                        rs.getInt("NomenclatureNumber"),
+                        rs.getString("Title"),
+                        rs.getString("Publisher"),
+                        rs.getDate("ReceiptDate").toString(),
+                        rs.getInt("YearOfPrinting"),
+                        rs.getString("Category"),
+                        rs.getInt("AgeRestriction"),
+                        rs.getInt("StorageLocationID"),
+                        rs.getString("State"),
+                        rs.getBoolean("PermissionToIssue"),
+                        rs.getInt("DaysForReturn"))
+        );
+    }
+
+    @Override
+    public String saveEntity(Publication entity) {
+        if (!entity.checkEmptyFields()) {
+            return "Невозможно сохранить: поля \"Название\", \"Издательство\", \"Дата поступления\", " +
+                    "\"ID места хранения\", \"Состояние\", \"Разрешение на выдачу\" и \"Срок возврата\" не должны " +
+                    "быть пустыми!";
+        }
+
+        try {
+            if (entity.getId() != 0) {
+                jdbcTemplate.update(
+                        "UPDATE \"Publication\" SET \"Title\" = ?, \"Publisher\" = ?, \"ReceiptDate\" = " +
+                                "TO_DATE(?, 'YYYY-MM-DD'), \"YearOfPrinting\" = ?, \"Category\" = ?, " +
+                                "\"AgeRestriction\" = ?, \"StorageLocationID\" = ?, \"State\" = ?, " +
+                                "\"PermissionToIssue\" = ?, \"DaysForReturn\" = ? WHERE \"NomenclatureNumber\" = ?",
+                        entity.getTitle(),
+                        entity.getPublisher(),
+                        entity.getReceiptDate(),
+                        entity.getYearOfPrinting(),
+                        entity.getCategory(),
+                        entity.getAgeRestriction(),
+                        entity.getStorageLocationID(),
+                        entity.getState(),
+                        entity.isPermissionToIssue(),
+                        entity.getDaysForReturn(),
+                        entity.getId());
+            } else {
+                jdbcTemplate.update(
+                        "INSERT INTO \"Publication\" (\"Title\", \"Publisher\", \"ReceiptDate\", \"YearOfPrinting\", " +
+                                "\"Category\", \"AgeRestriction\", \"StorageLocationID\", \"State\", \"PermissionToIssue\", " +
+                                "\"DaysForReturn\") VALUES (?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?, ?, ?, ?)",
+                        entity.getTitle(),
+                        entity.getPublisher(),
+                        entity.getReceiptDate(),
+                        entity.getYearOfPrinting(),
+                        entity.getCategory(),
+                        entity.getAgeRestriction(),
+                        entity.getStorageLocationID(),
+                        entity.getState(),
+                        entity.isPermissionToIssue(),
+                        entity.getDaysForReturn()
+                );
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return e.getMessage();
+        }
+
+        return null;
+    }
+
+    @Override
+    public void deleteEntity(Publication entity) {
+        jdbcTemplate.update(
+                "DELETE FROM \"Publication\" WHERE \"NomenclatureNumber\" = ?",
+                entity.getId());
+    }
+
+    public List<String> loadPublicationCategories() {
+        return jdbcTemplate.query(
+                "SELECT unnest(enum_range(NULL::\"PublicationCategory\")) AS category",
+                (rs, rowNum) -> rs.getString("category")
+        );
+    }
+
+    public List<String> loadStates() {
+        return jdbcTemplate.query(
+                "SELECT unnest(enum_range(NULL::\"PublicationState\")) AS state",
+                (rs, rowNum) -> rs.getString("state")
+        );
+    }
 
     public List<Map<String, Object>> getPublicationsThatIssuedFromTheStorageLocation(Library library, int roomNumber,
                                                                                      int shelvingNumber,

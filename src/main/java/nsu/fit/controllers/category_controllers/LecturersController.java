@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
+import nsu.fit.data.access.Reader;
 import nsu.fit.data.access.category.Lecturer;
 import nsu.fit.repository.category_repository.LecturerRepository;
 import nsu.fit.repository.ReaderRepository;
@@ -64,5 +65,13 @@ public class LecturersController extends AbstractCategoryController<Lecturer, Le
     @Override
     protected Lecturer createEntity() {
         return new Lecturer();
+    }
+
+    @Override
+    protected boolean confirmDeletion(Lecturer entity) {
+        Reader reader = readerRepository.findOne(entity.getLibraryCardNumber());
+
+        return notificationService.showConfirmationWindow("Вы действительно хотите удалить " + reader.getSurname() +
+                " " + reader.getName() + " " + reader.getPatronymic() + " из числа преподавателей?");
     }
 }

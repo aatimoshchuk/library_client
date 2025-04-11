@@ -23,6 +23,7 @@ import nsu.fit.repository.AbstractEntityRepository;
 import nsu.fit.service.UserService;
 import nsu.fit.util.TableColumnConfigurator;
 import nsu.fit.view.NotificationService;
+import nsu.fit.view.ViewConstants;
 
 import java.util.List;
 
@@ -53,6 +54,7 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
     public abstract void initialize();
     protected abstract void applyUserPermissions();
     protected abstract T createEntity();
+    protected abstract boolean confirmDeletion(T entity);
 
     public void initializeBase() {
         entitiesTable.setRowFactory(tableView -> {
@@ -79,7 +81,7 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
             Bounds panelBounds = actionPanel.getParent().sceneToLocal(row.localToScene(row.getBoundsInLocal()));
 
             actionPanel.setLayoutY(panelBounds.getMaxY());
-            actionPanel.setLayoutX(panelBounds.getMinX());
+            actionPanel.setLayoutX(ViewConstants.TABLE_VIEW_LAYOUT_X);
             actionPanel.setVisible(true);
 
             saveButton.setOnAction(e -> saveEntity(selectedEntity));
@@ -93,7 +95,7 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
         String error = entityRepository.saveEntity(entity);
 
         if (error != null) {
-            notificationService.showWarning(error);
+            notificationService.showWarning(null, error);
             return;
         }
 
@@ -102,9 +104,11 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
     }
 
     public void deleteEntity(T entity) {
-        entityRepository.deleteEntity(entity);
-        loadData();
-        actionPanel.setVisible(false);
+        if (confirmDeletion(entity)) {
+            entityRepository.deleteEntity(entity);
+            loadData();
+            actionPanel.setVisible(false);
+        }
     }
 
     public void addEntity(ActionEvent actionEvent) {
@@ -151,7 +155,7 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
 
     public void switchToPublications(ActionEvent actionEvent) {
         Stage stage = (Stage) entitiesTable.getScene().getWindow();
-        Parent root = fxWeaver.loadView(MainController.class);
+        Parent root = fxWeaver.loadView(PublicationsController.class);
         stage.setScene(new Scene(root));
     }
 
@@ -178,12 +182,14 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
 
     protected boolean validateDate(String date) {
         if (date.isEmpty()) {
-            notificationService.showWarning("Невозможно выполнить запрос: поля не должны быть пустыми!");
+            notificationService.showWarning("Поля не должны быть пустыми!",
+                    NotificationService.DEFAULT_WARNING_HEADER);
             return false;
         }
 
         if (!date.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-            notificationService.showWarning("Невозможно выполнить запрос: даты должны быть в виде \"YYYY-MM-DD\"");
+            notificationService.showWarning("Даты должны быть в виде \"YYYY-MM-DD\"",
+                    NotificationService.DEFAULT_WARNING_HEADER);
             return false;
         }
 
@@ -193,13 +199,13 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
     protected boolean validateNumber(String stringNumber) {
         try {
             if (Integer.parseInt(stringNumber) <= 0) {
-                notificationService.showWarning("Невозможно выполнить запрос: значение поля должно представлять " +
-                        "собой положительное число.");
+                notificationService.showWarning("Значение поля должно представлять собой положительное число.",
+                        NotificationService.DEFAULT_WARNING_HEADER);
                 return false;
             }
         } catch (NumberFormatException e) {
-            notificationService.showWarning("Невозможно выполнить запрос: значение поля должно представлять " +
-                    "собой положительное число.");
+            notificationService.showWarning("Значение поля должно представлять собой положительное число.",
+                    NotificationService.DEFAULT_WARNING_HEADER);
             return false;
         }
 
