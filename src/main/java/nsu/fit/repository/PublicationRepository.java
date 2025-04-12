@@ -137,4 +137,20 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
                 "SELECT * FROM \"getPublicationsWithLiteraryWork\"(?)",
                 literaryWork.getId()));
     }
+
+    public List<Map<String, Object>> getPublicationsThatWereReceiptDuringThePeriod(String startDate, String endDate) {
+        return ColumnTranslation.formatColumnNames(jdbcTemplate.queryForList(
+                "SELECT \"PublicationNomenclatureNumber\", \"Title\", \"ReceiptDate\" FROM " +
+                        "\"getPublicationsThatWereReceiptOrWrittenOffDuringThePeriod\"(TO_DATE(?, 'YYYY-MM-DD')" +
+                        ", TO_DATE(?, 'YYYY-MM-DD')) WHERE \"ReceiptDate\" IS NOT NULL",
+                startDate, endDate));
+    }
+
+    public List<Map<String, Object>> getPublicationsThatWereWrittenOffDuringThePeriod(String startDate, String endDate) {
+        return ColumnTranslation.formatColumnNames(jdbcTemplate.queryForList(
+                "SELECT \"PublicationNomenclatureNumber\", \"Title\", \"WriteOffDate\" FROM " +
+                        "\"getPublicationsThatWereReceiptOrWrittenOffDuringThePeriod\"(TO_DATE(?, 'YYYY-MM-DD'), " +
+                        "TO_DATE(?, 'YYYY-MM-DD')) WHERE \"WriteOffDate\" IS NOT NULL",
+                startDate, endDate));
+    }
 }

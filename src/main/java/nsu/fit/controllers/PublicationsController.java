@@ -1,12 +1,13 @@
 package nsu.fit.controllers;
 
-import javafx.beans.property.BooleanProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxControllerAndView;
@@ -71,6 +72,11 @@ public class PublicationsController extends AbstractEntityController<Publication
     private Button getStorageLocationInfoButton;
     @FXML
     private Button getAllowedCategoriesButton;
+
+    @FXML
+    private TextField startDateField;
+    @FXML
+    private TextField endDateField;
 
     public PublicationsController(FxWeaver fxWeaver, PublicationRepository entityRepository, UserService userService, NotificationService notificationService, TableColumnConfigurator tableColumnConfigurator, HistoryEntryRepository historyEntryRepository, WrittenOffPublicationRepository writtenOffPublicationRepository, ReaderRepository readerRepository, StorageLocationRepository storageLocationRepository, ObjectToMapConverter objectToMapConverter) {
         super(fxWeaver, entityRepository, userService, notificationService, tableColumnConfigurator);
@@ -146,6 +152,38 @@ public class PublicationsController extends AbstractEntityController<Publication
         stage.setTitle("Разрешенные категории для издания");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
+    }
+
+    public void getPublicationsThatWereReceiptDuringThePeriod(ActionEvent actionEvent) {
+        if (!validateDate(startDateField.getText()) || !validateDate(endDateField.getText())) {
+            return;
+        }
+
+        List<Map<String, Object>> result = entityRepository.getPublicationsThatWereReceiptDuringThePeriod(
+                startDateField.getText(),
+                endDateField.getText());
+
+        if (result.isEmpty()) {
+            notificationService.showNotification("Список изданий пуст.");
+        } else {
+            notificationService.showResultsInTableView(result);
+        }
+    }
+
+    public void getPublicationsThatWereWrittenOffDuringThePeriod(ActionEvent actionEvent) {
+        if (!validateDate(startDateField.getText()) || !validateDate(endDateField.getText())) {
+            return;
+        }
+
+        List<Map<String, Object>> result = entityRepository.getPublicationsThatWereWrittenOffDuringThePeriod(
+                startDateField.getText(),
+                endDateField.getText());
+
+        if (result.isEmpty()) {
+            notificationService.showNotification("Список изданий пуст.");
+        } else {
+            notificationService.showResultsInTableView(result);
+        }
     }
 
     @Override

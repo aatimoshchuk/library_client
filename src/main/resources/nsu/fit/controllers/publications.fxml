@@ -110,7 +110,7 @@
             </font>
         </Text>
         <Button layoutY="609.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToWrittenOffPublications" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
-        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="137.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="562.0" prefWidth="1135.0" stylesheets="@style.css">
+        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="137.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="597.0" prefWidth="1135.0" stylesheets="@style.css">
             <columns>
             <TableColumn fx:id="nomenclatureNumberColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" resizable="false" text="номер" />
             <TableColumn fx:id="titleColumn" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" resizable="false" text="Название" />
@@ -199,7 +199,9 @@
             <Font name="Hlebozavod Medium" size="85.0" />
          </font>
       </Text>
-      <Button layoutX="308.0" layoutY="728.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="496.0" style="-fx-background-color: #A29F92;" text="список самых популярных произведений" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+      <Button onAction="#getPublicationsThatWereReceiptDuringThePeriod" layoutX="336.0" layoutY="781.0"
+              mnemonicParsing="false" prefHeight="48.0" prefWidth="532.0"
+              style="-fx-background-color: #A29F92;" text="издания, которые поступили в течение периода" textAlignment="CENTER" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Hlebozavod Medium" size="23.0" />
          </font>
@@ -207,7 +209,8 @@
             <Glow />
          </effect>
       </Button>
-      <Button layoutX="812.0" layoutY="728.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="630.0" style="-fx-background-color: #A29F92;" text="издания, содержащие произведения указанного автора" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+      <Button onAction="#getPublicationsThatWereWrittenOffDuringThePeriod" layoutX="886.0" layoutY="781.0"
+              mnemonicParsing="false" prefHeight="48.0" prefWidth="532.0" style="-fx-background-color: #A29F92;" text="издания, которые были списаны в течение периода" textAlignment="CENTER" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Hlebozavod Medium" size="23.0" />
          </font>
@@ -215,22 +218,22 @@
             <Glow />
          </effect>
       </Button>
-      <TextField fx:id="authorNameField" layoutX="956.0" layoutY="795.0" prefHeight="23.0" prefWidth="382.0">
+      <Label layoutX="660.0" layoutY="749.0" text="период:" textFill="WHITE">
+         <font>
+            <Font name="Hlebozavod Medium" size="19.0" />
+         </font>
+      </Label>
+      <TextField fx:id="startDateField" layoutX="730.0" layoutY="749.0" prefHeight="23.0" prefWidth="135.0">
          <font>
             <Font name="Advent Pro Regular" size="12.0" />
          </font>
       </TextField>
-      <Label layoutX="901.0" layoutY="795.0" text="Автор:" textFill="WHITE">
+      <Label layoutX="871.0" layoutY="749.0" text="-" textFill="WHITE">
          <font>
             <Font name="Hlebozavod Medium" size="19.0" />
          </font>
       </Label>
-      <Label layoutX="415.0" layoutY="793.0" text="максимальное кол-во:" textFill="WHITE">
-         <font>
-            <Font name="Hlebozavod Medium" size="19.0" />
-         </font>
-      </Label>
-      <TextField fx:id="maxCountField" layoutX="606.0" layoutY="793.0" prefHeight="23.0" prefWidth="60.0">
+      <TextField fx:id="endDateField" layoutX="886.0" layoutY="749.0" prefHeight="23.0" prefWidth="135.0">
          <font>
             <Font name="Advent Pro Regular" size="12.0" />
          </font>

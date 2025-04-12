@@ -16,7 +16,9 @@ public enum ColumnTranslation {
     READERS_BORROW_COUNT("ReadersBorrowCount", "Кол-во читателей, бравших произведение"),
     ISSUE_DATE("IssueDate", "Дата выдачи"),
     LITERARY_WORK_TITLE("LiteraryWorkTitle", "Название произведения"),
-    PUBLICATION_TITLE("PublicationTitle", "Название издания");
+    PUBLICATION_TITLE("PublicationTitle", "Название издания"),
+    RECEIPT_DATE("ReceiptDate", "Дата поступления"),
+    WRITE_OFF_DATE("WriteOffDate", "Дата списания");
 
     private static final Map<String, String> MAP = new HashMap<>();
 
