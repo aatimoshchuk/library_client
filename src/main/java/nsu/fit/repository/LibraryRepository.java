@@ -2,6 +2,9 @@ package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.Library;
+import nsu.fit.utils.Warning;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +13,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class LibraryRepository extends AbstractEntityRepository<Library> {
+    private static final Logger logger = LoggerFactory.getLogger(LibraryRepository.class);
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -24,9 +28,9 @@ public class LibraryRepository extends AbstractEntityRepository<Library> {
     }
 
     @Override
-    public String saveEntity(Library entity) {
+    public Warning saveEntity(Library entity) {
         if (!entity.checkEmptyFields()) {
-            return "Невозможно сохранить: поля не должны быть пустыми!";
+            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля не должны быть пустыми!");
         }
 
         try {
@@ -44,7 +48,8 @@ public class LibraryRepository extends AbstractEntityRepository<Library> {
                 );
             }
         } catch (Exception e) {
-            return e.getMessage();
+            logger.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(IMPOSSIBLE_TO_SAVE, null);
         }
 
         return null;

@@ -3,6 +3,9 @@ package nsu.fit.repository.category_repository;
 import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.category.Schoolchild;
 import nsu.fit.repository.AbstractEntityRepository;
+import nsu.fit.utils.Warning;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,6 +17,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class SchoolchildRepository extends AbstractEntityRepository<Schoolchild> {
+    private static final Logger logger = LoggerFactory.getLogger(SchoolchildRepository.class);
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -30,9 +34,9 @@ public class SchoolchildRepository extends AbstractEntityRepository<Schoolchild>
     }
 
     @Override
-    public String saveEntity(Schoolchild entity) {
+    public Warning saveEntity(Schoolchild entity) {
         if (!entity.checkEmptyFields()) {
-            return "Невозможно сохранить: поля не должны быть пустыми!";
+            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля не должны быть пустыми!");
         }
 
         try {
@@ -57,12 +61,13 @@ public class SchoolchildRepository extends AbstractEntityRepository<Schoolchild>
                 );
             }
         } catch (DataIntegrityViolationException e) {
-            return "Невозможно сохранить: номер учебного класса должен быть от 1 до 11!";
+            return new Warning(IMPOSSIBLE_TO_SAVE, "Номер учебного класса должен быть от 1 до 11!");
         } catch (DataAccessException e) {
             if (e.getCause() instanceof SQLException sqlEx && "P0001".equals(sqlEx.getSQLState())) {
-                return "Невозможно сохранить: этот читатель уже принадлежит к одной из категорий!";
+                return new Warning(IMPOSSIBLE_TO_SAVE, "Этот читатель уже принадлежит к одной из категорий!");
             } else {
-                return e.getMessage();
+                logger.error("Невозможно сохранить запись: {}", e.getMessage());
+                return new Warning(IMPOSSIBLE_TO_SAVE, null);
             }
         }
 

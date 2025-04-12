@@ -3,6 +3,9 @@ package nsu.fit.repository;
 import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.LiteraryWork;
 import nsu.fit.utils.ColumnTranslation;
+import nsu.fit.utils.Warning;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +15,7 @@ import java.util.Map;
 @Repository
 @RequiredArgsConstructor
 public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWork>{
+    private static final Logger logger = LoggerFactory.getLogger(LiteraryWorkRepository.class);
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -35,9 +39,9 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
     }
 
     @Override
-    public String saveEntity(LiteraryWork entity) {
+    public Warning saveEntity(LiteraryWork entity) {
         if (!entity.checkEmptyFields()) {
-            return "Невозможно сохранить: поля не должны быть пустыми!";
+            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля не должны быть пустыми!");
         }
 
         try {
@@ -61,9 +65,8 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
                 );
             }
         } catch (Exception e) {
-            System.out.println(e.getCause());
-            System.out.println(entity.getCategory());
-            return e.getMessage();
+            logger.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(IMPOSSIBLE_TO_SAVE, null);
         }
 
         return null;

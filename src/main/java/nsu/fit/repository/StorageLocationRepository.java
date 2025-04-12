@@ -2,6 +2,7 @@ package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.StorageLocation;
+import nsu.fit.utils.Warning;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +20,7 @@ public class StorageLocationRepository extends AbstractEntityRepository<StorageL
     }
 
     @Override
-    public String saveEntity(StorageLocation entity) {
+    public Warning saveEntity(StorageLocation entity) {
         return null;
     }
 

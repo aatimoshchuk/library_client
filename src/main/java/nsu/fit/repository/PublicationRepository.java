@@ -6,6 +6,7 @@ import nsu.fit.data.access.LiteraryWork;
 import nsu.fit.data.access.Publication;
 import nsu.fit.data.access.Reader;
 import nsu.fit.utils.ColumnTranslation;
+import nsu.fit.utils.Warning;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -39,12 +40,31 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
         );
     }
 
+    public Publication findOne(int publicationNomenclatureNumber) {
+        return jdbcTemplate.queryForObject(
+                "SELECT * FROM \"Publication\" WHERE \"NomenclatureNumber\" = ?",
+                (rs, rowNum) -> new Publication(
+                        rs.getInt("NomenclatureNumber"),
+                        rs.getString("Title"),
+                        rs.getString("Publisher"),
+                        rs.getDate("ReceiptDate").toString(),
+                        rs.getInt("YearOfPrinting"),
+                        rs.getString("Category"),
+                        rs.getInt("AgeRestriction"),
+                        rs.getInt("StorageLocationID"),
+                        rs.getString("State"),
+                        rs.getBoolean("PermissionToIssue"),
+                        rs.getInt("DaysForReturn")),
+                publicationNomenclatureNumber
+        );
+    }
+
     @Override
-    public String saveEntity(Publication entity) {
+    public Warning saveEntity(Publication entity) {
         if (!entity.checkEmptyFields()) {
-            return "Невозможно сохранить: поля \"Название\", \"Издательство\", \"Дата поступления\", " +
+            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля \"Название\", \"Издательство\", \"Дата поступления\", " +
                     "\"ID места хранения\", \"Состояние\", \"Разрешение на выдачу\" и \"Срок возврата\" не должны " +
-                    "быть пустыми!";
+                    "быть пустыми!");
         }
 
         try {
@@ -84,9 +104,8 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
                 );
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            logger.error(String.valueOf(e.getCause()));
-            return e.getMessage();
+            logger.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(IMPOSSIBLE_TO_SAVE, null);
         }
 
         return null;

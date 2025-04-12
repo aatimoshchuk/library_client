@@ -6,6 +6,7 @@ import nsu.fit.data.access.LiteraryWork;
 import nsu.fit.data.access.Publication;
 import nsu.fit.data.access.Reader;
 import nsu.fit.utils.ColumnTranslation;
+import nsu.fit.utils.Warning;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -35,9 +36,9 @@ public class ReaderRepository extends AbstractEntityRepository<Reader> {
     }
 
     @Override
-    public String saveEntity(Reader entity) {
+    public Warning saveEntity(Reader entity) {
         if (!entity.checkEmptyFields()) {
-            return "Невозможно сохранить: поля не должны быть пустыми!";
+            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля не должны быть пустыми!");
         }
 
         try {
@@ -61,7 +62,7 @@ public class ReaderRepository extends AbstractEntityRepository<Reader> {
                 );
             }
         } catch (DataIntegrityViolationException e) {
-            return "Невозможно сохранить: возраст читателя должен быть не меньше 12 лет!";
+            return new Warning(IMPOSSIBLE_TO_SAVE, "Возраст читателя должен быть не меньше 12 лет!");
         }
 
         return null;

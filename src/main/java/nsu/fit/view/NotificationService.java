@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import net.rgielen.fxweaver.core.FxWeaver;
 import nsu.fit.controllers.ResultViewController;
+import nsu.fit.utils.Warning;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,13 +22,12 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    public static final String DEFAULT_WARNING_HEADER = "Невозможно выполнить запрос";
     private final FxWeaver fxWeaver;
-    public void showWarning(String message, String header) {
+    public void showWarning(Warning warning) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Предупреждение");
-        alert.setHeaderText(header);
-        alert.setContentText(message);
+        alert.setHeaderText(warning.getTitle());
+        alert.setContentText(warning.getMessage());
         alert.showAndWait();
     }
 
@@ -75,7 +75,7 @@ public class NotificationService {
             vbox.getChildren().add(createInfoRow(fieldName + ":", String.valueOf(result.get(fieldName))));
         }
 
-        Scene scene = new Scene(vbox, 350, 150);
+        Scene scene = new Scene(vbox, 350, 30 * result.size());
         stage.setScene(scene);
         stage.showAndWait();
     }

@@ -443,6 +443,9 @@ BEGIN
     ELSEIF "PublicationState" = 'Выдано' THEN RAISE EXCEPTION 'publication is out of stock';
     END IF;
 
+    IF NEW."WriteOffDate" > CURRENT_DATE THEN RAISE EXCEPTION 'write off date cannot be in the future';
+    END IF;
+
     UPDATE "Publication" SET "State" = 'Списано'
     WHERE "NomenclatureNumber" = NEW."PublicationNomenclatureNumber";
     RETURN NEW;
@@ -452,6 +455,24 @@ $$ LANGUAGE 'plpgsql';
 CREATE TRIGGER "WrittenOffPublicationsCheckInsert"
     BEFORE INSERT ON "WrittenOffPublications"
     FOR EACH ROW EXECUTE FUNCTION WrittenOffPublicationsCheckInsert();
+
+-- Обновление записи в "Списанные издания"
+
+CREATE FUNCTION WrittenOffPublicationsCheckUpdate()
+    RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW."PublicationNomenclatureNumber" IS DISTINCT FROM OLD."PublicationNomenclatureNumber" THEN
+        RAISE EXCEPTION 'field PublicationNomenclatureNumber cannot be changed';
+    END IF;
+
+    IF NEW."WriteOffDate" > CURRENT_DATE THEN RAISE EXCEPTION 'write off date cannot be in the future';
+    END IF;
+END
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER "WrittenOffPublicationsCheckUpdate"
+    BEFORE UPDATE ON "WrittenOffPublications"
+    FOR EACH ROW EXECUTE FUNCTION WrittenOffPublicationsCheckUpdate();
 
 -- Заполнение таблиц
 

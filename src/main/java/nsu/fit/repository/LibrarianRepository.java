@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.Librarian;
 import nsu.fit.data.access.Library;
 import nsu.fit.utils.ColumnTranslation;
+import nsu.fit.utils.Warning;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -33,9 +34,9 @@ public class LibrarianRepository extends AbstractEntityRepository<Librarian> {
     }
 
     @Override
-    public String saveEntity(Librarian entity) {
+    public Warning saveEntity(Librarian entity) {
         if (!entity.checkEmptyFields()) {
-            return "Невозможно сохранить: поля не должны быть пустыми!";
+            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля не должны быть пустыми!");
         }
 
         try {
@@ -66,7 +67,7 @@ public class LibrarianRepository extends AbstractEntityRepository<Librarian> {
                 );
             }
         } catch (DataIntegrityViolationException e) {
-            return "Невозможно сохранить: возраст библиотекаря должен быть не меньше 18 лет!";
+            return new Warning(IMPOSSIBLE_TO_SAVE, "Возраст библиотекаря должен быть не меньше 18 лет!");
         }
 
         return null;

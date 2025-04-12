@@ -24,6 +24,7 @@ import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.ObjectToMapConverter;
 import nsu.fit.utils.TableColumnConfigurator;
+import nsu.fit.utils.Warning;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 
@@ -92,8 +93,9 @@ public class PublicationsController extends AbstractEntityController<Publication
         historyEntryRepository.markPublicationAsReturned(publication);
 
         if (numberOfDaysOverdue > 0) {
-            notificationService.showWarning("Издание было успешно возвращено.",
-                    "Срок возврата издания истек " + numberOfDaysOverdue + " дней назад!");
+            notificationService.showWarning(new Warning(
+                    "Срок возврата издания истек " + numberOfDaysOverdue + " дней назад!",
+                    "Издание было успешно возвращено."));
         } else {
             notificationService.showNotification("Издание было успешно возвращено.");
         }
@@ -122,7 +124,7 @@ public class PublicationsController extends AbstractEntityController<Publication
             notificationService.showNotification("Читатель не найден. Издание либо находится в библиотеке, либо " +
                     "списано.");
         } else if (result.size() > 1) {
-            notificationService.showWarning("У издания больше одного хозяина","Ошибка сервера");
+            notificationService.showWarning(new Warning("Ошибка сервера", "У издания больше одного хозяина"));
         } else {
             notificationService.showResultInStringView(result.get(0));
         }

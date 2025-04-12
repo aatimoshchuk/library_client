@@ -5,20 +5,46 @@ import javafx.beans.property.SimpleBooleanProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nsu.fit.annotations.DisplayName;
+import nsu.fit.annotations.FieldOrder;
+import nsu.fit.annotations.HiddenField;
 
 @Setter
 @Getter
 @NoArgsConstructor
 public class Publication extends AbstractEntity {
+    @DisplayName("Номенклатурный номер")
+    @FieldOrder(1)
+    private int id;
+    @DisplayName("Название")
+    @FieldOrder(2)
     private String title;
+    @DisplayName("Издательство")
+    @FieldOrder(3)
     private String publisher;
+    @DisplayName("Дата поступления")
+    @FieldOrder(4)
     private String receiptDate;
+    @DisplayName("Год печати")
+    @FieldOrder(5)
     private Integer yearOfPrinting;
+    @DisplayName("Категория")
+    @FieldOrder(6)
     private String category;
+    @DisplayName("Возрастное ограничение")
+    @FieldOrder(7)
     private Integer ageRestriction;
+    @DisplayName("ID места хранения")
+    @HiddenField
     private Integer storageLocationID;
+    @DisplayName("Состояние")
+    @FieldOrder(8)
     private String state;
+    @DisplayName("Разрешение на выдачу")
+    @HiddenField
     private BooleanProperty permissionToIssue = new SimpleBooleanProperty();
+    @DisplayName("Срок возврата")
+    @HiddenField
     private Integer daysForReturn;
 
     public Publication(int id, String title, String publisher, String receiptDate, int yearOfPrinting, String category,

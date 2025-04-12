@@ -21,6 +21,7 @@ import nsu.fit.data.access.AbstractEntity;
 import nsu.fit.repository.AbstractEntityRepository;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.TableColumnConfigurator;
+import nsu.fit.utils.Warning;
 import nsu.fit.view.NotificationService;
 import nsu.fit.view.ViewConstants;
 
@@ -28,6 +29,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public abstract class AbstractEntityController<T extends AbstractEntity, U extends AbstractEntityRepository<T>> {
+    protected final String VALIDATION_ERROR = "Ошибка валидации";
 
     protected final FxWeaver fxWeaver;
     protected final U entityRepository;
@@ -91,10 +93,10 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
     }
 
     public void saveEntity(T entity) {
-        String error = entityRepository.saveEntity(entity);
+        Warning warning = entityRepository.saveEntity(entity);
 
-        if (error != null) {
-            notificationService.showWarning(null, error);
+        if (warning != null) {
+            notificationService.showWarning(warning);
             return;
         }
 
@@ -166,7 +168,7 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
 
     public void switchToWrittenOffPublications(ActionEvent actionEvent) {
         Stage stage = (Stage) entitiesTable.getScene().getWindow();
-        Parent root = fxWeaver.loadView(MainController.class);
+        Parent root = fxWeaver.loadView(WrittenOffPublicationsController.class);
         stage.setScene(new Scene(root));
     }
 
@@ -181,14 +183,13 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
 
     protected boolean validateDate(String date) {
         if (date.isEmpty()) {
-            notificationService.showWarning("Поля не должны быть пустыми!",
-                    NotificationService.DEFAULT_WARNING_HEADER);
+            notificationService.showWarning(new Warning(VALIDATION_ERROR, "Поля не должны быть пустыми!"));
             return false;
         }
 
         if (!date.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-            notificationService.showWarning("Даты должны быть в виде \"YYYY-MM-DD\"",
-                    NotificationService.DEFAULT_WARNING_HEADER);
+            notificationService.showWarning(new Warning(VALIDATION_ERROR,
+                    "Даты должны быть в формате \"YYYY-MM-DD\""));
             return false;
         }
 
@@ -198,13 +199,13 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
     protected boolean validateNumber(String stringNumber) {
         try {
             if (Integer.parseInt(stringNumber) <= 0) {
-                notificationService.showWarning("Значение поля должно представлять собой положительное число.",
-                        NotificationService.DEFAULT_WARNING_HEADER);
+                notificationService.showWarning(new Warning(VALIDATION_ERROR,
+                        "Значение поля должно представлять собой положительное число."));
                 return false;
             }
         } catch (NumberFormatException e) {
-            notificationService.showWarning("Значение поля должно представлять собой положительное число.",
-                    NotificationService.DEFAULT_WARNING_HEADER);
+            notificationService.showWarning(new Warning(VALIDATION_ERROR,
+                    "Значение поля должно представлять собой положительное число."));
             return false;
         }
 

@@ -3,6 +3,9 @@ package nsu.fit.repository.category_repository;
 import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.category.ScientificWorker;
 import nsu.fit.repository.AbstractEntityRepository;
+import nsu.fit.utils.Warning;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -13,6 +16,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class ScientificWorkerRepository extends AbstractEntityRepository<ScientificWorker> {
+    private static final Logger logger = LoggerFactory.getLogger(ScientificWorkerRepository.class);
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -28,9 +32,9 @@ public class ScientificWorkerRepository extends AbstractEntityRepository<Scienti
     }
 
     @Override
-    public String saveEntity(ScientificWorker entity) {
+    public Warning saveEntity(ScientificWorker entity) {
         if (!entity.checkEmptyFields()) {
-            return "Невозможно сохранить: поля не должны быть пустыми!";
+            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля не должны быть пустыми!");
         }
 
         try {
@@ -53,9 +57,10 @@ public class ScientificWorkerRepository extends AbstractEntityRepository<Scienti
             }
         } catch (DataAccessException e) {
             if (e.getCause() instanceof SQLException sqlEx && "P0001".equals(sqlEx.getSQLState())) {
-                return "Невозможно сохранить: этот читатель уже принадлежит к одной из категорий!";
+                return new Warning(IMPOSSIBLE_TO_SAVE, "Этот читатель уже принадлежит к одной из категорий!");
             } else {
-                return e.getMessage();
+                logger.error("Невозможно сохранить запись: {}", e.getMessage());
+                return new Warning(IMPOSSIBLE_TO_SAVE, null);
             }
         }
 
