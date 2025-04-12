@@ -474,6 +474,21 @@ CREATE TRIGGER "WrittenOffPublicationsCheckUpdate"
     BEFORE UPDATE ON "WrittenOffPublications"
     FOR EACH ROW EXECUTE FUNCTION WrittenOffPublicationsCheckUpdate();
 
+-- Удаление записи из "Списанные издания"
+
+CREATE FUNCTION WrittenOffPublicationsDelete()
+    RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE "Publication" SET "State" = 'В наличии'
+    WHERE "NomenclatureNumber" = OLD."PublicationNomenclatureNumber";
+    RETURN OLD;
+END
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER "WrittenOffPublicationsDelete"
+    AFTER DELETE ON "WrittenOffPublications"
+    FOR EACH ROW EXECUTE FUNCTION WrittenOffPublicationsDelete();
+
 -- Заполнение таблиц
 
 INSERT INTO "Library" ("Name", "Address")
