@@ -10,7 +10,7 @@ import lombok.Setter;
 public class Schoolchild extends AbstractCategoryEntity {
 
     private String educationalInstitutionName;
-    private int grade;
+    private Integer grade;
     private String extensionDate;
 
     public Schoolchild(int id, int libraryCardNumber, String educationalInstitutionName, int grade, String extensionDate) {

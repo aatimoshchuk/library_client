@@ -44,7 +44,7 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
             if (entity.getId() != 0) {
                 jdbcTemplate.update(
                         "UPDATE \"LiteraryWork\" SET \"Title\" = ?, \"Author\" = ?, \"WritingYear\" = ?," +
-                                "\"Category\" = ? WHERE \"ID\" = ?",
+                                "\"Category\" = ?::\"LiteraryWorkCategory\" WHERE \"ID\" = ?",
                         entity.getTitle(),
                         entity.getAuthor(),
                         entity.getWritingYear(),
@@ -53,7 +53,7 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
             } else {
                 jdbcTemplate.update(
                         "INSERT INTO \"LiteraryWork\" (\"Title\", \"Author\", \"WritingYear\", \"Category\") " +
-                                "VALUES (?, ?, ?, ?)",
+                                "VALUES (?, ?, ?, ?::\"LiteraryWorkCategory\")",
                         entity.getTitle(),
                         entity.getAuthor(),
                         entity.getWritingYear(),
@@ -62,6 +62,7 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
             }
         } catch (Exception e) {
             System.out.println(e.getCause());
+            System.out.println(entity.getCategory());
             return e.getMessage();
         }
 

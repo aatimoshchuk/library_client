@@ -51,8 +51,8 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
             if (entity.getId() != 0) {
                 jdbcTemplate.update(
                         "UPDATE \"Publication\" SET \"Title\" = ?, \"Publisher\" = ?, \"ReceiptDate\" = " +
-                                "TO_DATE(?, 'YYYY-MM-DD'), \"YearOfPrinting\" = ?, \"Category\" = ?, " +
-                                "\"AgeRestriction\" = ?, \"StorageLocationID\" = ?, \"State\" = ?, " +
+                                "TO_DATE(?, 'YYYY-MM-DD'), \"YearOfPrinting\" = ?, \"Category\" = ?::\"PublicationCategory\", " +
+                                "\"AgeRestriction\" = ?, \"StorageLocationID\" = ?, \"State\" = ?::\"PublicationState\", " +
                                 "\"PermissionToIssue\" = ?, \"DaysForReturn\" = ? WHERE \"NomenclatureNumber\" = ?",
                         entity.getTitle(),
                         entity.getPublisher(),
@@ -62,14 +62,15 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
                         entity.getAgeRestriction(),
                         entity.getStorageLocationID(),
                         entity.getState(),
-                        entity.isPermissionToIssue(),
+                        entity.getPermissionToIssue().get(),
                         entity.getDaysForReturn(),
                         entity.getId());
             } else {
                 jdbcTemplate.update(
                         "INSERT INTO \"Publication\" (\"Title\", \"Publisher\", \"ReceiptDate\", \"YearOfPrinting\", " +
                                 "\"Category\", \"AgeRestriction\", \"StorageLocationID\", \"State\", \"PermissionToIssue\", " +
-                                "\"DaysForReturn\") VALUES (?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?, ?, ?, ?)",
+                                "\"DaysForReturn\") VALUES (?, ?, TO_DATE(?, 'YYYY-MM-DD'), ?, " +
+                                "?::\"PublicationCategory\", ?, ?, ?::\"PublicationState\", ?, ?)",
                         entity.getTitle(),
                         entity.getPublisher(),
                         entity.getReceiptDate(),
@@ -78,12 +79,13 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
                         entity.getAgeRestriction(),
                         entity.getStorageLocationID(),
                         entity.getState(),
-                        entity.isPermissionToIssue(),
+                        entity.getPermissionToIssue().get(),
                         entity.getDaysForReturn()
                 );
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
+            logger.error(String.valueOf(e.getCause()));
             return e.getMessage();
         }
 
@@ -101,13 +103,6 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
         return jdbcTemplate.query(
                 "SELECT unnest(enum_range(NULL::\"PublicationCategory\")) AS category",
                 (rs, rowNum) -> rs.getString("category")
-        );
-    }
-
-    public List<String> loadStates() {
-        return jdbcTemplate.query(
-                "SELECT unnest(enum_range(NULL::\"PublicationState\")) AS state",
-                (rs, rowNum) -> rs.getString("state")
         );
     }
 

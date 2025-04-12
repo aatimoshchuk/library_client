@@ -11,9 +11,9 @@ public class Student extends AbstractCategoryEntity {
 
     private String educationalInstitutionName;
     private String faculty;
-    private int course;
-    private int groupNumber;
-    private int studentCardNumber;
+    private Integer course;
+    private Integer groupNumber;
+    private Integer studentCardNumber;
     private String extensionDate;
 
     public Student(int id, int libraryCardNumber, String educationalInstitutionName, String faculty, int course,

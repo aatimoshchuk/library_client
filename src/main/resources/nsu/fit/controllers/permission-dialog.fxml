@@ -12,7 +12,7 @@
         <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
 
-    <Label text="Категории, которым разрешена выдача издания" textFill="#383838">
+    <Label text="Категории, для которых разрешена выдача издания" textFill="#696868">
       <font>
          <Font name="Hlebozavod Medium" size="22.0" />
       </font></Label>
@@ -20,7 +20,8 @@
     <VBox fx:id="checkboxContainer" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" spacing="5" />
 
     <HBox alignment="CENTER" spacing="10">
-        <Button onAction="#onSaveClick" style="-fx-background-color: #A29F92;" text="Сохранить" textAlignment="CENTER" textFill="WHITE">
+        <Button fx:id="saveButton" onAction="#onSaveClick" style="-fx-background-color: #A29F92;" text="Сохранить"
+                textAlignment="CENTER" textFill="WHITE">
             <font>
                 <Font name="Hlebozavod Medium" size="15.0" />
             </font>

@@ -1,6 +1,7 @@
 package nsu.fit.controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -8,8 +9,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.rgielen.fxweaver.core.FxmlView;
 import nsu.fit.data.access.Publication;
-import nsu.fit.data.access.ReaderCategory;
+import nsu.fit.data.access.ReaderCategoryPermission;
 import nsu.fit.repository.PublicationPermissionRepository;
+import nsu.fit.service.UserRole;
+import nsu.fit.service.UserService;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -22,26 +25,40 @@ import java.util.stream.Collectors;
 public class PublicationPermissionDialogController {
     private final PublicationPermissionRepository publicationPermissionRepository;
     private final List<CheckBox> checkBoxes = new ArrayList<>();
+    private final UserService userService;
 
     @Setter
     private Publication publication;
 
     @FXML
     private VBox checkboxContainer;
+    @FXML
+    private Button saveButton;
 
     public void loadData() {
-        List<ReaderCategory> categories = publicationPermissionRepository.findAllForPublication(publication);
+        List<ReaderCategoryPermission> categories = publicationPermissionRepository.findAllForPublication(publication);
+        UserRole userRole = userService.getUserRole();
 
         checkboxContainer.getChildren().clear();
         checkBoxes.clear();
 
-        for (ReaderCategory category : categories) {
+        for (ReaderCategoryPermission category : categories) {
             CheckBox checkBox = new CheckBox(category.getReaderCategoryName());
             checkBox.setUserData(category.getReaderCategoryID());
             checkBox.setSelected(category.isPermitted());
             checkBox.setStyle("-fx-font-size: 14px; -fx-font-family: 'Hlebozavod Medium'; -fx-text-fill: #7b6f6f" );
+
+            if (userRole.equals(UserRole.LIBRARIAN)) {
+                checkBox.setDisable(true);
+            }
+
             checkBoxes.add(checkBox);
             checkboxContainer.getChildren().add(checkBox);
+        }
+
+        if (userRole.equals(UserRole.LIBRARIAN)) {
+            saveButton.setDisable(true);
+
         }
     }
 

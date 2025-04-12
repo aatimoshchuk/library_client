@@ -2,8 +2,7 @@ package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.Publication;
-import nsu.fit.data.access.PublicationPermission;
-import nsu.fit.data.access.ReaderCategory;
+import nsu.fit.data.access.ReaderCategoryPermission;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +15,7 @@ import java.util.Set;
 public class PublicationPermissionRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public List<ReaderCategory> findAllForPublication(Publication publication) {
+    public List<ReaderCategoryPermission> findAllForPublication(Publication publication) {
         Set<Integer> permittedIds = new HashSet<>(jdbcTemplate.query(
                 "SELECT \"ReaderCategoryID\" FROM \"PublicationPermissionToIssue\" WHERE " +
                         "\"PublicationNomenclatureNumber\" = ?",
@@ -26,7 +25,7 @@ public class PublicationPermissionRepository {
 
         return jdbcTemplate.query(
                 "SELECT * FROM \"ReaderCategory\"",
-                (rs, rowNum) -> new ReaderCategory(
+                (rs, rowNum) -> new ReaderCategoryPermission(
                         rs.getInt("ID"),
                         rs.getString("Name"),
                         permittedIds.contains(rs.getInt("ID"))

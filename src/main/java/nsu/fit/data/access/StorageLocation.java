@@ -15,16 +15,16 @@ public class StorageLocation extends AbstractEntity {
     private int id;
     @DisplayName("ID библиотеки")
     @FieldOrder(2)
-    private int libraryID;
+    private Integer libraryID;
     @DisplayName("Номер зала")
     @FieldOrder(3)
-    private int roomNumber;
+    private Integer roomNumber;
     @DisplayName("Номер стеллажа")
     @FieldOrder(4)
-    private int shelvingNumber;
+    private Integer shelvingNumber;
     @DisplayName("Номер полки")
     @FieldOrder(5)
-    private int shelfNumber;
+    private Integer shelfNumber;
 
     public StorageLocation(int id, int libraryID, int roomNumber, int shelvingNumber, int shelfNumber) {
         this.id = id;

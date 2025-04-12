@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @AllArgsConstructor
-public class ReaderCategory {
+public class ReaderCategoryPermission {
     private int readerCategoryID;
     private String readerCategoryName;
     private boolean isPermitted;

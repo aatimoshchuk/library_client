@@ -1,5 +1,7 @@
 package nsu.fit.data.access;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,13 +13,13 @@ public class Publication extends AbstractEntity {
     private String title;
     private String publisher;
     private String receiptDate;
-    private int yearOfPrinting;
+    private Integer yearOfPrinting;
     private String category;
-    private int ageRestriction;
-    private int storageLocationID;
+    private Integer ageRestriction;
+    private Integer storageLocationID;
     private String state;
-    private boolean permissionToIssue;
-    private int daysForReturn;
+    private BooleanProperty permissionToIssue = new SimpleBooleanProperty();
+    private Integer daysForReturn;
 
     public Publication(int id, String title, String publisher, String receiptDate, int yearOfPrinting, String category,
                        int ageRestriction, int storageLocationID, String state, boolean permissionToIssue,
@@ -31,9 +33,10 @@ public class Publication extends AbstractEntity {
         this.ageRestriction = ageRestriction;
         this.storageLocationID = storageLocationID;
         this.state = state;
-        this.permissionToIssue = permissionToIssue;
+        this.permissionToIssue.set(permissionToIssue);
         this.daysForReturn = daysForReturn;
     }
+
     @Override
     public boolean checkEmptyFields() {
         return title != null && !title.isEmpty() && publisher != null && !publisher.isEmpty() && receiptDate != null &&

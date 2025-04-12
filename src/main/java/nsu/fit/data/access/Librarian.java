@@ -15,8 +15,8 @@ public class Librarian extends AbstractEntity {
     private String patronymic;
     private String birthDay;
     private String phoneNumber;
-    private int library;
-    private int roomNumber;
+    private Integer library;
+    private Integer roomNumber;
 
     public Librarian(int id, String surname, String name, String patronymic, String birthDay, String phoneNumber,
                      int library, int roomNumber) {

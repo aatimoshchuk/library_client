@@ -10,7 +10,7 @@ import lombok.Setter;
 public class LiteraryWork extends AbstractEntity {
     private String title;
     private String author;
-    private int writingYear;
+    private Integer writingYear;
     private String category;
 
     public LiteraryWork(int id, String title, String author, int writingYear, String category) {

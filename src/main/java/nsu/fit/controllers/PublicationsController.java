@@ -1,5 +1,6 @@
 package nsu.fit.controllers;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -65,7 +66,7 @@ public class PublicationsController extends AbstractEntityController<Publication
     @FXML
     private Button markPublicationAsWrittenOffButton;
     @FXML
-    private Button getReadersWithPublicationButton;
+    private Button getReaderWithPublicationButton;
     @FXML
     private Button getStorageLocationInfoButton;
     @FXML
@@ -150,7 +151,6 @@ public class PublicationsController extends AbstractEntityController<Publication
     @Override
     public void initialize() {
         List<String> categories = entityRepository.loadPublicationCategories();
-        List<String> states = entityRepository.loadStates();
 
         tableColumnConfigurator.configureNotEditableTextColumn(nomenclatureNumberColumn, "id");
         tableColumnConfigurator.configureEditableTextColumn(titleColumn, "title", Publication.class);
@@ -160,7 +160,7 @@ public class PublicationsController extends AbstractEntityController<Publication
         tableColumnConfigurator.configureDropDownColumn(categoryColumn, "category", Publication.class, categories);
         tableColumnConfigurator.configureEditableNumberColumn(ageRestrictionColumn, "ageRestriction", Publication.class);
         tableColumnConfigurator.configureEditableNumberColumn(storageLocationIdColumn, "storageLocationID", Publication.class);
-        tableColumnConfigurator.configureDropDownColumn(stateColumn, "state", Publication.class, states);
+        tableColumnConfigurator.configureNotEditableTextColumn(stateColumn, "state");
         tableColumnConfigurator.configureCheckBoxColumn(permissionToIssueColumn, "permissionToIssue", Publication.class);
         tableColumnConfigurator.configureEditableNumberColumn(daysForReturnColumn, "daysForReturn", Publication.class);
 
@@ -209,8 +209,14 @@ public class PublicationsController extends AbstractEntityController<Publication
             markPublicationAsReturnedButton.setVisible(false);
         }
 
-        getReadersWithPublicationButton.setOnAction(e -> getReaderWithPublication(selectedEntity));
+        getReaderWithPublicationButton.setOnAction(e -> getReaderWithPublication(selectedEntity));
         getStorageLocationInfoButton.setOnAction(e -> getStorageLocationInfo(selectedEntity));
-        getAllowedCategoriesButton.setOnAction(e -> getAllowedCategories(selectedEntity));
+
+        if (!selectedEntity.getPermissionToIssue().get()) {
+            getAllowedCategoriesButton.setVisible(true);
+            getAllowedCategoriesButton.setOnAction(e -> getAllowedCategories(selectedEntity));
+        } else {
+            getAllowedCategoriesButton.setVisible(false);
+        }
     }
 }
