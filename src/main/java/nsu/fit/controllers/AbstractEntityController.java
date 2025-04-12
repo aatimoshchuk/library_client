@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -21,7 +20,7 @@ import nsu.fit.controllers.category_controllers.StudentsController;
 import nsu.fit.data.access.AbstractEntity;
 import nsu.fit.repository.AbstractEntityRepository;
 import nsu.fit.service.UserService;
-import nsu.fit.util.TableColumnConfigurator;
+import nsu.fit.utils.TableColumnConfigurator;
 import nsu.fit.view.NotificationService;
 import nsu.fit.view.ViewConstants;
 

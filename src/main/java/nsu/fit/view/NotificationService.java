@@ -7,16 +7,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import net.rgielen.fxweaver.core.FxWeaver;
 import nsu.fit.controllers.ResultViewController;
-import nsu.fit.data.access.Reader;
-import nsu.fit.data.access.StorageLocation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,7 +47,7 @@ public class NotificationService {
         return alert.showAndWait().orElse(ButtonType.CANCEL).equals(ButtonType.YES);
     }
 
-    public void showResults(List<Map<String, Object>> result) {
+    public void showResultsInTableView(List<Map<String, Object>> result) {
         Stage stage = new Stage();
         Parent root = fxWeaver.loadView(ResultViewController.class);
         stage.setScene(new Scene(root));
@@ -64,48 +60,20 @@ public class NotificationService {
         stage.show();
     }
 
-    public void showReaderInfo(Reader reader) {
+    public void showResultInStringView(Map<String, Object> result) {
         Stage stage = new Stage();
         Parent root = fxWeaver.loadView(ResultViewController.class);
         stage.setScene(new Scene(root));
-        stage.setTitle("Читательский билет");
+        stage.setTitle("Результат запроса");
         stage.setResizable(false);
 
-        VBox vbox = new VBox(5);
+        VBox vbox = new VBox(result.size());
         vbox.setPadding(new Insets(15));
         vbox.setAlignment(Pos.CENTER_LEFT);
 
-        vbox.getChildren().addAll(
-                createInfoRow("Номер читательского билета:", String.valueOf(reader.getId())),
-                createInfoRow("Фамилия:", reader.getSurname()),
-                createInfoRow("Имя:", reader.getName()),
-                createInfoRow("Отчество:", reader.getPatronymic()),
-                createInfoRow("Дата рождения:", reader.getBirthDay())
-        );
-
-        Scene scene = new Scene(vbox, 350, 150);
-        stage.setScene(scene);
-        stage.showAndWait();
-    }
-
-    public void showStorageLocationInfo(StorageLocation storageLocation) {
-        Stage stage = new Stage();
-        Parent root = fxWeaver.loadView(ResultViewController.class);
-        stage.setScene(new Scene(root));
-        stage.setTitle("Место хранения");
-        stage.setResizable(false);
-
-        VBox vbox = new VBox(5);
-        vbox.setPadding(new Insets(15));
-        vbox.setAlignment(Pos.CENTER_LEFT);
-
-        vbox.getChildren().addAll(
-                createInfoRow("ID места хранения:", String.valueOf(storageLocation.getId())),
-                createInfoRow("ID библиотеки:", String.valueOf(storageLocation.getLibraryID())),
-                createInfoRow("Номер зала:", String.valueOf(storageLocation.getRoomNumber())),
-                createInfoRow("Номер стеллажа:", String.valueOf(storageLocation.getShelvingNumber())),
-                createInfoRow("Номер полки:", String.valueOf(storageLocation.getShelfNumber()))
-        );
+        for (String fieldName : result.keySet()) {
+            vbox.getChildren().add(createInfoRow(fieldName + ":", String.valueOf(result.get(fieldName))));
+        }
 
         Scene scene = new Scene(vbox, 350, 150);
         stage.setScene(scene);

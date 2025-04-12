@@ -3,7 +3,7 @@ package nsu.fit.repository;
 import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.Librarian;
 import nsu.fit.data.access.Library;
-import nsu.fit.view.ColumnTranslation;
+import nsu.fit.utils.ColumnTranslation;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package nsu.fit.util;
+package nsu.fit.utils;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

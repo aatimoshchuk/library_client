@@ -5,8 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import nsu.fit.data.access.Reader;
@@ -14,7 +12,7 @@ import nsu.fit.repository.PublicationRepository;
 import nsu.fit.repository.ReaderRepository;
 import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
-import nsu.fit.util.TableColumnConfigurator;
+import nsu.fit.utils.TableColumnConfigurator;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 
@@ -103,7 +101,7 @@ public class ReadersController extends AbstractEntityController<Reader, ReaderRe
         if (result.isEmpty()) {
             notificationService.showNotification("Список изданий пуст.");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultsInTableView(result);
         }
     }
 
@@ -114,7 +112,7 @@ public class ReadersController extends AbstractEntityController<Reader, ReaderRe
         if (result.isEmpty()) {
             notificationService.showNotification("Список изданий пуст.");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultsInTableView(result);
         }
     }
 
@@ -124,7 +122,7 @@ public class ReadersController extends AbstractEntityController<Reader, ReaderRe
         if (result.isEmpty()) {
             notificationService.showNotification("Список читателей пуст.");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultsInTableView(result);
         }
     }
 
@@ -140,7 +138,7 @@ public class ReadersController extends AbstractEntityController<Reader, ReaderRe
         if (result.isEmpty()) {
             notificationService.showNotification("Список читателей пуст.");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultsInTableView(result);
         }
     }
 }

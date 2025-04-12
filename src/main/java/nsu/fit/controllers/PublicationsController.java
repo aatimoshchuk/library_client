@@ -20,7 +20,8 @@ import nsu.fit.repository.StorageLocationRepository;
 import nsu.fit.repository.WrittenOffPublicationRepository;
 import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
-import nsu.fit.util.TableColumnConfigurator;
+import nsu.fit.utils.ObjectToMapConverter;
+import nsu.fit.utils.TableColumnConfigurator;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,7 @@ public class PublicationsController extends AbstractEntityController<Publication
     private final WrittenOffPublicationRepository writtenOffPublicationRepository;
     private final ReaderRepository readerRepository;
     private final StorageLocationRepository storageLocationRepository;
+    private final ObjectToMapConverter objectToMapConverter;
 
     @FXML
     private TableColumn<Publication, String> nomenclatureNumberColumn;
@@ -69,12 +71,13 @@ public class PublicationsController extends AbstractEntityController<Publication
     @FXML
     private Button getAllowedCategoriesButton;
 
-    public PublicationsController(FxWeaver fxWeaver, PublicationRepository entityRepository, UserService userService, NotificationService notificationService, TableColumnConfigurator tableColumnConfigurator, HistoryEntryRepository historyEntryRepository, WrittenOffPublicationRepository writtenOffPublicationRepository, ReaderRepository readerRepository, StorageLocationRepository storageLocationRepository) {
+    public PublicationsController(FxWeaver fxWeaver, PublicationRepository entityRepository, UserService userService, NotificationService notificationService, TableColumnConfigurator tableColumnConfigurator, HistoryEntryRepository historyEntryRepository, WrittenOffPublicationRepository writtenOffPublicationRepository, ReaderRepository readerRepository, StorageLocationRepository storageLocationRepository, ObjectToMapConverter objectToMapConverter) {
         super(fxWeaver, entityRepository, userService, notificationService, tableColumnConfigurator);
         this.historyEntryRepository = historyEntryRepository;
         this.writtenOffPublicationRepository = writtenOffPublicationRepository;
         this.readerRepository = readerRepository;
         this.storageLocationRepository = storageLocationRepository;
+        this.objectToMapConverter = objectToMapConverter;
     }
 
     public void markPublicationAsReturned(Publication publication) {
@@ -104,14 +107,17 @@ public class PublicationsController extends AbstractEntityController<Publication
         }
     }
 
-    public void getReadersWithPublication(Publication publication) {
+    public void getReaderWithPublication(Publication publication) {
         List<Map<String, Object>> result =
                 readerRepository.getReadersWithPublication(publication);
 
         if (result.isEmpty()) {
-            notificationService.showNotification("Список читателей пуст.");
+            notificationService.showNotification("Читатель не найден. Издание либо находится в библиотеке, либо " +
+                    "списано.");
+        } else if (result.size() > 1) {
+            notificationService.showWarning("У издания больше одного хозяина","Ошибка сервера");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultInStringView(result.get(0));
         }
     }
 
@@ -119,7 +125,7 @@ public class PublicationsController extends AbstractEntityController<Publication
         StorageLocation storageLocation = storageLocationRepository.findOne(publication.getStorageLocationID());
 
         if (storageLocation != null) {
-            notificationService.showStorageLocationInfo(storageLocation);
+            notificationService.showResultInStringView(objectToMapConverter.convert(storageLocation));
         } else {
             notificationService.showNotification("Место хранения с таким ID не найдено.");
         }
@@ -203,7 +209,7 @@ public class PublicationsController extends AbstractEntityController<Publication
             markPublicationAsReturnedButton.setVisible(false);
         }
 
-        getReadersWithPublicationButton.setOnAction(e -> getReadersWithPublication(selectedEntity));
+        getReadersWithPublicationButton.setOnAction(e -> getReaderWithPublication(selectedEntity));
         getStorageLocationInfoButton.setOnAction(e -> getStorageLocationInfo(selectedEntity));
         getAllowedCategoriesButton.setOnAction(e -> getAllowedCategories(selectedEntity));
     }

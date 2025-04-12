@@ -2,7 +2,7 @@ package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.LiteraryWork;
-import nsu.fit.view.ColumnTranslation;
+import nsu.fit.utils.ColumnTranslation;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 

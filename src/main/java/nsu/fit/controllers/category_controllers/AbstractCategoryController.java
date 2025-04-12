@@ -14,7 +14,8 @@ import nsu.fit.data.access.category.AbstractCategoryEntity;
 import nsu.fit.repository.AbstractEntityRepository;
 import nsu.fit.repository.ReaderRepository;
 import nsu.fit.service.UserService;
-import nsu.fit.util.TableColumnConfigurator;
+import nsu.fit.utils.ObjectToMapConverter;
+import nsu.fit.utils.TableColumnConfigurator;
 import nsu.fit.view.NotificationService;
 import nsu.fit.view.ViewConstants;
 
@@ -24,6 +25,7 @@ public abstract class AbstractCategoryController<T extends AbstractCategoryEntit
         U extends AbstractEntityRepository<T>> extends AbstractEntityController<T, U> {
 
     public final ReaderRepository readerRepository;
+    private final ObjectToMapConverter objectToMapConverter;
 
     @FXML
     protected Button getLibraryCardButton;
@@ -50,9 +52,10 @@ public abstract class AbstractCategoryController<T extends AbstractCategoryEntit
 
     public AbstractCategoryController(FxWeaver fxWeaver, U entityRepository, UserService userService,
                                       NotificationService notificationService, ReaderRepository readerRepository,
-                                      TableColumnConfigurator tableColumnConfigurator) {
+                                      TableColumnConfigurator tableColumnConfigurator, ObjectToMapConverter objectToMapConverter) {
         super(fxWeaver, entityRepository, userService, notificationService, tableColumnConfigurator);
         this.readerRepository = readerRepository;
+        this.objectToMapConverter = objectToMapConverter;
     }
 
     protected abstract List<T> getEntities();
@@ -77,7 +80,7 @@ public abstract class AbstractCategoryController<T extends AbstractCategoryEntit
     public void getLibraryCard(T entity) {
         Reader reader = readerRepository.findOne(entity.getLibraryCardNumber());
         if (reader != null) {
-            notificationService.showReaderInfo(reader);
+            notificationService.showResultInStringView(objectToMapConverter.convert(reader));
         } else {
             notificationService.showNotification("Читатель с таким номер читательского билета не найден.");
         }

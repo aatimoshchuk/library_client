@@ -13,7 +13,7 @@ import nsu.fit.repository.PublicationRepository;
 import nsu.fit.repository.ReaderRepository;
 import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
-import nsu.fit.util.TableColumnConfigurator;
+import nsu.fit.utils.TableColumnConfigurator;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 
@@ -83,7 +83,7 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
         if (result.isEmpty()) {
             notificationService.showNotification("Список произведений пуст.");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultsInTableView(result);
         }
     }
 
@@ -94,7 +94,7 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
         if (result.isEmpty()) {
             notificationService.showNotification("Список изданий пуст.");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultsInTableView(result);
         }
 
     }
@@ -106,7 +106,7 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
         if (result.isEmpty()) {
             notificationService.showNotification("Список изданий пуст.");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultsInTableView(result);
         }
     }
 
@@ -117,7 +117,7 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
         if (result.isEmpty()) {
             notificationService.showNotification("Список читателей пуст.");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultsInTableView(result);
         }
     }
 
@@ -133,7 +133,7 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
         if (result.isEmpty()) {
             notificationService.showNotification("Список читателей пуст.");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultsInTableView(result);
         }
     }
 

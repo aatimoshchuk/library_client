@@ -1,19 +1,15 @@
 package nsu.fit.controllers;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import nsu.fit.data.access.Librarian;
-import nsu.fit.data.access.Reader;
 import nsu.fit.repository.LibrarianRepository;
 import nsu.fit.repository.ReaderRepository;
 import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
-import nsu.fit.util.TableColumnConfigurator;
+import nsu.fit.utils.TableColumnConfigurator;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 
@@ -95,7 +91,7 @@ public class LibrariansController extends AbstractEntityController<Librarian, Li
         if (result.isEmpty()) {
             notificationService.showNotification("Список обслуженных читателей пуст.");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultsInTableView(result);
         }
     }
 

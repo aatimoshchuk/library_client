@@ -3,16 +3,31 @@ package nsu.fit.data.access;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nsu.fit.annotations.DisplayName;
+import nsu.fit.annotations.FieldOrder;
+import nsu.fit.annotations.HiddenField;
 
 @Setter
 @Getter
 @NoArgsConstructor
 public class Reader extends AbstractEntity {
-
+    @DisplayName("Номер читательского билета")
+    @FieldOrder(1)
+    private int id;
+    @DisplayName("Фамилия")
+    @FieldOrder(2)
     private String surname;
+    @DisplayName("Имя")
+    @FieldOrder(3)
     private String name;
+    @DisplayName("Отчество")
+    @FieldOrder(4)
     private String patronymic;
+    @DisplayName("Дата рождения")
+    @FieldOrder(5)
     private String birthDay;
+    @DisplayName("Категория")
+    @HiddenField
     private String category;
 
     public Reader(int id, String surname, String name, String patronymic, String birthDay, String category) {

@@ -2,18 +2,15 @@ package nsu.fit.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
-import nsu.fit.data.access.Librarian;
 import nsu.fit.data.access.Library;
 import nsu.fit.repository.LibrarianRepository;
 import nsu.fit.repository.LibraryRepository;
 import nsu.fit.repository.PublicationRepository;
 import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
-import nsu.fit.util.TableColumnConfigurator;
+import nsu.fit.utils.TableColumnConfigurator;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 
@@ -91,7 +88,7 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
         if (result.isEmpty()) {
             notificationService.showNotification("Список библиотекарей, работающих в данном читальном зале пуст.");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultsInTableView(result);
         }
 
     }
@@ -111,7 +108,7 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
         if (result.isEmpty()) {
             notificationService.showNotification("Список литературы, выданной с данной полки пуст.");
         } else {
-            notificationService.showResults(result);
+            notificationService.showResultsInTableView(result);
         }
 
     }

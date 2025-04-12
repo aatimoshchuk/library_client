@@ -1,4 +1,4 @@
-package nsu.fit.view;
+package nsu.fit.utils;
 
 import java.util.*;
 
