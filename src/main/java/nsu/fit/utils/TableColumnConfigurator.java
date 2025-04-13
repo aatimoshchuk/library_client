@@ -1,6 +1,7 @@
 package nsu.fit.utils;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -121,6 +122,26 @@ public class TableColumnConfigurator {
     public <S> void configureNotEditableTextColumn(TableColumn<S, String> column,
                                                    String propertyName) {
         column.setCellValueFactory(new PropertyValueFactory<>(propertyName));
+    }
+
+    public <S> void configureNotEditableEnumColumn(
+            TableColumn<S, String> column,
+            String propertyName,
+            Class<S> rowClass
+    ) {
+        column.setCellValueFactory(cellData -> {
+            S rowItem = cellData.getValue();
+            try {
+                Method getter = rowClass.getMethod(getGetterName(propertyName));
+                Object enumValue = getter.invoke(rowItem);
+
+                String displayValue = (enumValue != null) ? enumValue.toString() : "";
+                return new ReadOnlyStringWrapper(displayValue);
+            } catch (Exception e) {
+                logger.error(METHOD_NOT_EXIST, getGetterName(propertyName));
+                return new ReadOnlyStringWrapper("");
+            }
+        });
     }
 
     private String getSetterName(String propertyName) {

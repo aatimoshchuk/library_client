@@ -4,14 +4,17 @@ import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.Library;
 import nsu.fit.data.access.LiteraryWork;
 import nsu.fit.data.access.Publication;
+import nsu.fit.data.access.PublicationState;
 import nsu.fit.data.access.Reader;
 import nsu.fit.utils.ColumnTranslation;
 import nsu.fit.utils.Warning;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +37,7 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
                         rs.getString("Category"),
                         rs.getInt("AgeRestriction"),
                         rs.getInt("StorageLocationID"),
-                        rs.getString("State"),
+                        PublicationState.fromRussianName(rs.getString("State")),
                         rs.getBoolean("PermissionToIssue"),
                         rs.getInt("DaysForReturn"))
         );
@@ -52,7 +55,7 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
                         rs.getString("Category"),
                         rs.getInt("AgeRestriction"),
                         rs.getInt("StorageLocationID"),
-                        rs.getString("State"),
+                        PublicationState.fromRussianName(rs.getString("State")),
                         rs.getBoolean("PermissionToIssue"),
                         rs.getInt("DaysForReturn")),
                 publicationNomenclatureNumber
@@ -63,7 +66,7 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
     public Warning saveEntity(Publication entity) {
         if (!entity.checkEmptyFields()) {
             return new Warning(IMPOSSIBLE_TO_SAVE, "Поля \"Название\", \"Издательство\", \"Дата поступления\", " +
-                    "\"ID места хранения\", \"Состояние\", \"Разрешение на выдачу\" и \"Срок возврата\" не должны " +
+                    "\"Разрешение на выдачу\" и \"Срок возврата\" не должны " +
                     "быть пустыми!");
         }
 
@@ -81,7 +84,7 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
                         entity.getCategory(),
                         entity.getAgeRestriction(),
                         entity.getStorageLocationID(),
-                        entity.getState(),
+                        entity.getState().toString(),
                         entity.getPermissionToIssue().get(),
                         entity.getDaysForReturn(),
                         entity.getId());
@@ -98,10 +101,16 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
                         entity.getCategory(),
                         entity.getAgeRestriction(),
                         entity.getStorageLocationID(),
-                        entity.getState(),
+                        entity.getState().toString(),
                         entity.getPermissionToIssue().get(),
                         entity.getDaysForReturn()
                 );
+            }
+        } catch (DataAccessException e) {
+            if (e.getCause() instanceof SQLException sqlEx && "P0001".equals(sqlEx.getSQLState())) {
+                if (sqlEx.getMessage().contains("field StorageLocationID cannot be changed while publication is written off")) {
+                    return new Warning(IMPOSSIBLE_TO_SAVE, "Невозможно изменить место хранения списанного издания.");
+                }
             }
         } catch (Exception e) {
             logger.error("Невозможно сохранить запись: {}", e.getMessage());

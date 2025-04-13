@@ -14,6 +14,7 @@ import net.rgielen.fxweaver.core.FxControllerAndView;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;;
 import nsu.fit.data.access.Publication;
+import nsu.fit.data.access.PublicationState;
 import nsu.fit.data.access.StorageLocation;
 import nsu.fit.repository.HistoryEntryRepository;
 import nsu.fit.repository.PublicationRepository;
@@ -200,7 +201,7 @@ public class PublicationsController extends AbstractEntityController<Publication
         tableColumnConfigurator.configureDropDownColumn(categoryColumn, "category", Publication.class, categories);
         tableColumnConfigurator.configureEditableNumberColumn(ageRestrictionColumn, "ageRestriction", Publication.class);
         tableColumnConfigurator.configureEditableNumberColumn(storageLocationIdColumn, "storageLocationID", Publication.class);
-        tableColumnConfigurator.configureNotEditableTextColumn(stateColumn, "state");
+        tableColumnConfigurator.configureNotEditableEnumColumn(stateColumn, "state", Publication.class);
         tableColumnConfigurator.configureCheckBoxColumn(permissionToIssueColumn, "permissionToIssue", Publication.class);
         tableColumnConfigurator.configureEditableNumberColumn(daysForReturnColumn, "daysForReturn", Publication.class);
 
@@ -236,21 +237,33 @@ public class PublicationsController extends AbstractEntityController<Publication
 
     @Override
     protected void setCustomButtonActions() {
-        if (selectedEntity.getState().equals("Выдано")) {
+        if (selectedEntity.getState().equals(PublicationState.ISSUED)) {
             markPublicationAsReturnedButton.setVisible(true);
             markPublicationAsWrittenOffButton.setVisible(false);
             markPublicationAsReturnedButton.setOnAction(e -> markPublicationAsReturned(selectedEntity));
-        } else if (!selectedEntity.getState().equals("Списано")) {
+
+            getStorageLocationInfoButton.setVisible(true);
+            getStorageLocationInfoButton.setOnAction(e -> getStorageLocationInfo(selectedEntity));
+
+            getReaderWithPublicationButton.setVisible(true);
+            getReaderWithPublicationButton.setOnAction(e -> getReaderWithPublication(selectedEntity));
+        } else if (selectedEntity.getState().equals(PublicationState.AVAILABLE)) {
             markPublicationAsWrittenOffButton.setVisible(true);
             markPublicationAsReturnedButton.setVisible(false);
             markPublicationAsWrittenOffButton.setOnAction(e -> markPublicationAsWrittenOff(selectedEntity));
+
+            getStorageLocationInfoButton.setVisible(true);
+            getStorageLocationInfoButton.setOnAction(e -> getStorageLocationInfo(selectedEntity));
+
+            getReaderWithPublicationButton.setVisible(true);
+            getReaderWithPublicationButton.setOnAction(e -> getReaderWithPublication(selectedEntity));
         } else {
             markPublicationAsWrittenOffButton.setVisible(false);
             markPublicationAsReturnedButton.setVisible(false);
-        }
 
-        getReaderWithPublicationButton.setOnAction(e -> getReaderWithPublication(selectedEntity));
-        getStorageLocationInfoButton.setOnAction(e -> getStorageLocationInfo(selectedEntity));
+            getStorageLocationInfoButton.setVisible(false);
+            getReaderWithPublicationButton.setVisible(false);
+        }
 
         if (!selectedEntity.getPermissionToIssue().get()) {
             getAllowedCategoriesButton.setVisible(true);

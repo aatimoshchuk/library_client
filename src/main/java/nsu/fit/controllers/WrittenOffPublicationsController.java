@@ -102,6 +102,17 @@ public class WrittenOffPublicationsController extends AbstractEntityController<W
     }
 
     @Override
+    public void deleteEntity(WrittenOffPublication entity) {
+        if (confirmDeletion(entity)) {
+            entityRepository.deleteEntity(entity);
+            notificationService.showNotification("Издание удалено из числа списанных. Разметите его в одном из мест " +
+                    "хранения и внесите информацию в базу данных.");
+            loadData();
+            actionPanel.setVisible(false);
+        }
+    }
+
+    @Override
     protected void setCustomButtonActions() {
         getPublicationInfoButton.setOnAction(e -> getPublicationInfo(selectedEntity));
     }

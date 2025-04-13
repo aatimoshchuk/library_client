@@ -39,7 +39,7 @@ public class Publication extends AbstractEntity {
     private Integer storageLocationID;
     @DisplayName("Состояние")
     @FieldOrder(8)
-    private String state;
+    private PublicationState state;
     @DisplayName("Разрешение на выдачу")
     @HiddenField
     private BooleanProperty permissionToIssue = new SimpleBooleanProperty();
@@ -48,7 +48,7 @@ public class Publication extends AbstractEntity {
     private Integer daysForReturn;
 
     public Publication(int id, String title, String publisher, String receiptDate, int yearOfPrinting, String category,
-                       int ageRestriction, int storageLocationID, String state, boolean permissionToIssue,
+                       int ageRestriction, int storageLocationID, PublicationState state, boolean permissionToIssue,
                        int daysForReturn) {
         this.id = id;
         this.title = title;
@@ -66,6 +66,6 @@ public class Publication extends AbstractEntity {
     @Override
     public boolean checkEmptyFields() {
         return title != null && !title.isEmpty() && publisher != null && !publisher.isEmpty() && receiptDate != null &&
-                !receiptDate.isEmpty() && storageLocationID > 0 && state != null && !state.isEmpty() && daysForReturn > 0;
+                !receiptDate.isEmpty() && state != null && daysForReturn > 0;
     }
 }
