@@ -73,8 +73,8 @@ CREATE TABLE "Publication" (
     "YearOfPrinting" int,
     "Category" "PublicationCategory",
     "AgeRestriction" int,
-    "StorageLocationID" int NOT NULL REFERENCES "PublicationStorageLocation"("StorageLocationID") ON UPDATE CASCADE
-        ON DELETE CASCADE,
+    "StorageLocationID" int REFERENCES "PublicationStorageLocation"("StorageLocationID") ON UPDATE SET NULL
+        ON DELETE SET NULL,
     "State" "PublicationState" NOT NULL,
     "PermissionToIssue" boolean NOT NULL,
     "DaysForReturn" int NOT NULL
@@ -446,7 +446,7 @@ BEGIN
     IF NEW."WriteOffDate" > CURRENT_DATE THEN RAISE EXCEPTION 'write off date cannot be in the future';
     END IF;
 
-    UPDATE "Publication" SET "State" = 'Списано'
+    UPDATE "Publication" SET "State" = 'Списано', "StorageLocationID" = NULL
     WHERE "NomenclatureNumber" = NEW."PublicationNomenclatureNumber";
     RETURN NEW;
 END
@@ -488,6 +488,22 @@ $$ LANGUAGE 'plpgsql';
 CREATE TRIGGER "WrittenOffPublicationsDelete"
     AFTER DELETE ON "WrittenOffPublications"
     FOR EACH ROW EXECUTE FUNCTION WrittenOffPublicationsDelete();
+
+-- Изменение записи в "Издания"
+
+CREATE FUNCTION PublicationCheckUpdate()
+    RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW."State" = 'Списано' AND NEW."StorageLocationID" IS NOT NULL THEN RAISE EXCEPTION
+        'field StorageLocationID cannot be changed while publication is written off';
+    END IF;
+    RETURN NEW;
+END
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER "PublicationCheckUpdate"
+    BEFORE UPDATE ON "Publication"
+    FOR EACH ROW EXECUTE FUNCTION PublicationCheckUpdate();
 
 -- Заполнение таблиц
 
