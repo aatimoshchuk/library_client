@@ -77,15 +77,17 @@ public class ReaderRepository extends AbstractEntityRepository<Reader> {
 
     public Reader findOne(int libraryCardNumber) {
         return jdbcTemplate.queryForObject(
-                "SELECT \"LibraryCardNumber\", \"Surname\", \"Name\", \"Patronymic\", \"BirthDay\" FROM \"Reader\" " +
-                        "WHERE \"LibraryCardNumber\" = ?",
+                "SELECT \"LibraryCardNumber\", \"Surname\", \"Reader\".\"Name\" AS \"ReaderName\", \"Patronymic\", " +
+                        "\"BirthDay\", \"ReaderCategory\".\"Name\" AS \"CategoryName\"" +
+                        "FROM \"Reader\" LEFT JOIN \"ReaderCategory\" ON \"Reader\".\"CategoryID\" = " +
+                        "\"ReaderCategory\".\"ID\"" + " WHERE \"LibraryCardNumber\" = ?",
                 (rs, rowNum) -> new Reader(
                         rs.getInt("LibraryCardNumber"),
                         rs.getString("Surname"),
-                        rs.getString("Name"),
+                        rs.getString("ReaderName"),
                         rs.getString("Patronymic"),
                         rs.getDate("BirthDay").toString(),
-                        null),
+                        rs.getString("CategoryName")),
                 libraryCardNumber
         );
     }

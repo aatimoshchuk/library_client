@@ -6,9 +6,11 @@ import nsu.fit.data.access.Publication;
 import nsu.fit.utils.Warning;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -79,9 +81,32 @@ public class HistoryEntryRepository extends AbstractEntityRepository<HistoryEntr
                         entity.getIssueDate(),
                         (entity.getReturnDate() != null && entity.getReturnDate().isEmpty()) ? null :
                                 entity.getReturnDate(),
-                        (entity.getLibrarianID() == 0) ? null : entity.getLibrarianID()
+                        (entity.getLibrarianID() == null || entity.getLibrarianID() == 0) ? null : entity.getLibrarianID()
                 );
             }
+        } catch (DataAccessException e) {
+            if (e.getCause() instanceof SQLException sqlEx && "P0001".equals(sqlEx.getSQLState())) {
+                if (sqlEx.getMessage().contains("selected publication is not available for readers without category")) {
+                    return new Warning(IMPOSSIBLE_TO_SAVE, "Издание недоступно для выдачи читателям, не относящимся " +
+                            "ни к одной из категорий.");
+                }
+                if (sqlEx.getMessage().contains("selected publication is not available for this category of readers")) {
+                    return new Warning(IMPOSSIBLE_TO_SAVE, "Издание недоступно для выдачи читателям данной категории.");
+                }
+                if (sqlEx.getMessage().contains("the student subscription renewal period has expired")) {
+                    return new Warning(IMPOSSIBLE_TO_SAVE, "Срок продления студенческого абонемента данного читателя " +
+                            "истек.");
+                }
+                if (sqlEx.getMessage().contains("the schoolchild subscription renewal period has expired")) {
+                    return new Warning(IMPOSSIBLE_TO_SAVE, "Срок продления школьного абонемента данного читателя " +
+                            "истек.");
+                }
+                if (sqlEx.getMessage().contains("reader does not meet the age restriction")) {
+                    return new Warning(IMPOSSIBLE_TO_SAVE, "Читатель не соответствует ограничению по возрасту, " +
+                            "существующему для данного издания.");
+                }
+            }
+
         } catch (Exception e) {
             logger.error("Невозможно сохранить запись: {}", e.getMessage());
             return new Warning(IMPOSSIBLE_TO_SAVE, null);

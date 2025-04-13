@@ -27,7 +27,7 @@ public class Reader extends AbstractEntity {
     @FieldOrder(5)
     private String birthDay;
     @DisplayName("Категория")
-    @HiddenField
+    @FieldOrder(6)
     private String category;
 
     public Reader(int id, String surname, String name, String patronymic, String birthDay, String category) {
