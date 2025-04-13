@@ -1,13 +1,16 @@
 package nsu.fit.view;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,8 @@ public class NotificationService {
         alert.setTitle("Предупреждение");
         alert.setHeaderText(warning.getTitle());
         alert.setContentText(warning.getMessage());
+
+        autoSizeAlert(alert);
         alert.showAndWait();
     }
 
@@ -36,6 +41,8 @@ public class NotificationService {
         alert.setTitle("Информационное сообщение");
         alert.setHeaderText(null);
         alert.setContentText(message);
+
+        autoSizeAlert(alert);
         alert.showAndWait();
     }
 
@@ -91,5 +98,18 @@ public class NotificationService {
         HBox hbox = new HBox(10, label, valueLabel);
         hbox.setAlignment(Pos.CENTER_LEFT);
         return hbox;
+    }
+
+    private void autoSizeAlert(Alert alert) {
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setMinHeight(Region.USE_PREF_SIZE);
+        dialogPane.setMinWidth(Region.USE_PREF_SIZE);
+        dialogPane.setPrefWidth(400);
+        dialogPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) dialogPane.getScene().getWindow();
+            stage.sizeToScene();
+        });
     }
 }
