@@ -17,6 +17,7 @@ import nsu.fit.data.access.Publication;
 import nsu.fit.data.access.PublicationState;
 import nsu.fit.data.access.StorageLocation;
 import nsu.fit.repository.HistoryEntryRepository;
+import nsu.fit.repository.LiteraryWorkRepository;
 import nsu.fit.repository.PublicationRepository;
 import nsu.fit.repository.ReaderRepository;
 import nsu.fit.repository.StorageLocationRepository;
@@ -39,6 +40,7 @@ public class PublicationsController extends AbstractEntityController<Publication
     private final WrittenOffPublicationRepository writtenOffPublicationRepository;
     private final ReaderRepository readerRepository;
     private final StorageLocationRepository storageLocationRepository;
+    private final LiteraryWorkRepository literaryWorkRepository;
     private final ObjectToMapConverter objectToMapConverter;
 
     @FXML
@@ -74,18 +76,21 @@ public class PublicationsController extends AbstractEntityController<Publication
     private Button getStorageLocationInfoButton;
     @FXML
     private Button getAllowedCategoriesButton;
+    @FXML
+    private Button getLiteraryWorksButton;
 
     @FXML
     private TextField startDateField;
     @FXML
     private TextField endDateField;
 
-    public PublicationsController(FxWeaver fxWeaver, PublicationRepository entityRepository, UserService userService, NotificationService notificationService, TableColumnConfigurator tableColumnConfigurator, HistoryEntryRepository historyEntryRepository, WrittenOffPublicationRepository writtenOffPublicationRepository, ReaderRepository readerRepository, StorageLocationRepository storageLocationRepository, ObjectToMapConverter objectToMapConverter) {
+    public PublicationsController(FxWeaver fxWeaver, PublicationRepository entityRepository, UserService userService, NotificationService notificationService, TableColumnConfigurator tableColumnConfigurator, HistoryEntryRepository historyEntryRepository, WrittenOffPublicationRepository writtenOffPublicationRepository, ReaderRepository readerRepository, StorageLocationRepository storageLocationRepository, LiteraryWorkRepository literaryWorkRepository, ObjectToMapConverter objectToMapConverter) {
         super(fxWeaver, entityRepository, userService, notificationService, tableColumnConfigurator);
         this.historyEntryRepository = historyEntryRepository;
         this.writtenOffPublicationRepository = writtenOffPublicationRepository;
         this.readerRepository = readerRepository;
         this.storageLocationRepository = storageLocationRepository;
+        this.literaryWorkRepository = literaryWorkRepository;
         this.objectToMapConverter = objectToMapConverter;
     }
 
@@ -189,6 +194,17 @@ public class PublicationsController extends AbstractEntityController<Publication
         }
     }
 
+    public void getLiteraryWorks(Publication publication) {
+        List<Map<String, Object>> result =
+                literaryWorkRepository.getLiteraryWorksIncludedInThePublication(publication);
+
+        if (result.isEmpty()) {
+            notificationService.showNotification("Литературные произведения, включенные в данное издание, не найдены.");
+        } else {
+            notificationService.showResultsInTableView(result);
+        }
+    }
+
     @Override
     public void initialize() {
         List<String> categories = entityRepository.loadPublicationCategories();
@@ -271,5 +287,7 @@ public class PublicationsController extends AbstractEntityController<Publication
         } else {
             getAllowedCategoriesButton.setVisible(false);
         }
+
+        getLiteraryWorksButton.setOnAction(e -> getLiteraryWorks(selectedEntity));
     }
 }

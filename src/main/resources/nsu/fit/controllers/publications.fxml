@@ -164,7 +164,7 @@
                <Font name="Hlebozavod Medium" size="11.0" />
             </font>
          </Button>
-         <Button fx:id="getAllowedCategoriesButton" layoutX="425.0" layoutY="4.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="категории, которым разрешена выдача" textFill="WHITE" visible="false">
+         <Button fx:id="getAllowedCategoriesButton" layoutX="620.0" layoutY="4.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="категории, которым разрешена выдача" textFill="WHITE" visible="false">
             <font>
                <Font name="Hlebozavod Medium" size="11.0" />
             </font>
@@ -193,15 +193,20 @@
                  <Tooltip text="Пометить издание как списанное" />
              </tooltip>
          </Button>
+         <Button fx:id="getLiteraryWorksButton" layoutX="425.0" layoutY="4.0" maxHeight="-Infinity"
+                 minHeight="-Infinity"
+                 mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="произведения, входящие в издание" textFill="WHITE">
+            <font>
+               <Font name="Hlebozavod Medium" size="11.0" />
+            </font>
+         </Button>
         </AnchorPane>
       <Text fill="#6c6c6a" layoutX="308.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="издания" textAlignment="CENTER" wrappingWidth="1135.0">
          <font>
             <Font name="Hlebozavod Medium" size="85.0" />
          </font>
       </Text>
-      <Button onAction="#getPublicationsThatWereReceiptDuringThePeriod" layoutX="336.0" layoutY="781.0"
-              mnemonicParsing="false" prefHeight="48.0" prefWidth="532.0"
-              style="-fx-background-color: #A29F92;" text="издания, которые поступили в течение периода" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+      <Button layoutX="336.0" layoutY="781.0" mnemonicParsing="false" onAction="#getPublicationsThatWereReceiptDuringThePeriod" prefHeight="48.0" prefWidth="532.0" style="-fx-background-color: #A29F92;" text="издания, которые поступили в течение периода" textAlignment="CENTER" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Hlebozavod Medium" size="23.0" />
          </font>
@@ -209,8 +214,7 @@
             <Glow />
          </effect>
       </Button>
-      <Button onAction="#getPublicationsThatWereWrittenOffDuringThePeriod" layoutX="886.0" layoutY="781.0"
-              mnemonicParsing="false" prefHeight="48.0" prefWidth="532.0" style="-fx-background-color: #A29F92;" text="издания, которые были списаны в течение периода" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+      <Button layoutX="886.0" layoutY="781.0" mnemonicParsing="false" onAction="#getPublicationsThatWereWrittenOffDuringThePeriod" prefHeight="48.0" prefWidth="532.0" style="-fx-background-color: #A29F92;" text="издания, которые были списаны в течение периода" textAlignment="CENTER" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Hlebozavod Medium" size="23.0" />
          </font>

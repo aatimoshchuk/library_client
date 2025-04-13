@@ -18,7 +18,9 @@ public enum ColumnTranslation {
     LITERARY_WORK_TITLE("LiteraryWorkTitle", "Название произведения"),
     PUBLICATION_TITLE("PublicationTitle", "Название издания"),
     RECEIPT_DATE("ReceiptDate", "Дата поступления"),
-    WRITE_OFF_DATE("WriteOffDate", "Дата списания");
+    WRITE_OFF_DATE("WriteOffDate", "Дата списания"),
+    WRITING_YEAR("WritingYear", "Год написания"),
+    CATEGORY("Category", "Категория");
 
     private static final Map<String, String> MAP = new HashMap<>();
 

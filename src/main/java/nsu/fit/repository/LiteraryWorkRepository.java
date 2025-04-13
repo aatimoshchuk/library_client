@@ -2,6 +2,7 @@ package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.LiteraryWork;
+import nsu.fit.data.access.Publication;
 import nsu.fit.utils.ColumnTranslation;
 import nsu.fit.utils.Warning;
 import org.slf4j.Logger;
@@ -83,5 +84,13 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
         return ColumnTranslation.formatColumnNames(jdbcTemplate.queryForList(
                 "SELECT * FROM \"getTheMostPopularLiteraryWorks\"(?)",
                 maxCount));
+    }
+
+    public List<Map<String, Object>> getLiteraryWorksIncludedInThePublication(Publication publication) {
+        return ColumnTranslation.formatColumnNames(jdbcTemplate.queryForList(
+                "SELECT \"LiteraryWorkID\", \"Title\", \"Author\", \"WritingYear\", \"Category\" FROM " +
+                        "\"LiteraryWork\" JOIN \"PublicationToLiteraryWork\" ON \"LiteraryWork\".\"ID\" = " +
+                        "\"PublicationToLiteraryWork\".\"LiteraryWorkID\" WHERE \"PublicationNomenclatureNumber\" = ?",
+                publication.getId()));
     }
 }
