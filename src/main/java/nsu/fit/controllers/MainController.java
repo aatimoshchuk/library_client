@@ -60,7 +60,7 @@ public class MainController {
 
     public void switchToHistory(ActionEvent actionEvent) {
         Stage stage = (Stage) libraryIcon.getScene().getWindow();
-        Parent root = fxWeaver.loadView(MainController.class);
+        Parent root = fxWeaver.loadView(HistoryEntriesController.class);
         stage.setScene(new Scene(root));
     }
 

@@ -33,6 +33,22 @@ public class LibrarianRepository extends AbstractEntityRepository<Librarian> {
         );
     }
 
+    public Librarian findOne(int librarianID) {
+        return jdbcTemplate.queryForObject(
+                "SELECT * FROM \"Librarian\" WHERE \"LibrarianID\" = ?",
+                (rs, rowNum) -> new Librarian(
+                        rs.getInt("LibrarianID"),
+                        rs.getString("Surname"),
+                        rs.getString("Name"),
+                        rs.getString("Patronymic"),
+                        rs.getDate("BirthDay").toString(),
+                        rs.getString("PhoneNumber"),
+                        rs.getInt("LibraryID"),
+                        rs.getInt("RoomNumber")),
+                librarianID
+        );
+    }
+
     @Override
     public Warning saveEntity(Librarian entity) {
         if (!entity.checkEmptyFields()) {

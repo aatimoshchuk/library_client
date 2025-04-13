@@ -95,8 +95,8 @@ public class PublicationsController extends AbstractEntityController<Publication
     }
 
     public void markPublicationAsReturned(Publication publication) {
-        int numberOfDaysOverdue = historyEntryRepository.getNumberOfDaysOverdue(publication);
-        historyEntryRepository.markPublicationAsReturned(publication);
+        int numberOfDaysOverdue = historyEntryRepository.getNumberOfDaysOverdue(publication.getId());
+        historyEntryRepository.markPublicationAsReturned(publication.getId());
 
         if (numberOfDaysOverdue > 0) {
             notificationService.showWarning(new Warning(
