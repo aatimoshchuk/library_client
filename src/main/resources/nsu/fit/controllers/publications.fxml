@@ -110,9 +110,7 @@
             </font>
         </Text>
         <Button layoutY="609.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToWrittenOffPublications" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
-        <ImageView fx:id="storageLocationIcon" fitHeight="37.0" fitWidth="37.0" layoutX="26.0" layoutY="688.0"
-                   pickOnBounds="true"
-                   smooth="false">
+        <ImageView fx:id="storageLocationIcon" fitHeight="37.0" fitWidth="37.0" layoutX="26.0" layoutY="688.0" pickOnBounds="true" smooth="false">
             <image>
                 <Image url="@../../../img/shelf.png" />
             </image>
@@ -122,10 +120,8 @@
                 <Font name="Hlebozavod Medium" size="20.0" />
             </font>
         </Text>
-        <Button layoutY="678.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                mnemonicParsing="false" onAction="#switchToStorageLocations" opacity="0.0" prefHeight="60.0" prefWidth="293.0"
-                style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
-        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="137.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="597.0" prefWidth="1135.0" stylesheets="@style.css">
+        <Button layoutY="678.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToStorageLocations" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="550.0" prefWidth="1135.0" stylesheets="@style.css">
             <columns>
             <TableColumn fx:id="nomenclatureNumberColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" resizable="false" text="номер" />
             <TableColumn fx:id="titleColumn" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" resizable="false" text="Название" />
@@ -208,9 +204,7 @@
                  <Tooltip text="Пометить издание как списанное" />
              </tooltip>
          </Button>
-         <Button fx:id="getLiteraryWorksButton" layoutX="425.0" layoutY="4.0" maxHeight="-Infinity"
-                 minHeight="-Infinity"
-                 mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="произведения, входящие в издание" textFill="WHITE">
+         <Button fx:id="getLiteraryWorksButton" layoutX="425.0" layoutY="4.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="произведения, входящие в издание" textFill="WHITE">
             <font>
                <Font name="Hlebozavod Medium" size="11.0" />
             </font>
@@ -257,5 +251,23 @@
             <Font name="Advent Pro Regular" size="12.0" />
          </font>
       </TextField>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a29f92" height="34.0" layoutX="308.0" layoutY="137.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1135.0" />
+        <TextField fx:id="libraryIdField" alignment="CENTER" layoutX="736.0" layoutY="141.0" prefHeight="26.0" prefWidth="278.0" promptText="ID библиотеки" style="-fx-background-color: #B6B3A8; -fx-text-fill: white; -fx-prompt-text-fill: white;">
+            <font>
+                <Font name="Advent Pro Regular" size="13.0" />
+            </font>
+        </TextField>
+        <Button fx:id="searchButton" layoutX="1400.0" layoutY="137.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                minHeight="-Infinity" minWidth="-Infinity" onAction="#getPublicationsStoredInTheLibrary"
+                prefHeight="34.0"
+                prefWidth="34.0"
+                style="-fx-background-color: transparent;">
+            <graphic>
+                <ImageView fx:id="searchIcon" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                    <image>
+                        <Image url="@/img/search.png" />
+                    </image>
+                </ImageView>
+            </graphic></Button>
     </children>
 </AnchorPane>

@@ -83,6 +83,8 @@ public class PublicationsController extends AbstractEntityController<Publication
     private TextField startDateField;
     @FXML
     private TextField endDateField;
+    @FXML
+    private TextField libraryIdField;
 
     public PublicationsController(FxWeaver fxWeaver, PublicationRepository entityRepository, UserService userService, NotificationService notificationService, TableColumnConfigurator tableColumnConfigurator, HistoryEntryRepository historyEntryRepository, WrittenOffPublicationRepository writtenOffPublicationRepository, ReaderRepository readerRepository, StorageLocationRepository storageLocationRepository, LiteraryWorkRepository literaryWorkRepository, ObjectToMapConverter objectToMapConverter) {
         super(fxWeaver, entityRepository, userService, notificationService, tableColumnConfigurator);
@@ -202,6 +204,21 @@ public class PublicationsController extends AbstractEntityController<Publication
             notificationService.showNotification("Литературные произведения, включенные в данное издание, не найдены.");
         } else {
             notificationService.showResultsInTableView(result);
+        }
+    }
+
+    public void getPublicationsStoredInTheLibrary(ActionEvent actionEvent) {
+        if (!validateNumber(libraryIdField.getText())) {
+            return;
+        }
+
+        actionPanel.setVisible(false);
+
+        entities = entityRepository.findEntities(Integer.parseInt(libraryIdField.getText()));
+        if (!entities.isEmpty()) {
+            entitiesTable.getItems().setAll(entities);
+        } else {
+            notificationService.showNotification("В данной библиотеке нет изданий.");
         }
     }
 

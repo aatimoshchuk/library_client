@@ -62,6 +62,27 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
         );
     }
 
+    public List<Publication> findEntities(int libraryID) {
+        return jdbcTemplate.query(
+                "SELECT \"Publication\".* FROM \"Publication\" JOIN \"PublicationStorageLocation\" ON " +
+                        "\"Publication\".\"StorageLocationID\" = \"PublicationStorageLocation\"." +
+                        "\"StorageLocationID\" WHERE \"LibraryID\" = ?",
+                (rs, rowNum) -> new Publication(
+                        rs.getInt("NomenclatureNumber"),
+                        rs.getString("Title"),
+                        rs.getString("Publisher"),
+                        rs.getDate("ReceiptDate").toString(),
+                        rs.getInt("YearOfPrinting"),
+                        rs.getString("Category"),
+                        rs.getInt("AgeRestriction"),
+                        rs.getInt("StorageLocationID"),
+                        PublicationState.fromRussianName(rs.getString("State")),
+                        rs.getBoolean("PermissionToIssue"),
+                        rs.getInt("DaysForReturn")),
+                libraryID
+        );
+    }
+
     @Override
     public Warning saveEntity(Publication entity) {
         if (!entity.checkEmptyFields()) {
