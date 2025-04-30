@@ -14,6 +14,7 @@ import nsu.fit.repository.ReaderRepository;
 import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.TableColumnConfigurator;
+import nsu.fit.utils.Warning;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 
@@ -45,6 +46,8 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
     private TextField authorNameField;
     @FXML
     private TextField maxCountField;
+    @FXML
+    private TextField publicationNomenclatureNumberField;
 
     @FXML
     private Button getPublicationsWithLiteraryWorkButton;
@@ -52,6 +55,10 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
     private Button getReadersWithLiteraryWorkButton;
     @FXML
     private Button getReadersWhoReceivedLiteraryWorkDuringThePeriodButton;
+    @FXML
+    private Button setRelationshipWithPublicationButton;
+    @FXML
+    private Button removeRelationshipWithPublicationButton;
 
     public LiteraryWorksController(FxWeaver fxWeaver, LiteraryWorkRepository entityRepository, UserService userService,
                                    NotificationService notificationService, TableColumnConfigurator tableColumnConfigurator, PublicationRepository publicationRepository, ReaderRepository readerRepository) {
@@ -96,7 +103,41 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
         } else {
             notificationService.showResultsInTableView(result);
         }
+    }
 
+    public void setRelationshipWithPublication(LiteraryWork literaryWork) {
+        if (!validateNumber(publicationNomenclatureNumberField.getText())) {
+            return;
+        }
+
+        Warning warning = entityRepository.setRelationshipWithPublication(literaryWork,
+                Integer.parseInt(publicationNomenclatureNumberField.getText()));
+
+        if (warning != null) {
+            notificationService.showWarning(warning);
+        } else {
+            notificationService.showNotification(("Издание с номенклатурным номером %s успешно связано с " +
+                    "произведением с ID = %d.")
+                    .formatted(publicationNomenclatureNumberField.getText(), literaryWork.getId()));
+        }
+    }
+
+    public void removeRelationshipWithPublication(LiteraryWork literaryWork) {
+        if (!validateNumber(publicationNomenclatureNumberField.getText())) {
+            return;
+        }
+
+        Warning warning = entityRepository.removeRelationshipWithPublication(literaryWork,
+                Integer.parseInt(publicationNomenclatureNumberField.getText()));
+
+        if (warning != null) {
+            notificationService.showWarning(warning);
+        } else {
+
+            notificationService.showNotification(("Связь издания с номенклатурным номером %s и произведения c ID = " +
+                    "%d успешно разорвана.")
+                    .formatted(publicationNomenclatureNumberField.getText(), literaryWork.getId()));
+        }
     }
 
     public void getPublicationsWithLiteraryWork(LiteraryWork literaryWork) {
@@ -154,6 +195,8 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
         getReadersWhoReceivedLiteraryWorkDuringThePeriodButton
                 .setOnAction(e -> getReadersWhoReceivedLiteraryWorkDuringThePeriod(selectedEntity));
         getReadersWithLiteraryWorkButton.setOnAction(e -> getReadersWithLiteraryWork(selectedEntity));
+        setRelationshipWithPublicationButton.setOnAction(e -> setRelationshipWithPublication(selectedEntity));
+        removeRelationshipWithPublicationButton.setOnAction(e -> removeRelationshipWithPublication(selectedEntity));
     }
 
     @Override
@@ -163,7 +206,7 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
 
     @Override
     protected boolean confirmDeletion(LiteraryWork entity) {
-        return notificationService.showConfirmationWindow("Вы действительно хотите удалить \"" + entity.getTitle() +
-                "\" из числа произведений?");
+        return notificationService.showConfirmationWindow(String.format("Вы действительно хотите удалить \"%s\" из " +
+                "числа произведений?", entity.getTitle()));
     }
 }

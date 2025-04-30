@@ -50,6 +50,7 @@ public class NotificationService {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO);
         alert.setTitle("Подтверждение");
         alert.setHeaderText(null);
+        autoSizeAlert(alert);
 
         return alert.showAndWait().orElse(ButtonType.CANCEL).equals(ButtonType.YES);
     }

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +79,46 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
         jdbcTemplate.update(
                 "DELETE FROM \"LiteraryWork\" WHERE \"ID\" = ?",
                 entity.getId());
+    }
+
+    public Warning setRelationshipWithPublication(LiteraryWork literaryWork, int publicationNomenclatureNumber) {
+        try {
+            jdbcTemplate.update("INSERT INTO \"PublicationToLiteraryWork\" (\"LiteraryWorkID\", " +
+                            "\"PublicationNomenclatureNumber\") VALUES (?, ?)",
+                    literaryWork.getId(),
+                    publicationNomenclatureNumber);
+        } catch (Exception e) {
+            if (e.getCause() instanceof SQLException sqlEx) {
+                if (sqlEx.getMessage().contains("duplicate key value")) {
+                    return new Warning(IMPOSSIBLE_TO_SAVE, "Издание уже включает в себя данное произведение!");
+                }
+
+                if (sqlEx.getMessage().contains("violates foreign key constraint")) {
+                    return new Warning(IMPOSSIBLE_TO_SAVE, "Издание с таким номенклатурным номером не " +
+                            "существует!");
+                }
+            }
+
+            logger.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(IMPOSSIBLE_TO_SAVE, null);
+        }
+
+        return null;
+    }
+
+    public Warning removeRelationshipWithPublication(LiteraryWork literaryWork, int publicationNomenclatureNumber) {
+        try {
+            jdbcTemplate.update(
+                    "DELETE FROM \"PublicationToLiteraryWork\" WHERE \"LiteraryWorkID\" = ? AND " +
+                            "\"PublicationNomenclatureNumber\" = ?",
+                    literaryWork.getId(),
+                    publicationNomenclatureNumber);
+        } catch (Exception e) {
+            logger.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(IMPOSSIBLE_TO_SAVE, null);
+        }
+
+        return null;
     }
 
     public List<Map<String, Object>> getTheMostPopularLiteraryWorks(int maxCount) {
