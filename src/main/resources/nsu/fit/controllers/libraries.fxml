@@ -204,11 +204,32 @@
                <Font name="Hlebozavod Medium" size="11.0" />
             </font>
          </Button>
-         <Button fx:id="getReadersWhoRegisteredInTheLibraryButton" layoutX="700.0" layoutY="18.0" maxHeight="-Infinity"
-                 minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="Читатели, зарегистрированные в библиотеке" textFill="WHITE">
+         <Button fx:id="getReadersWhoRegisteredInTheLibraryButton" layoutX="700.0" layoutY="4.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="Читатели, зарегистрированные в библиотеке" textFill="WHITE">
             <font>
                <Font name="Hlebozavod Medium" size="11.0" />
             </font>
+         </Button>
+         <Label layoutX="720.0" layoutY="38.0" text="читательсикй билет:" textFill="WHITE">
+            <font>
+               <Font name="Hlebozavod Medium" size="12.0" />
+            </font>
+         </Label>
+         <TextField fx:id="libraryCardNumberField" layoutX="825.0" layoutY="33.0" prefHeight="24.0" prefWidth="30.0">
+            <font>
+               <Font name="Advent Pro Regular" size="12.0" />
+            </font>
+         </TextField>
+         <Button fx:id="registerReaderButton" layoutX="870.0" layoutY="35.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
+            <graphic>
+               <ImageView fx:id="addReaderIcon" fitHeight="20.0" fitWidth="20.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                  <image>
+                     <Image url="@/img/add_reader.png" />
+                  </image>
+               </ImageView>
+            </graphic>
+             <tooltip>
+                 <Tooltip text="Зарегистрировать читателя в данной библиотеке" />
+             </tooltip>
          </Button>
         </AnchorPane>
       <Text fill="#6c6c6a" layoutX="692.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="БИБЛИОТЕКИ">

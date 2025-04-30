@@ -12,6 +12,7 @@ import nsu.fit.repository.ReaderRepository;
 import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.TableColumnConfigurator;
+import nsu.fit.utils.Warning;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +40,8 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
     private Button getIssuedPublicationsButton;
     @FXML
     private Button getReadersWhoRegisteredInTheLibraryButton;
+    @FXML
+    private Button registerReaderButton;
 
     @FXML
     private TextField roomNumberField;
@@ -48,6 +51,8 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
     private TextField shelvingNumberField;
     @FXML
     private TextField shelfNumberField;
+    @FXML
+    private TextField libraryCardNumberField;
 
     public LibrariesController(FxWeaver fxWeaver, LibraryRepository entityRepository, UserService userService,
                                NotificationService notificationService, LibrarianRepository librarianRepository,
@@ -83,6 +88,7 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
         getLibrariansWhoWorksInTheRoomButton.setOnAction(e -> getLibrariansWhoWorksInTheRoom(selectedEntity));
         getIssuedPublicationsButton.setOnAction(e -> getIssuedPublications(selectedEntity));
         getReadersWhoRegisteredInTheLibraryButton.setOnAction(e -> getReadersWhoRegisteredInTheLibrary(selectedEntity));
+        registerReaderButton.setOnAction(e -> registerReaderInTheLibrary(selectedEntity));
     }
 
     public void getLibrariansWhoWorksInTheRoom(Library library) {
@@ -129,6 +135,22 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
             notificationService.showResultsInTableView(result);
         }
 
+    }
+
+    public void registerReaderInTheLibrary(Library library) {
+        if (!validateNumber(libraryCardNumberField.getText())) {
+            return;
+        }
+
+        Warning warning = entityRepository.registerReaderInTheLibrary(library.getId(),
+                Integer.parseInt(libraryCardNumberField.getText()));
+
+        if (warning != null) {
+            notificationService.showWarning(warning);
+        } else {
+            notificationService.showNotification("Читатель с номером читательского билета " +
+                    libraryCardNumberField.getText() + " успешно зарегистрирован в библиотеке c ID = " + library.getId());
+        }
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -82,5 +83,30 @@ public class LibraryRepository extends AbstractEntityRepository<Library> {
                         "\"ReaderToLibrary\" ON \"Library\".\"ID\" = \"ReaderToLibrary\".\"LibraryID\" " +
                         "WHERE \"ReaderLibraryCardNumber\" = ?",
                 reader.getId()));
+    }
+
+    public Warning registerReaderInTheLibrary(int libraryID, int readerLibraryCardNumber) {
+        try {
+            jdbcTemplate.update("INSERT INTO \"ReaderToLibrary\" (\"ReaderLibraryCardNumber\", \"LibraryID\") " +
+                            "VALUES (?, ?)",
+                    readerLibraryCardNumber,
+                    libraryID);
+        } catch (Exception e) {
+            if (e.getCause() instanceof SQLException sqlEx) {
+                if (sqlEx.getMessage().contains("duplicate key value")) {
+                    return new Warning(IMPOSSIBLE_TO_SAVE, "Читатель уже зарегистрирован в данной библиотеке!");
+                }
+
+                if (sqlEx.getMessage().contains("violates foreign key constraint")) {
+                    return new Warning(IMPOSSIBLE_TO_SAVE, "Читатель с таким номер читательского билета не " +
+                            "существует!");
+                }
+            }
+
+            logger.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(IMPOSSIBLE_TO_SAVE, null);
+        }
+
+        return null;
     }
 }
