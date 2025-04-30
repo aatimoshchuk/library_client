@@ -23,7 +23,10 @@ public enum ColumnTranslation {
     CATEGORY("Category", "Категория"),
     NOMENCLATURE_NUMBER("NomenclatureNumber", "Номенклатурный номер"),
     PUBLISHER("Publisher","Издательство"),
-    STATE("State", "Состояние");
+    STATE("State", "Состояние"),
+    READER_NAME("ReaderName", "Имя"),
+    CATEGORY_NAME("CategoryName", "Категория"),
+    BIRTHDAY("BirthDay", "Дата рождения");
 
     private static final Map<String, String> MAP = new HashMap<>();
 

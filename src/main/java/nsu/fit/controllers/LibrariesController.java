@@ -8,6 +8,7 @@ import nsu.fit.data.access.Library;
 import nsu.fit.repository.LibrarianRepository;
 import nsu.fit.repository.LibraryRepository;
 import nsu.fit.repository.PublicationRepository;
+import nsu.fit.repository.ReaderRepository;
 import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.TableColumnConfigurator;
@@ -22,6 +23,7 @@ import java.util.Map;
 @FxmlView("libraries.fxml")
 public class LibrariesController extends AbstractEntityController<Library, LibraryRepository> {
     private final LibrarianRepository librarianRepository;
+    private final ReaderRepository readerRepository;
     private final PublicationRepository publicationRepository;
 
     @FXML
@@ -30,10 +32,14 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
     private TableColumn<Library, String> nameColumn;
     @FXML
     private TableColumn<Library, String> addressColumn;
+
     @FXML
     private Button getLibrariansWhoWorksInTheRoomButton;
     @FXML
     private Button getIssuedPublicationsButton;
+    @FXML
+    private Button getReadersWhoRegisteredInTheLibraryButton;
+
     @FXML
     private TextField roomNumberField;
     @FXML
@@ -45,10 +51,11 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
 
     public LibrariesController(FxWeaver fxWeaver, LibraryRepository entityRepository, UserService userService,
                                NotificationService notificationService, LibrarianRepository librarianRepository,
-                               PublicationRepository publicationRepository, TableColumnConfigurator tableColumnConfigurator) {
+                               PublicationRepository publicationRepository, TableColumnConfigurator tableColumnConfigurator, ReaderRepository readerRepository) {
         super(fxWeaver, entityRepository, userService, notificationService, tableColumnConfigurator);
         this.librarianRepository = librarianRepository;
         this.publicationRepository = publicationRepository;
+        this.readerRepository = readerRepository;
     }
 
     @FXML
@@ -75,6 +82,7 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
     protected void setCustomButtonActions() {
         getLibrariansWhoWorksInTheRoomButton.setOnAction(e -> getLibrariansWhoWorksInTheRoom(selectedEntity));
         getIssuedPublicationsButton.setOnAction(e -> getIssuedPublications(selectedEntity));
+        getReadersWhoRegisteredInTheLibraryButton.setOnAction(e -> getReadersWhoRegisteredInTheLibrary(selectedEntity));
     }
 
     public void getLibrariansWhoWorksInTheRoom(Library library) {
@@ -91,6 +99,16 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
             notificationService.showResultsInTableView(result);
         }
 
+    }
+
+    public void getReadersWhoRegisteredInTheLibrary(Library library) {
+        List<Map<String, Object>> result = readerRepository.getReadersWhoRegisteredInTheLibrary(library);
+
+        if (result.isEmpty()) {
+            notificationService.showNotification("Список читателей, зарегистрированных в данной библиотеке, пуст.");
+        } else {
+            notificationService.showResultsInTableView(result);
+        }
     }
 
     public void getIssuedPublications(Library library) {

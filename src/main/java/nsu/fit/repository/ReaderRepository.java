@@ -2,6 +2,7 @@ package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.Librarian;
+import nsu.fit.data.access.Library;
 import nsu.fit.data.access.LiteraryWork;
 import nsu.fit.data.access.Publication;
 import nsu.fit.data.access.Reader;
@@ -133,5 +134,15 @@ public class ReaderRepository extends AbstractEntityRepository<Reader> {
         return ColumnTranslation.formatColumnNames(jdbcTemplate.queryForList(
                 "SELECT * FROM \"getReadersWithPublication\"(?)",
                 publication.getId()));
+    }
+
+    public List<Map<String, Object>> getReadersWhoRegisteredInTheLibrary(Library library) {
+        return ColumnTranslation.formatColumnNames(jdbcTemplate.queryForList(
+                "SELECT \"LibraryCardNumber\", \"Surname\", \"Reader\".\"Name\" AS \"ReaderName\", \"Patronymic\", " +
+                        "\"BirthDay\", \"ReaderCategory\".\"Name\" AS \"CategoryName\"" +
+                        "FROM \"Reader\" JOIN \"ReaderToLibrary\" ON \"Reader\".\"LibraryCardNumber\" = " +
+                        "\"ReaderToLibrary\".\"ReaderLibraryCardNumber\" LEFT JOIN \"ReaderCategory\" ON " +
+                        "\"Reader\".\"CategoryID\" = \"ReaderCategory\".\"ID\" WHERE \"LibraryID\" = ?",
+                library.getId()));
     }
 }
