@@ -69,4 +69,10 @@ public class MainController {
         Parent root = fxWeaver.loadView(WrittenOffPublicationsController.class);
         stage.setScene(new Scene(root));
     }
+
+    public void switchToStorageLocations(ActionEvent actionEvent) {
+        Stage stage = (Stage) libraryIcon.getScene().getWindow();
+        Parent root = fxWeaver.loadView(StorageLocationController.class);
+        stage.setScene(new Scene(root));
+    }
 }

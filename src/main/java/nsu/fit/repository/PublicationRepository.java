@@ -181,4 +181,12 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
                         "TO_DATE(?, 'YYYY-MM-DD')) WHERE \"WriteOffDate\" IS NOT NULL",
                 startDate, endDate));
     }
+
+    public List<Map<String, Object>> getPublicationsInStorageLocation(int storageLocationId) {
+        return ColumnTranslation.formatColumnNames(jdbcTemplate.queryForList(
+                "SELECT \"NomenclatureNumber\", \"Title\", \"Publisher\", \"Category\", \"State\" FROM " +
+                        "\"Publication\" WHERE \"StorageLocationID\" = ?",
+                storageLocationId
+        ));
+    }
 }

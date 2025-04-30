@@ -78,11 +78,13 @@ public class NotificationService {
         vbox.setPadding(new Insets(15));
         vbox.setAlignment(Pos.CENTER_LEFT);
 
+
+
         for (String fieldName : result.keySet()) {
             vbox.getChildren().add(createInfoRow(fieldName + ":", String.valueOf(result.get(fieldName))));
         }
 
-        Scene scene = new Scene(vbox, 350, 30 * result.size());
+        Scene scene = new Scene(vbox, Region.USE_COMPUTED_SIZE, 30 * result.size());
         stage.setScene(scene);
         stage.showAndWait();
     }

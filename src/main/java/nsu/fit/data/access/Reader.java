@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nsu.fit.annotations.DisplayName;
 import nsu.fit.annotations.FieldOrder;
-import nsu.fit.annotations.HiddenField;
 
 @Setter
 @Getter

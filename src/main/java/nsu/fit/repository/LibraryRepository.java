@@ -27,6 +27,17 @@ public class LibraryRepository extends AbstractEntityRepository<Library> {
         );
     }
 
+    public Library findOne(int id) {
+        return jdbcTemplate.queryForObject(
+                "SELECT * FROM \"Library\" WHERE \"ID\" = ?",
+                (rs, rowNum) -> new Library(
+                        rs.getInt("ID"),
+                        rs.getString("Name"),
+                        rs.getString("Address")),
+                id
+        );
+    }
+
     @Override
     public Warning saveEntity(Library entity) {
         if (!entity.checkEmptyFields()) {

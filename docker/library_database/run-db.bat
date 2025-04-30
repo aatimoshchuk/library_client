@@ -1,4 +1,4 @@
-set container-name=postgres-with-logs
+set container-name=postgres-with-logs-library
 set image-name=library_database-postgres
 
 docker stop %container-name%

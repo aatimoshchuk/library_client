@@ -172,6 +172,12 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
         stage.setScene(new Scene(root));
     }
 
+    public void switchToStorageLocations(ActionEvent actionEvent) {
+        Stage stage = (Stage) entitiesTable.getScene().getWindow();
+        Parent root = fxWeaver.loadView(StorageLocationController.class);
+        stage.setScene(new Scene(root));
+    }
+
     protected void setCustomButtonActions() {
 
     }

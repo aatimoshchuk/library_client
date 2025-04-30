@@ -20,7 +20,10 @@ public enum ColumnTranslation {
     RECEIPT_DATE("ReceiptDate", "Дата поступления"),
     WRITE_OFF_DATE("WriteOffDate", "Дата списания"),
     WRITING_YEAR("WritingYear", "Год написания"),
-    CATEGORY("Category", "Категория");
+    CATEGORY("Category", "Категория"),
+    NOMENCLATURE_NUMBER("NomenclatureNumber", "Номенклатурный номер"),
+    PUBLISHER("Publisher","Издательство"),
+    STATE("State", "Состояние");
 
     private static final Map<String, String> MAP = new HashMap<>();
 

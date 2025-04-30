@@ -109,7 +109,18 @@
             </font>
         </Text>
         <Button layoutY="609.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToWrittenOffPublications" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
-        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="137.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="597.0" prefWidth="1135.0" stylesheets="@style.css">
+        <ImageView fx:id="storageLocationIcon" fitHeight="37.0" fitWidth="37.0" layoutX="26.0" layoutY="688.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@../../../img/shelf.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="87.0" layoutY="716.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Места хранения">
+            <font>
+                <Font name="Hlebozavod Medium" size="20.0" />
+            </font>
+        </Text>
+        <Button layoutY="678.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToStorageLocations" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
+        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="137.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="692.0" prefWidth="1135.0" stylesheets="@style.css">
             <columns>
             <TableColumn fx:id="idColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" resizable="false" text="ID" />
             <TableColumn fx:id="publicationNomenclatureNumberColumn" maxWidth="270.0" minWidth="270.0" prefWidth="270.0" resizable="false" text="Номенклатурный номер издания" />
