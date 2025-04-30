@@ -3,6 +3,7 @@ package nsu.fit.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -59,6 +60,9 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
     private Button setRelationshipWithPublicationButton;
     @FXML
     private Button removeRelationshipWithPublicationButton;
+
+    @FXML
+    private Label nomenclatureNumberLabel;
 
     public LiteraryWorksController(FxWeaver fxWeaver, LiteraryWorkRepository entityRepository, UserService userService,
                                    NotificationService notificationService, TableColumnConfigurator tableColumnConfigurator, PublicationRepository publicationRepository, ReaderRepository readerRepository) {
@@ -180,12 +184,22 @@ public class LiteraryWorksController extends AbstractEntityController<LiteraryWo
 
     @Override
     protected void applyUserPermissions() {
-        if (userService.getUserRole().equals(UserRole.ADMIN_FOND)) {
+        UserRole userRole = userService.getUserRole();
+
+        if (userRole.equals(UserRole.ADMIN_FOND)) {
             entitiesTable.setEditable(true);
 
             addButton.setVisible(true);
             saveButton.setVisible(true);
             deleteButton.setVisible(true);
+        } else if (userRole.equals(UserRole.ADMIN_LIBRARY)) {
+            removeRelationshipWithPublicationButton.setVisible(false);
+        } else {
+            removeRelationshipWithPublicationButton.setVisible(false);
+            setRelationshipWithPublicationButton.setVisible(false);
+
+            publicationNomenclatureNumberField.setVisible(false);
+            nomenclatureNumberLabel.setVisible(false);
         }
     }
 

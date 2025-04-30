@@ -42,6 +42,8 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
     private Button getReadersWhoRegisteredInTheLibraryButton;
     @FXML
     private Button registerReaderButton;
+    @FXML
+    private Button unregisterReaderButton;
 
     @FXML
     private TextField roomNumberField;
@@ -89,6 +91,7 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
         getIssuedPublicationsButton.setOnAction(e -> getIssuedPublications(selectedEntity));
         getReadersWhoRegisteredInTheLibraryButton.setOnAction(e -> getReadersWhoRegisteredInTheLibrary(selectedEntity));
         registerReaderButton.setOnAction(e -> registerReaderInTheLibrary(selectedEntity));
+        unregisterReaderButton.setOnAction(e -> unregisterReaderInTheLibrary(selectedEntity));
     }
 
     public void getLibrariansWhoWorksInTheRoom(Library library) {
@@ -100,7 +103,7 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
                 Integer.parseInt(roomNumberField.getText()));
 
         if (result.isEmpty()) {
-            notificationService.showNotification("Список библиотекарей, работающих в данном читальном зале пуст.");
+            notificationService.showNotification("Список библиотекарей, работающих в данном читальном зале, пуст.");
         } else {
             notificationService.showResultsInTableView(result);
         }
@@ -130,7 +133,7 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
                         Integer.parseInt(shelfNumberField.getText()));
 
         if (result.isEmpty()) {
-            notificationService.showNotification("Список литературы, выданной с данной полки пуст.");
+            notificationService.showNotification("Список литературы, выданной с данной полки, пуст.");
         } else {
             notificationService.showResultsInTableView(result);
         }
@@ -148,8 +151,24 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
         if (warning != null) {
             notificationService.showWarning(warning);
         } else {
-            notificationService.showNotification("Читатель с номером читательского билета " +
-                    libraryCardNumberField.getText() + " успешно зарегистрирован в библиотеке c ID = " + library.getId());
+            notificationService.showNotification(String.format("Читатель с номером читательского билета %s успешно " +
+                    "зарегистрирован в библиотеке c ID = %d.", libraryCardNumberField.getText(), library.getId()));
+        }
+    }
+
+    public void unregisterReaderInTheLibrary(Library library) {
+        if (!validateNumber(libraryCardNumberField.getText())) {
+            return;
+        }
+
+        Warning warning = entityRepository.unregisterReaderInTheLibrary(library.getId(),
+                Integer.parseInt(libraryCardNumberField.getText()));
+
+        if (warning != null) {
+            notificationService.showWarning(warning);
+        } else {
+            notificationService.showNotification(String.format("Регистрация читателя с номером читательского билета " +
+                    "%s в библиотеке с ID = %d успешно отменена.", libraryCardNumberField.getText(), library.getId()));
         }
     }
 
@@ -160,7 +179,7 @@ public class LibrariesController extends AbstractEntityController<Library, Libra
 
     @Override
     protected boolean confirmDeletion(Library entity) {
-        return notificationService.showConfirmationWindow("Вы действительно хотите удалить " + entity.getName() +
-                " из списка библиотек?");
+        return notificationService.showConfirmationWindow(String.format("Вы действительно хотите удалить %s из списка" +
+                        " библиотек?", entity.getName()));
     }
 }

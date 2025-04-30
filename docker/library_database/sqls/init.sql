@@ -1336,6 +1336,9 @@ GRANT librarian TO a_ivanov;
 CREATE USER fadmin WITH PASSWORD '1';
 GRANT admin_fond TO fadmin;
 
+CREATE USER gpntb_admin WITH PASSWORD '000';
+GRANT admin_library to gpntb_admin;
+
 
 
 

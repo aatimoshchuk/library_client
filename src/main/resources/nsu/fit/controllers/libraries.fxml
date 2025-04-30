@@ -209,7 +209,7 @@
                <Font name="Hlebozavod Medium" size="11.0" />
             </font>
          </Button>
-         <Label layoutX="720.0" layoutY="38.0" text="читательсикй билет:" textFill="WHITE">
+         <Label layoutX="720.0" layoutY="38.0" text="читательский билет:" textFill="WHITE">
             <font>
                <Font name="Hlebozavod Medium" size="12.0" />
             </font>
@@ -219,7 +219,7 @@
                <Font name="Advent Pro Regular" size="12.0" />
             </font>
          </TextField>
-         <Button fx:id="registerReaderButton" layoutX="870.0" layoutY="35.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
+         <Button fx:id="registerReaderButton" layoutX="865.0" layoutY="35.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
             <graphic>
                <ImageView fx:id="addReaderIcon" fitHeight="20.0" fitWidth="20.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
                   <image>
@@ -230,6 +230,18 @@
              <tooltip>
                  <Tooltip text="Зарегистрировать читателя в данной библиотеке" />
              </tooltip>
+         </Button>
+         <Button fx:id="unregisterReaderButton" layoutX="890.0" layoutY="35.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
+            <graphic>
+               <ImageView fx:id="removeReaderIcon" fitHeight="20.0" fitWidth="20.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
+                  <image>
+                     <Image url="@/img/delete_reader.png" />
+                  </image>
+               </ImageView>
+            </graphic>
+            <tooltip>
+               <Tooltip text="Отменить регистрацию читателя в данной библиотеке" />
+            </tooltip>
          </Button>
         </AnchorPane>
       <Text fill="#6c6c6a" layoutX="692.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="БИБЛИОТЕКИ">

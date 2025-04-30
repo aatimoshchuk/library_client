@@ -109,4 +109,18 @@ public class LibraryRepository extends AbstractEntityRepository<Library> {
 
         return null;
     }
+
+    public Warning unregisterReaderInTheLibrary(int libraryID, int readerLibraryCardNumber) {
+        try {
+            jdbcTemplate.update(
+                    "DELETE FROM \"ReaderToLibrary\" WHERE \"ReaderLibraryCardNumber\" = ? AND \"LibraryID\" = ?",
+                    readerLibraryCardNumber,
+                    libraryID);
+        } catch (Exception e) {
+            logger.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(IMPOSSIBLE_TO_SAVE, null);
+        }
+
+        return null;
+    }
 }

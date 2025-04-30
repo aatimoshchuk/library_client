@@ -192,7 +192,7 @@
                     <Font name="Hlebozavod Medium" size="12.0" />
                 </font>
             </Label>
-         <Label layoutX="710.0" layoutY="37.0" text="ном. номер:" textFill="WHITE">
+         <Label fx:id="nomenclatureNumberLabel" layoutX="710.0" layoutY="37.0" text="ном. номер:" textFill="WHITE">
             <font>
                <Font name="Hlebozavod Medium" size="12.0" />
             </font>
