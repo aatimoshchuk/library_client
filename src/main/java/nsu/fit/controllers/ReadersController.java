@@ -50,6 +50,8 @@ public class ReadersController extends AbstractEntityController<Reader, ReaderRe
     private TextField startDateField;
     @FXML
     private TextField endDateField;
+    @FXML
+    private TextField libraryIdField;
 
     public ReadersController(FxWeaver fxWeaver, ReaderRepository entityRepository, UserService userService,
                              NotificationService notificationService, PublicationRepository publicationRepository,
@@ -139,6 +141,21 @@ public class ReadersController extends AbstractEntityController<Reader, ReaderRe
             notificationService.showNotification("Список читателей пуст.");
         } else {
             notificationService.showResultsInTableView(result);
+        }
+    }
+
+    public void getReadersRegisteredInTheLibrary(ActionEvent actionEvent) {
+        if (!validateNumber(libraryIdField.getText())) {
+            return;
+        }
+
+        actionPanel.setVisible(false);
+
+        entities = entityRepository.findEntities(Integer.parseInt(libraryIdField.getText()));
+        if (!entities.isEmpty()) {
+            entitiesTable.getItems().setAll(entities);
+        } else {
+            notificationService.showNotification("В данной библиотеке не зарегистрирован ни один читатель.");
         }
     }
 

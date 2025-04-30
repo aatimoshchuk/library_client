@@ -93,6 +93,24 @@ public class ReaderRepository extends AbstractEntityRepository<Reader> {
         );
     }
 
+    public List<Reader> findEntities(int libraryID) {
+        return jdbcTemplate.query(
+                "SELECT \"LibraryCardNumber\", \"Surname\", \"Reader\".\"Name\" AS \"ReaderName\", \"Patronymic\", " +
+                        "\"BirthDay\", \"ReaderCategory\".\"Name\" AS \"CategoryName\"" +
+                        "FROM \"Reader\" LEFT JOIN \"ReaderCategory\" ON \"Reader\".\"CategoryID\" = " +
+                        "\"ReaderCategory\".\"ID\" JOIN \"ReaderToLibrary\" ON \"Reader\".\"LibraryCardNumber\" = " +
+                        "\"ReaderToLibrary\".\"ReaderLibraryCardNumber\" WHERE \"LibraryID\" = ?",
+                (rs, rowNum) -> new Reader(
+                        rs.getInt("LibraryCardNumber"),
+                        rs.getString("Surname"),
+                        rs.getString("ReaderName"),
+                        rs.getString("Patronymic"),
+                        rs.getDate("BirthDay").toString(),
+                        rs.getString("CategoryName")),
+                libraryID
+        );
+    }
+
     public List<Map<String, Object>> getReadersWhoWereServedByTheLibrarianDuringThePeriod(Librarian librarian,
                                                                                           String startDate,
                                                                                           String endDate) {
