@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import nsu.fit.data.access.Reader;
+import nsu.fit.repository.LibraryRepository;
 import nsu.fit.repository.PublicationRepository;
 import nsu.fit.repository.ReaderRepository;
 import nsu.fit.service.UserRole;
@@ -23,6 +24,7 @@ import java.util.Map;
 @FxmlView("readers.fxml")
 public class ReadersController extends AbstractEntityController<Reader, ReaderRepository> {
     private final PublicationRepository publicationRepository;
+    private final LibraryRepository libraryRepository;
 
     @FXML
     private TableColumn<Reader, String> libraryCardNumberColumn;
@@ -41,6 +43,8 @@ public class ReadersController extends AbstractEntityController<Reader, ReaderRe
     private Button getPublicationsThatIssuedFromLibraryWhereReaderIsNotRegisteredButton;
     @FXML
     private Button getPublicationsThatIssuedFromLibraryWhereReaderIsRegisteredButton;
+    @FXML
+    private Button getLibrariesWhereReaderIsRegisteredButton;
 
     @FXML
     private TextField startDateField;
@@ -49,9 +53,10 @@ public class ReadersController extends AbstractEntityController<Reader, ReaderRe
 
     public ReadersController(FxWeaver fxWeaver, ReaderRepository entityRepository, UserService userService,
                              NotificationService notificationService, PublicationRepository publicationRepository,
-                             TableColumnConfigurator tableColumnConfigurator) {
+                             TableColumnConfigurator tableColumnConfigurator, LibraryRepository libraryRepository) {
         super(fxWeaver, entityRepository, userService, notificationService, tableColumnConfigurator);
         this.publicationRepository = publicationRepository;
+        this.libraryRepository = libraryRepository;
     }
 
     @FXML
@@ -81,6 +86,7 @@ public class ReadersController extends AbstractEntityController<Reader, ReaderRe
                 .setOnAction(e -> getPublicationsThatIssuedFromLibraryWhereReaderIsNotRegistered(selectedEntity));
         getPublicationsThatIssuedFromLibraryWhereReaderIsRegisteredButton
                 .setOnAction(e -> getPublicationsThatIssuedFromLibraryWhereReaderIsRegistered(selectedEntity));
+        getLibrariesWhereReaderIsRegisteredButton.setOnAction(e -> getLibrariesWhereReaderIsRegistered(selectedEntity));
     }
 
     @Override
@@ -100,6 +106,16 @@ public class ReadersController extends AbstractEntityController<Reader, ReaderRe
 
         if (result.isEmpty()) {
             notificationService.showNotification("Список изданий пуст.");
+        } else {
+            notificationService.showResultsInTableView(result);
+        }
+    }
+
+    public void getLibrariesWhereReaderIsRegistered(Reader reader) {
+        List<Map<String, Object>> result = libraryRepository.getLibrariesWhereReaderIsRegistered(reader);
+
+        if (result.isEmpty()) {
+            notificationService.showNotification("Читатель не зарегистрирован ни в одной из библиотек.");
         } else {
             notificationService.showResultsInTableView(result);
         }

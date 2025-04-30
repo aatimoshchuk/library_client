@@ -26,7 +26,9 @@ public enum ColumnTranslation {
     STATE("State", "Состояние"),
     READER_NAME("ReaderName", "Имя"),
     CATEGORY_NAME("CategoryName", "Категория"),
-    BIRTHDAY("BirthDay", "Дата рождения");
+    BIRTHDAY("BirthDay", "Дата рождения"),
+    ADDRESS("Address", "Адрес"),
+    LIBRARY_NAME("LibraryName", "Название библиотеки");
 
     private static final Map<String, String> MAP = new HashMap<>();
 

@@ -2,6 +2,8 @@ package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
 import nsu.fit.data.access.Library;
+import nsu.fit.data.access.Reader;
+import nsu.fit.utils.ColumnTranslation;
 import nsu.fit.utils.Warning;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
@@ -71,5 +74,13 @@ public class LibraryRepository extends AbstractEntityRepository<Library> {
         jdbcTemplate.update(
                 "DELETE FROM \"Library\" WHERE \"ID\" = ?",
                 entity.getId());
+    }
+
+    public List<Map<String, Object>> getLibrariesWhereReaderIsRegistered(Reader reader) {
+        return ColumnTranslation.formatColumnNames(jdbcTemplate.queryForList(
+                "SELECT \"ID\", \"Name\" AS \"LibraryName\", \"Address\" FROM \"Library\" LEFT JOIN " +
+                        "\"ReaderToLibrary\" ON \"Library\".\"ID\" = \"ReaderToLibrary\".\"LibraryID\" " +
+                        "WHERE \"ReaderLibraryCardNumber\" = ?",
+                reader.getId()));
     }
 }
