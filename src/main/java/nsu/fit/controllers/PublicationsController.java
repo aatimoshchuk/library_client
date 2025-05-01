@@ -26,7 +26,8 @@ import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.ObjectToMapConverter;
 import nsu.fit.utils.TableColumnConfigurator;
-import nsu.fit.utils.Warning;
+import nsu.fit.utils.warning.Warning;
+import nsu.fit.utils.warning.WarningType;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 
@@ -101,9 +102,9 @@ public class PublicationsController extends AbstractEntityController<Publication
         historyEntryRepository.markPublicationAsReturned(publication.getId());
 
         if (numberOfDaysOverdue > 0) {
-            notificationService.showWarning(new Warning(
-                    "Срок возврата издания истек " + numberOfDaysOverdue + " дней назад!",
-                    "Издание было успешно возвращено."));
+            notificationService.showWarning(new Warning(WarningType.WARNING,
+                    String.format("Срок возврата издания истек %d дней назад! Издание было успешно возвращено.",
+                            numberOfDaysOverdue)));
         } else {
             notificationService.showNotification("Издание было успешно возвращено.");
         }
@@ -113,11 +114,17 @@ public class PublicationsController extends AbstractEntityController<Publication
     }
 
     public void markPublicationAsWrittenOff(Publication publication) {
-        boolean confirmation = notificationService.showConfirmationWindow("Вы действительно хотите списать издание \"" +
-                publication.getTitle() + "\"?");
+        boolean confirmation = notificationService.showConfirmationWindow(String.format(
+                "Вы действительно хотите списать издание \"%s\"?", publication.getTitle()));
 
         if (confirmation) {
-            writtenOffPublicationRepository.markPublicationAsWrittenOff(publication);
+            Warning warning = writtenOffPublicationRepository.markPublicationAsWrittenOff(publication);
+
+            if (warning != null) {
+                notificationService.showWarning(warning);
+                return;
+            }
+
             notificationService.showNotification("Издание было успешно списано.");
             loadData();
             actionPanel.setVisible(false);
@@ -132,7 +139,7 @@ public class PublicationsController extends AbstractEntityController<Publication
             notificationService.showNotification("Читатель не найден. Издание либо находится в библиотеке, либо " +
                     "списано.");
         } else if (result.size() > 1) {
-            notificationService.showWarning(new Warning("Ошибка сервера", "У издания больше одного хозяина"));
+            notificationService.showWarning(new Warning(WarningType.SERVER_EXCEPTION, "У издания больше одного хозяина"));
         } else {
             notificationService.showResultInStringView(result.get(0));
         }
@@ -264,8 +271,8 @@ public class PublicationsController extends AbstractEntityController<Publication
 
     @Override
     protected boolean confirmDeletion(Publication entity) {
-        return notificationService.showConfirmationWindow("Вы действительно хотите удалить \"" + entity.getTitle() +
-                "\" из числа изданий?");
+        return notificationService.showConfirmationWindow(String.format(
+                "Вы действительно хотите удалить \"%s\" из числа изданий?", entity.getTitle()));
     }
 
     @Override

@@ -121,7 +121,7 @@ public class LibrariansController extends AbstractEntityController<Librarian, Li
 
     @Override
     protected boolean confirmDeletion(Librarian entity) {
-        return notificationService.showConfirmationWindow("Вы действительно хотите удалить " + entity.getSurname() +
-                " " + entity.getName() + " " + entity.getPatronymic() + " из числа библиотекарей?");
+        return notificationService.showConfirmationWindow(String.format("Вы действительно хотите удалить %s %s %s из " +
+                "числа библиотекарей?", entity.getSurname(), entity.getName(), entity.getPatronymic()));
     }
 }

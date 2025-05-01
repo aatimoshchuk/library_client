@@ -6,7 +6,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1536.0" styleClass="bodybg" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nsu.fit.controllers.category_controllers.ScientificWorkersController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1536.0" styleClass="bodybg" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nsu.fit.controllers.category.ScientificWorkersController">
     <children>
         <Rectangle fill="#47453c" height="864.0" opacity="0.54" stroke="TRANSPARENT" strokeType="INSIDE" width="1536.0" />
         <Rectangle fill="#d9d9d9" height="864.0" layoutX="293.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1243.0" />

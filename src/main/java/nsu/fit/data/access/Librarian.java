@@ -10,27 +10,35 @@ import nsu.fit.annotations.FieldOrder;
 @Getter
 @NoArgsConstructor
 public class Librarian extends AbstractEntity {
+
     @DisplayName("ID")
     @FieldOrder(1)
     private int id;
+
     @DisplayName("Фамилия")
     @FieldOrder(2)
     private String surname;
+
     @DisplayName("Имя")
     @FieldOrder(3)
     private String name;
+
     @DisplayName("Отчество")
     @FieldOrder(4)
     private String patronymic;
+
     @DisplayName("Дата рождения")
     @FieldOrder(5)
     private String birthDay;
+
     @DisplayName("Номер телефона")
     @FieldOrder(6)
     private String phoneNumber;
+
     @DisplayName("ID библиотеки")
     @FieldOrder(7)
     private Integer library;
+
     @DisplayName("Номер зала")
     @FieldOrder(8)
     private Integer roomNumber;
@@ -52,5 +60,10 @@ public class Librarian extends AbstractEntity {
         return name != null && !name.isEmpty() && surname != null && !surname.isEmpty() && patronymic != null &&
                 !patronymic.isEmpty() && birthDay != null && !birthDay.isEmpty() && library > 0 && phoneNumber != null &&
                 !phoneNumber.isEmpty() && roomNumber > 0;
+    }
+
+    @Override
+    public boolean validateNumericFields() {
+        return library != null && roomNumber != null;
     }
 }

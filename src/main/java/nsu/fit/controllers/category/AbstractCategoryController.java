@@ -1,4 +1,4 @@
-package nsu.fit.controllers.category_controllers;
+package nsu.fit.controllers.category;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -67,7 +67,7 @@ public abstract class AbstractCategoryController<T extends AbstractCategoryEntit
         if (!entities.isEmpty()) {
             entitiesTable.getItems().setAll(entities);
         } else {
-            notificationService.showNotification("Список преподавателей пуст.");
+            notificationService.showNotification("Список читателей с заданными характеристиками пуст.");
         }
     }
 

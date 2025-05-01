@@ -13,7 +13,8 @@ import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.ObjectToMapConverter;
 import nsu.fit.utils.TableColumnConfigurator;
-import nsu.fit.utils.Warning;
+import nsu.fit.utils.warning.Warning;
+import nsu.fit.utils.warning.WarningType;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 
@@ -79,14 +80,14 @@ public class WrittenOffPublicationsController extends AbstractEntityController<W
 
     @Override
     protected boolean confirmDeletion(WrittenOffPublication entity) {
-        return notificationService.showConfirmationWindow("Вы действительно хотите удалить издание с " +
-                "номенклатурным номером " + entity.getPublicationNomenclatureNumber() + " из числа списанных?");
+        return notificationService.showConfirmationWindow(String.format("Вы действительно хотите удалить издание с " +
+                "номенклатурным номером %d из числа списанных?", entity.getPublicationNomenclatureNumber()));
     }
 
     @Override
     public void saveEntity(WrittenOffPublication entity) {
         if (userService.getUserRole().equals(UserRole.LIBRARIAN) && entity.getId() != 0) {
-            notificationService.showWarning(new Warning("Невозможно сохранить",
+            notificationService.showWarning(new Warning(WarningType.SAVING_ERROR,
                     "Недостаточно прав для редактирования записи"));
         } else {
             Warning warning = entityRepository.saveEntity(entity);

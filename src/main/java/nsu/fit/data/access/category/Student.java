@@ -33,4 +33,9 @@ public class Student extends AbstractCategoryEntity {
         return libraryCardNumber > 0 && studentCardNumber > 0 && course > 0 && educationalInstitutionName != null &&
                 !educationalInstitutionName.trim().isEmpty() && extensionDate != null && !extensionDate.trim().isEmpty();
     }
+
+    @Override
+    public boolean validateNumericFields() {
+        return libraryCardNumber != null && course != null;
+    }
 }

@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
-import nsu.fit.controllers.category_controllers.StudentsController;
+import nsu.fit.controllers.category.StudentsController;
 import org.springframework.stereotype.Component;
 
 @Component

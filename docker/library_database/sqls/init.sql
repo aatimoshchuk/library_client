@@ -497,6 +497,10 @@ BEGIN
     IF NEW."State" = 'Списано' AND NEW."StorageLocationID" IS NOT NULL THEN RAISE EXCEPTION
         'field StorageLocationID cannot be changed while publication is written off';
     END IF;
+
+    IF NEW."ReceiptDate" > CURRENT_DATE THEN RAISE EXCEPTION 'receipt date cannot be in the future';
+    END IF;
+
     RETURN NEW;
 END
 $$ LANGUAGE 'plpgsql';
@@ -504,6 +508,21 @@ $$ LANGUAGE 'plpgsql';
 CREATE TRIGGER "PublicationCheckUpdate"
     BEFORE UPDATE ON "Publication"
     FOR EACH ROW EXECUTE FUNCTION PublicationCheckUpdate();
+
+-- Вставка записи в "Издания"
+
+CREATE FUNCTION PublicationCheckInsert()
+    RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW."ReceiptDate" > CURRENT_DATE THEN RAISE EXCEPTION 'receipt date cannot be in the future';
+    END IF;
+    RETURN NEW;
+END
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER "PublicationCheckInsert"
+    BEFORE INSERT ON "Publication"
+    FOR EACH ROW EXECUTE FUNCTION PublicationCheckInsert();
 
 -- Заполнение таблиц
 
@@ -1212,9 +1231,10 @@ BEGIN
     RETURN QUERY
         SELECT *
         FROM "StudentInformation"
-        WHERE (educationalInstitutionName IS NULL OR "StudentInformation"."EducationalInstitutionName" =
-                                                     educationalInstitutionName)
-          AND (faculty IS NULL OR "StudentInformation"."Faculty" = faculty)
+        WHERE (educationalInstitutionName IS NULL OR "StudentInformation"."EducationalInstitutionName" ILIKE
+                                                     CONCAT('%', educationalInstitutionName, '%'))
+          AND (faculty IS NULL OR "StudentInformation"."Faculty" ILIKE
+                                  CONCAT('%', faculty, '%'))
           AND (course IS NULL OR "StudentInformation"."Course" = course);
 END
 $$ LANGUAGE plpgsql;
@@ -1226,8 +1246,8 @@ BEGIN
     RETURN QUERY
         SELECT *
         FROM "SchoolchildInformation"
-        WHERE (educationalInstitutionName IS NULL OR "SchoolchildInformation"."EducationalInstitutionName" =
-                                                     educationalInstitutionName)
+        WHERE (educationalInstitutionName IS NULL OR "SchoolchildInformation"."EducationalInstitutionName" ILIKE
+                                                     CONCAT('%', educationalInstitutionName, '%'))
           AND (grade IS NULL OR "SchoolchildInformation"."Grade" = grade);
 END
 $$ LANGUAGE plpgsql;
@@ -1238,8 +1258,10 @@ BEGIN
     RETURN QUERY
         SELECT *
         FROM "ScientificWorkerInformation"
-        WHERE (organizationName IS NULL OR "ScientificWorkerInformation"."OrganizationName" = organizationName)
-          AND (scientificTopic IS NULL OR "ScientificWorkerInformation"."ScientificTopic" = scientificTopic);
+        WHERE (organizationName IS NULL OR "ScientificWorkerInformation"."OrganizationName" ILIKE
+                                           CONCAT('%', organizationName, '%'))
+          AND (scientificTopic IS NULL OR "ScientificWorkerInformation"."ScientificTopic" ILIKE
+                                          CONCAT('%', scientificTopic, '%'));
 END
 $$ LANGUAGE plpgsql;
 
@@ -1249,9 +1271,9 @@ BEGIN
     RETURN QUERY
         SELECT *
         FROM "LecturerInformation"
-        WHERE (educationalInstitutionName IS NULL OR "LecturerInformation"."EducationalInstitutionName" =
-                                                     educationalInstitutionName)
-          AND (jobTitle IS NULL OR "LecturerInformation"."JobTitle" = jobTitle);
+        WHERE (educationalInstitutionName IS NULL OR "LecturerInformation"."EducationalInstitutionName" ILIKE
+                                                     CONCAT('%', educationalInstitutionName, '%'))
+          AND (jobTitle IS NULL OR "LecturerInformation"."JobTitle" ILIKE CONCAT('%', jobTitle, '%'));
 END
 $$ LANGUAGE plpgsql;
 

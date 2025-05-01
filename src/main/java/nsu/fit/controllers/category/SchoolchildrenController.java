@@ -1,4 +1,4 @@
-package nsu.fit.controllers.category_controllers;
+package nsu.fit.controllers.category;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -8,7 +8,7 @@ import net.rgielen.fxweaver.core.FxmlView;
 import nsu.fit.data.access.Reader;
 import nsu.fit.data.access.category.Schoolchild;
 import nsu.fit.repository.ReaderRepository;
-import nsu.fit.repository.category_repository.SchoolchildRepository;
+import nsu.fit.repository.category.SchoolchildRepository;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.ObjectToMapConverter;
 import nsu.fit.utils.TableColumnConfigurator;
@@ -73,7 +73,7 @@ public class SchoolchildrenController extends AbstractCategoryController<Schoolc
     protected boolean confirmDeletion(Schoolchild entity) {
         Reader reader = readerRepository.findOne(entity.getLibraryCardNumber());
 
-        return notificationService.showConfirmationWindow("Вы действительно хотите удалить " + reader.getSurname() +
-                " " + reader.getName() + " " + reader.getPatronymic() + " из числа школьников?");
+        return notificationService.showConfirmationWindow(String.format("Вы действительно хотите удалить %s %s %s из " +
+                "числа школьников?", reader.getSurname(), reader.getName(), reader.getPatronymic()));
     }
 }

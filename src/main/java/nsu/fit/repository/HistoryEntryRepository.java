@@ -1,32 +1,36 @@
 package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nsu.fit.data.access.HistoryEntry;
-import nsu.fit.data.access.Publication;
-import nsu.fit.utils.Warning;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
+import nsu.fit.utils.warning.SqlState;
+import nsu.fit.utils.warning.TriggerExceptionMessage;
+import nsu.fit.utils.warning.Warning;
+import nsu.fit.utils.warning.WarningType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.util.List;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class HistoryEntryRepository extends AbstractEntityRepository<HistoryEntry> {
-    private static final Logger logger = LoggerFactory.getLogger(HistoryEntryRepository.class);
+
     private final JdbcTemplate jdbcTemplate;
 
-    public void markPublicationAsReturned(int publicationNomenclatureNumber) {
+    public Warning markPublicationAsReturned(int publicationNomenclatureNumber) {
         try {
             jdbcTemplate.update("UPDATE \"HistoryOfIssueOfPublications\" SET \"ReturnDate\" = CURRENT_DATE WHERE " +
                             "\"PublicationNomenclatureNumber\" = ?",
                     publicationNomenclatureNumber);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
+
+        return null;
     }
 
     public int getNumberOfDaysOverdue(int publicationNomenclatureNumber) {
@@ -52,8 +56,13 @@ public class HistoryEntryRepository extends AbstractEntityRepository<HistoryEntr
 
     @Override
     public Warning saveEntity(HistoryEntry entity) {
+        if (!entity.validateNumericFields()) {
+            return new Warning(WarningType.SAVING_ERROR, "\"Номенклатурный номер издания\", " +
+                    "\"Номер читательского билета\" и \"ID библиотекаря\" должны представлять из себя число!");
+        }
+
         if (!entity.checkEmptyFields()) {
-            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля \"Номенклатурный номер издания\", \"Номер читательского " +
+            return new Warning(WarningType.SAVING_ERROR, "Поля \"Номенклатурный номер издания\", \"Номер читательского " +
                     "билета\" и \"Дата выдачи\" не должны быть пустыми!");
         }
 
@@ -69,7 +78,8 @@ public class HistoryEntryRepository extends AbstractEntityRepository<HistoryEntr
                         entity.getIssueDate(),
                         (entity.getReturnDate() != null && entity.getReturnDate().isEmpty()) ? null :
                                 entity.getReturnDate(),
-                        (entity.getLibrarianID() == 0) ? null : entity.getLibrarianID(),
+                        (entity.getLibrarianID() != null && entity.getLibrarianID() == 0) ? null :
+                                entity.getLibrarianID(),
                         entity.getId());
             } else {
                 jdbcTemplate.update(
@@ -81,35 +91,52 @@ public class HistoryEntryRepository extends AbstractEntityRepository<HistoryEntr
                         entity.getIssueDate(),
                         (entity.getReturnDate() != null && entity.getReturnDate().isEmpty()) ? null :
                                 entity.getReturnDate(),
-                        (entity.getLibrarianID() == null || entity.getLibrarianID() == 0) ? null : entity.getLibrarianID()
+                        (entity.getLibrarianID() != null && entity.getLibrarianID() == 0) ? null :
+                                entity.getLibrarianID()
                 );
             }
-        } catch (DataAccessException e) {
-            if (e.getCause() instanceof SQLException sqlEx && "P0001".equals(sqlEx.getSQLState())) {
-                if (sqlEx.getMessage().contains("selected publication is not available for readers without category")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Издание недоступно для выдачи читателям, не относящимся " +
-                            "ни к одной из категорий.");
+        } catch (Exception e) {
+            if (e.getCause() instanceof SQLException sqlEx) {
+                if (sqlEx.getSQLState().equals(SqlState.FOREIGN_KEY_MISSING.getCode())) {
+                    if (sqlEx.getMessage().contains("PublicationNomenclatureNumber")) {
+                        return new Warning(WarningType.SAVING_ERROR, "Издание с таким номенклатурным номером не существует.");
+                    }
+
+                    if (sqlEx.getMessage().contains("LibrarianID")) {
+                        return new Warning(WarningType.SAVING_ERROR, "Библиотекарь с таким ID не существует.");
+                    }
+
+                    if (sqlEx.getMessage().contains("LibraryCardNumber")) {
+                        return new Warning(WarningType.SAVING_ERROR, "Читатель с таким номером читательского билета " +
+                                "не существует.");
+                    }
                 }
-                if (sqlEx.getMessage().contains("selected publication is not available for this category of readers")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Издание недоступно для выдачи читателям данной категории.");
-                }
-                if (sqlEx.getMessage().contains("the student subscription renewal period has expired")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Срок продления студенческого абонемента данного читателя " +
-                            "истек.");
-                }
-                if (sqlEx.getMessage().contains("the schoolchild subscription renewal period has expired")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Срок продления школьного абонемента данного читателя " +
-                            "истек.");
-                }
-                if (sqlEx.getMessage().contains("reader does not meet the age restriction")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Читатель не соответствует ограничению по возрасту, " +
-                            "существующему для данного издания.");
+
+                if (sqlEx.getSQLState().equals(SqlState.TRIGGER_EXCEPTION.getCode())) {
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.MISSING_CATEGORY.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Издание недоступно для выдачи читателям, не относящимся " +
+                                "ни к одной из категорий.");
+                    }
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.INCORRECT_CATEGORY.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Издание недоступно для выдачи читателям данной категории.");
+                    }
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.STUDENT_SUBSCRIPTION_EXPIRED.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Срок продления студенческого абонемента данного читателя " +
+                                "истек.");
+                    }
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.SCHOOLCHILD_SUBSCRIPTION_EXPIRED.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Срок продления школьного абонемента данного читателя " +
+                                "истек.");
+                    }
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.AGE_RESTRICTION_EXCEPTION.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Читатель не соответствует ограничению по возрасту, " +
+                                "существующему для данного издания.");
+                    }
                 }
             }
 
-        } catch (Exception e) {
-            logger.error("Невозможно сохранить запись: {}", e.getMessage());
-            return new Warning(IMPOSSIBLE_TO_SAVE, null);
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
 
         return null;

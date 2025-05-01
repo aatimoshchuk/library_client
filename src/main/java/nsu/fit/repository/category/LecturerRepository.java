@@ -1,23 +1,24 @@
-package nsu.fit.repository.category_repository;
+package nsu.fit.repository.category;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nsu.fit.data.access.category.Lecturer;
 import nsu.fit.repository.AbstractEntityRepository;
-import nsu.fit.repository.LibraryRepository;
-import nsu.fit.utils.Warning;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
+import nsu.fit.utils.warning.SqlState;
+import nsu.fit.utils.warning.TriggerExceptionMessage;
+import nsu.fit.utils.warning.Warning;
+import nsu.fit.utils.warning.WarningType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.util.List;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class LecturerRepository extends AbstractEntityRepository<Lecturer> {
-    private static final Logger logger = LoggerFactory.getLogger(LecturerRepository.class);
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -34,8 +35,13 @@ public class LecturerRepository extends AbstractEntityRepository<Lecturer> {
 
     @Override
     public Warning saveEntity(Lecturer entity) {
+        if (!entity.validateNumericFields()) {
+            return new Warning(WarningType.SAVING_ERROR, "\"Номер читательского билета\" должен представлять из себя число!");
+        }
+
         if (!entity.checkEmptyFields()) {
-            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля не должны быть пустыми!");
+            return new Warning(WarningType.SAVING_ERROR, "Поля \"Номер читательского билета\" и \"Название " +
+                    "учебного заведения\" не должны быть пустыми!");
         }
 
         try {
@@ -58,13 +64,23 @@ public class LecturerRepository extends AbstractEntityRepository<Lecturer> {
                                 entity.getJobTitle()
                 );
             }
-        } catch (DataAccessException e) {
-            if (e.getCause() instanceof SQLException sqlEx && "P0001".equals(sqlEx.getSQLState())) {
-                return new Warning(IMPOSSIBLE_TO_SAVE, "Этот читатель уже принадлежит к одной из категорий!");
-            } else {
-                logger.error("Невозможно сохранить запись: {}", e.getMessage());
-                return new Warning(IMPOSSIBLE_TO_SAVE, null);
+        } catch (Exception e) {
+            if (e.getCause() instanceof SQLException sqlEx) {
+                if (sqlEx.getSQLState().equals(SqlState.FOREIGN_KEY_MISSING.getCode()) &&
+                        sqlEx.getMessage().contains("LibraryCardNumber")) {
+                    return new Warning(WarningType.SAVING_ERROR, "Читатель с таким номером читательского билета " +
+                            "не существует.");
+
+                }
+
+                if (sqlEx.getSQLState().equals(SqlState.TRIGGER_EXCEPTION.getCode()) &&
+                        sqlEx.getMessage().contains(TriggerExceptionMessage.REDEFINING_READER_CATEGORY.toString())) {
+                    return new Warning(WarningType.SAVING_ERROR, "Этот читатель уже принадлежит к одной из категорий!");
+                }
             }
+
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
 
         return null;

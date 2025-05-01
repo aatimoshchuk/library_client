@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class HistoryEntry extends AbstractEntity {
+
     private Integer publicationNomenclatureNumber;
     private Integer libraryCardNumber;
     private String issueDate;
@@ -27,5 +28,10 @@ public class HistoryEntry extends AbstractEntity {
     @Override
     public boolean checkEmptyFields() {
         return publicationNomenclatureNumber > 0 && libraryCardNumber > 0 && issueDate != null && !issueDate.isEmpty();
+    }
+
+    @Override
+    public boolean validateNumericFields() {
+        return publicationNomenclatureNumber != null && libraryCardNumber != null;
     }
 }

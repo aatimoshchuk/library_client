@@ -1,6 +1,7 @@
 package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nsu.fit.data.access.Publication;
 import nsu.fit.data.access.ReaderCategoryPermission;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,9 +11,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class PublicationPermissionRepository {
+
     private final JdbcTemplate jdbcTemplate;
 
     public List<ReaderCategoryPermission> findAllForPublication(Publication publication) {

@@ -16,12 +16,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import net.rgielen.fxweaver.core.FxWeaver;
-import nsu.fit.controllers.category_controllers.StudentsController;
+import nsu.fit.controllers.category.StudentsController;
 import nsu.fit.data.access.AbstractEntity;
 import nsu.fit.repository.AbstractEntityRepository;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.TableColumnConfigurator;
-import nsu.fit.utils.Warning;
+import nsu.fit.utils.warning.Warning;
+import nsu.fit.utils.warning.WarningType;
 import nsu.fit.view.NotificationService;
 import nsu.fit.view.ViewConstants;
 
@@ -29,7 +30,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public abstract class AbstractEntityController<T extends AbstractEntity, U extends AbstractEntityRepository<T>> {
-    protected final String VALIDATION_ERROR = "Ошибка валидации";
 
     protected final FxWeaver fxWeaver;
     protected final U entityRepository;
@@ -39,8 +39,10 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
 
     @FXML
     protected TableView<T> entitiesTable;
+
     @FXML
     protected AnchorPane actionPanel;
+
     @FXML
     protected Button addButton;
     @FXML
@@ -189,12 +191,12 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
 
     protected boolean validateDate(String date) {
         if (date.isEmpty()) {
-            notificationService.showWarning(new Warning(VALIDATION_ERROR, "Поля не должны быть пустыми!"));
+            notificationService.showWarning(new Warning(WarningType.VALIDATION_ERROR, "Поля не должны быть пустыми!"));
             return false;
         }
 
         if (!date.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-            notificationService.showWarning(new Warning(VALIDATION_ERROR,
+            notificationService.showWarning(new Warning(WarningType.VALIDATION_ERROR,
                     "Даты должны быть в формате \"YYYY-MM-DD\""));
             return false;
         }
@@ -205,12 +207,12 @@ public abstract class AbstractEntityController<T extends AbstractEntity, U exten
     protected boolean validateNumber(String stringNumber) {
         try {
             if (Integer.parseInt(stringNumber) <= 0) {
-                notificationService.showWarning(new Warning(VALIDATION_ERROR,
+                notificationService.showWarning(new Warning(WarningType.VALIDATION_ERROR,
                         "Значение поля должно представлять собой положительное число."));
                 return false;
             }
         } catch (NumberFormatException e) {
-            notificationService.showWarning(new Warning(VALIDATION_ERROR,
+            notificationService.showWarning(new Warning(WarningType.VALIDATION_ERROR,
                     "Значение поля должно представлять собой положительное число."));
             return false;
         }

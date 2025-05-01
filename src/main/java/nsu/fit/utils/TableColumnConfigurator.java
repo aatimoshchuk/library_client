@@ -4,27 +4,30 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.Callback;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import nsu.fit.utils.warning.Warning;
+import nsu.fit.utils.warning.WarningType;
+import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class TableColumnConfigurator {
     private static final String METHOD_NOT_EXIST = "Method with name {} doesn't exist";
-    private static final Logger logger = LoggerFactory.getLogger(TableColumnConfigurator.class);
+    private static final String NUMBER_FORMAT_EXCEPTION = "The value entered in the field {} is of the wrong type";
+
+    private final NotificationService notificationService;
 
     public <S> void configureEditableTextColumn(
             TableColumn<S, String> column,
@@ -41,12 +44,12 @@ public class TableColumnConfigurator {
             try {
                 rowClass.getMethod(getSetterName(propertyName), String.class).invoke(rowValue, newValue);
             } catch (Exception e) {
-                logger.error(METHOD_NOT_EXIST, getSetterName(propertyName));
+                log.error(METHOD_NOT_EXIST, getSetterName(propertyName));
             }
         });
     }
 
-    public <S> void configureEditableNumberColumn(
+    public <S> void configureEditableNumberColumn (
             TableColumn<S, String> column,
             String propertyName,
             Class<S> rowClass
@@ -59,7 +62,7 @@ public class TableColumnConfigurator {
                 Object value = getter.invoke(row);
                 return new SimpleStringProperty(value != null ? String.valueOf(value) : "");
             } catch (Exception e) {
-                logger.error(METHOD_NOT_EXIST, getGetterName(propertyName));
+                log.error(METHOD_NOT_EXIST, getGetterName(propertyName));
                 return new SimpleStringProperty("");
             }
         });
@@ -70,8 +73,15 @@ public class TableColumnConfigurator {
             try {
                 Method setter = rowClass.getMethod(getSetterName(propertyName), Integer.class);
                 setter.invoke(event.getRowValue(), Integer.parseInt(event.getNewValue()));
+            } catch (NumberFormatException e) {
+                log.error(NUMBER_FORMAT_EXCEPTION, propertyName);
+
+                if (!event.getOldValue().isEmpty()) {
+                    notificationService.showWarning(new Warning(WarningType.SAVING_ERROR,
+                            "Значение данного поля должно представлять из себя число!"));
+                }
             } catch (Exception e) {
-                logger.error(METHOD_NOT_EXIST, getGetterName(propertyName));
+                log.error(METHOD_NOT_EXIST, getSetterName(propertyName));
             }
         });
     }
@@ -90,7 +100,7 @@ public class TableColumnConfigurator {
             try {
                 rowClass.getMethod(getSetterName(propertyName), String.class).invoke(rowValue, newValue);
             } catch (Exception e) {
-                logger.error(METHOD_NOT_EXIST, getSetterName(propertyName));
+                log.error(METHOD_NOT_EXIST, getSetterName(propertyName));
             }
         });
     }
@@ -103,7 +113,7 @@ public class TableColumnConfigurator {
                 Method getter = rowClass.getMethod(getGetterName(propertyName));
                 return (BooleanProperty) getter.invoke(cellData.getValue());
             } catch (Exception e) {
-                logger.error(METHOD_NOT_EXIST, getGetterName(propertyName));
+                log.error(METHOD_NOT_EXIST, getGetterName(propertyName));
                 return new SimpleBooleanProperty(false);
             }
         });
@@ -114,7 +124,7 @@ public class TableColumnConfigurator {
                 Method getter = rowClass.getMethod(getGetterName(propertyName));
                 return (BooleanProperty) getter.invoke(rowItem);
             } catch (Exception e) {
-                logger.error(METHOD_NOT_EXIST, getGetterName(propertyName));
+                log.error(METHOD_NOT_EXIST, getGetterName(propertyName));
                 return new SimpleBooleanProperty(false);
             }
         }));
@@ -138,7 +148,7 @@ public class TableColumnConfigurator {
                 String displayValue = (enumValue != null) ? enumValue.toString() : "";
                 return new ReadOnlyStringWrapper(displayValue);
             } catch (Exception e) {
-                logger.error(METHOD_NOT_EXIST, getGetterName(propertyName));
+                log.error(METHOD_NOT_EXIST, getGetterName(propertyName));
                 return new ReadOnlyStringWrapper("");
             }
         });

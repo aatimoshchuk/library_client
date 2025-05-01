@@ -1,12 +1,13 @@
 package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nsu.fit.data.access.Library;
 import nsu.fit.data.access.Reader;
 import nsu.fit.utils.ColumnTranslation;
-import nsu.fit.utils.Warning;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import nsu.fit.utils.warning.SqlState;
+import nsu.fit.utils.warning.Warning;
+import nsu.fit.utils.warning.WarningType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -14,10 +15,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class LibraryRepository extends AbstractEntityRepository<Library> {
-    private static final Logger logger = LoggerFactory.getLogger(LibraryRepository.class);
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -45,7 +47,7 @@ public class LibraryRepository extends AbstractEntityRepository<Library> {
     @Override
     public Warning saveEntity(Library entity) {
         if (!entity.checkEmptyFields()) {
-            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля не должны быть пустыми!");
+            return new Warning(WarningType.SAVING_ERROR, "Поля не должны быть пустыми!");
         }
 
         try {
@@ -63,8 +65,8 @@ public class LibraryRepository extends AbstractEntityRepository<Library> {
                 );
             }
         } catch (Exception e) {
-            logger.error("Невозможно сохранить запись: {}", e.getMessage());
-            return new Warning(IMPOSSIBLE_TO_SAVE, null);
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
 
         return null;
@@ -93,18 +95,18 @@ public class LibraryRepository extends AbstractEntityRepository<Library> {
                     libraryID);
         } catch (Exception e) {
             if (e.getCause() instanceof SQLException sqlEx) {
-                if (sqlEx.getMessage().contains("duplicate key value")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Читатель уже зарегистрирован в данной библиотеке!");
+                if (sqlEx.getSQLState().equals(SqlState.DUPLICATE_KEY_VALUE.getCode())) {
+                    return new Warning(WarningType.SAVING_ERROR, "Читатель уже зарегистрирован в данной библиотеке!");
                 }
 
-                if (sqlEx.getMessage().contains("violates foreign key constraint")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Читатель с таким номер читательского билета не " +
+                if (sqlEx.getSQLState().equals(SqlState.FOREIGN_KEY_MISSING.getCode())) {
+                    return new Warning(WarningType.SAVING_ERROR, "Читатель с таким номер читательского билета не " +
                             "существует!");
                 }
             }
 
-            logger.error("Невозможно сохранить запись: {}", e.getMessage());
-            return new Warning(IMPOSSIBLE_TO_SAVE, null);
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
 
         return null;
@@ -117,8 +119,8 @@ public class LibraryRepository extends AbstractEntityRepository<Library> {
                     readerLibraryCardNumber,
                     libraryID);
         } catch (Exception e) {
-            logger.error("Невозможно сохранить запись: {}", e.getMessage());
-            return new Warning(IMPOSSIBLE_TO_SAVE, null);
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
 
         return null;

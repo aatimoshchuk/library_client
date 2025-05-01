@@ -6,7 +6,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1536.0" styleClass="bodybg" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nsu.fit.controllers.category_controllers.LecturersController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1536.0" styleClass="bodybg" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nsu.fit.controllers.category.StudentsController">
     <children>
         <Rectangle fill="#47453c" height="864.0" opacity="0.54" stroke="TRANSPARENT" strokeType="INSIDE" width="1536.0" />
         <Rectangle fill="#d9d9d9" height="864.0" layoutX="293.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1243.0" />
@@ -124,12 +124,17 @@
         <Button layoutY="678.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
                 mnemonicParsing="false" onAction="#switchToStorageLocations" opacity="0.0" prefHeight="60.0" prefWidth="293.0"
                 style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
-        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="212.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="510.0" prefWidth="1135.0" stylesheets="@../style.css">
+        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="212.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                   minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="510.0" prefWidth="1135.0" stylesheets="@../style.css">
             <columns>
-            <TableColumn fx:id="idColumn" maxWidth="283.75" minWidth="283.75" prefWidth="283.75" resizable="false" text="ID Преподавателя" />
-            <TableColumn fx:id="libraryCardNumberColumn" maxWidth="283.75" minWidth="283.75" prefWidth="283.75" resizable="false" text="номер читательского билета" />
-                <TableColumn fx:id="educationalInstitutionNameColumn" maxWidth="283.75" minWidth="283.75" prefWidth="283.75" resizable="false" text="название учебного заведения" />
-                <TableColumn fx:id="jobTitleColumn" maxWidth="283.75" minWidth="283.75" prefWidth="283.75" resizable="false" text="Должность" />
+            <TableColumn fx:id="idColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" resizable="false" text="ID студента" />
+            <TableColumn fx:id="libraryCardNumberColumn" maxWidth="230.0" minWidth="230.0" prefWidth="230.0" resizable="false" text="номер читательского билета" />
+                <TableColumn fx:id="educationalInstitutionNameColumn" maxWidth="240.0" minWidth="240.0" prefWidth="240.0" resizable="false" text="название учебного заведения" />
+                <TableColumn fx:id="facultyColumn" maxWidth="141.875" minWidth="141.875" prefWidth="141.875" resizable="false" text="факультет" />
+                <TableColumn fx:id="courseColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" resizable="false" text="курс" />
+            <TableColumn fx:id="groupNumberColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" resizable="false" text="группа" />
+            <TableColumn fx:id="studentCardNumberColumn" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" resizable="false" text="студ. билет" />
+            <TableColumn fx:id="extensionDateColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" resizable="false" text="срок продления" />
             </columns>
         </TableView>
         <AnchorPane fx:id="actionPanel" visible="false">
@@ -152,7 +157,9 @@
                 </ImageView>
             </graphic>
             </Button>
-         <Button fx:id="addButton" layoutX="1088.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
+         <Button fx:id="addButton" layoutX="1088.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                 minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0"
+                 style="-fx-background-color: transparent;">
          <graphic>
              <ImageView fx:id="add_icon" fitHeight="20.0" fitWidth="20.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
                  <image>
@@ -161,7 +168,7 @@
              </ImageView>
          </graphic>
          </Button>
-            <Button fx:id="getLibraryCardButton" layoutX="371.225" layoutY="5.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="читательский билет" textFill="WHITE">
+            <Button fx:id="getLibraryCardButton" layoutX="181.0" layoutY="5.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="читательский билет" textFill="WHITE">
                 <font>
                     <Font name="Hlebozavod Medium" size="11.0" />
                 </font>
@@ -172,23 +179,29 @@
             <Font name="Hlebozavod Medium" size="85.0" />
          </font>
       </Text>
-      <Text fill="#505050" layoutX="308.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="сведения о преподавателях" textAlignment="CENTER" wrappingWidth="1135.0">
+      <Text fill="#505050" layoutX="308.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="сведения о студентах" textAlignment="CENTER" wrappingWidth="1135.0">
          <font>
             <Font name="Hlebozavod Medium" size="45.0" />
          </font>
       </Text>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a29f92" height="34.0" layoutX="308.0" layoutY="169.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1135.0" />
-      <TextField fx:id="educationalInstitutionNameField" alignment="CENTER" layoutX="880.0" layoutY="173.0" prefHeight="26.0" prefWidth="278.0" promptText="Название учебного заведения" style="-fx-background-color: #B6B3A8; -fx-text-fill: white; -fx-prompt-text-fill: white;">
+      <TextField fx:id="educationalInstitutionNameField" alignment="CENTER" layoutX="659.0" layoutY="173.0" prefHeight="26.0" prefWidth="239.0" promptText="Название учебного заведения" style="-fx-background-color: #B6B3A8; -fx-text-fill: white; -fx-prompt-text-fill: white;">
          <font>
             <Font name="Advent Pro Regular" size="13.0" />
          </font>
       </TextField>
-      <TextField fx:id="jobTitleField" alignment="CENTER" layoutX="1162.0" layoutY="173.0" prefHeight="26.0" prefWidth="231.0" promptText="Должность" style="-fx-background-color: #B6B3A8; -fx-text-fill: white; -fx-prompt-text-fill: white;">
+      <TextField fx:id="facultyField" alignment="CENTER" layoutX="901.0" layoutY="173.0" prefHeight="26.0" prefWidth="141.0" promptText="Факультет" style="-fx-background-color: #B6B3A8; -fx-text-fill: white; -fx-prompt-text-fill: white;">
          <font>
             <Font name="Advent Pro Regular" size="13.0" />
          </font>
       </TextField>
-        <Button fx:id="searchButton" layoutX="1400.0" layoutY="169.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#findEntities" prefHeight="34.0" prefWidth="34.0" style="-fx-background-color: transparent;">
+      <TextField fx:id="courseField" alignment="CENTER" layoutX="1045.0" layoutY="173.0" prefHeight="26.0" prefWidth="57.0" promptText="Курс" style="-fx-background-color: #B6B3A8; -fx-text-fill: white; -fx-prompt-text-fill: white;">
+         <font>
+            <Font name="Advent Pro Regular" size="13.0" />
+         </font>
+      </TextField>
+        <Button fx:id="searchButton" layoutX="1400.0" layoutY="169.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                minHeight="-Infinity" minWidth="-Infinity" onAction="#findEntities" prefHeight="34.0" prefWidth="34.0" style="-fx-background-color: transparent;">
          <graphic>
                 <ImageView fx:id="searchIcon" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                     <image>
@@ -197,11 +210,11 @@
                 </ImageView>
          </graphic></Button>
       <Rectangle arcHeight="60.0" arcWidth="60.0" fill="#c1beb2" height="54.0" layoutX="667.0" layoutY="747.0" stroke="TRANSPARENT" strokeType="INSIDE" width="418.0" />
-        <Button fx:id="studentButton" layoutX="703.0" layoutY="752.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#switchToStudentCategory" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: transparent; -fx-opacity: 1;">
+        <Button fx:id="studentButton" disable="true" layoutX="703.0" layoutY="752.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: transparent; -fx-opacity: 1;">
             <graphic>
                 <ImageView fx:id="studentIcon" fitHeight="44.0" fitWidth="44.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
                     <image>
-                        <Image url="@/img/student.png" />
+                        <Image url="@/img/student_selected.png" />
                     </image>
                 </ImageView>
             </graphic>
@@ -224,11 +237,11 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="lecturerButton" disable="true" layoutX="935.0" layoutY="752.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: transparent; -fx-opacity: 1;">
+        <Button fx:id="lecturerButton" layoutX="935.0" layoutY="752.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#switchToLecturerCategory" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: transparent;">
             <graphic>
                 <ImageView fx:id="lecturerIcon" fitHeight="44.0" fitWidth="44.0" layoutX="1020.0" layoutY="5.0" pickOnBounds="true" smooth="false">
                     <image>
-                        <Image url="@/img/lecturer_selected.png" />
+                        <Image url="@/img/lecturer.png" />
                     </image>
                 </ImageView>
             </graphic>

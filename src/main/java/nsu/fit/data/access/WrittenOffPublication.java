@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class WrittenOffPublication extends AbstractEntity {
+
     private Integer publicationNomenclatureNumber;
     private String writeOffDate;
 
@@ -20,5 +21,10 @@ public class WrittenOffPublication extends AbstractEntity {
     @Override
     public boolean checkEmptyFields() {
         return publicationNomenclatureNumber > 0 && writeOffDate != null && !writeOffDate.isEmpty();
+    }
+
+    @Override
+    public boolean validateNumericFields() {
+        return publicationNomenclatureNumber != null;
     }
 }

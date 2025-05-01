@@ -1,4 +1,4 @@
-package nsu.fit.utils;
+package nsu.fit.utils.warning;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,6 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class Warning {
-    private String title;
+    private WarningType type;
     private String message;
 }

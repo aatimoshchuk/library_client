@@ -12,7 +12,7 @@ import nsu.fit.repository.ReaderRepository;
 import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.TableColumnConfigurator;
-import nsu.fit.utils.Warning;
+import nsu.fit.utils.warning.Warning;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 

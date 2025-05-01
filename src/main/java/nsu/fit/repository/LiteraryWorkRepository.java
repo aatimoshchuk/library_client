@@ -1,12 +1,13 @@
 package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nsu.fit.data.access.LiteraryWork;
 import nsu.fit.data.access.Publication;
 import nsu.fit.utils.ColumnTranslation;
-import nsu.fit.utils.Warning;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import nsu.fit.utils.warning.SqlState;
+import nsu.fit.utils.warning.Warning;
+import nsu.fit.utils.warning.WarningType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -14,10 +15,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWork>{
-    private static final Logger logger = LoggerFactory.getLogger(LiteraryWorkRepository.class);
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -43,7 +45,7 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
     @Override
     public Warning saveEntity(LiteraryWork entity) {
         if (!entity.checkEmptyFields()) {
-            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля не должны быть пустыми!");
+            return new Warning(WarningType.SAVING_ERROR, "Поля \"Название\" и \"Автор\" не должны быть пустыми!");
         }
 
         try {
@@ -53,8 +55,9 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
                                 "\"Category\" = ?::\"LiteraryWorkCategory\" WHERE \"ID\" = ?",
                         entity.getTitle(),
                         entity.getAuthor(),
-                        entity.getWritingYear(),
-                        entity.getCategory(),
+                        (entity.getWritingYear() != null && entity.getWritingYear() == 0) ? null :
+                                entity.getWritingYear(),
+                        (entity.getCategory() != null && entity.getCategory().isEmpty()) ? null : entity.getCategory(),
                         entity.getId());
             } else {
                 jdbcTemplate.update(
@@ -62,13 +65,14 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
                                 "VALUES (?, ?, ?, ?::\"LiteraryWorkCategory\")",
                         entity.getTitle(),
                         entity.getAuthor(),
-                        entity.getWritingYear(),
-                        entity.getCategory()
+                        (entity.getWritingYear() != null && entity.getWritingYear() == 0) ? null :
+                                entity.getWritingYear(),
+                        (entity.getCategory() != null && entity.getCategory().isEmpty()) ? null : entity.getCategory()
                 );
             }
         } catch (Exception e) {
-            logger.error("Невозможно сохранить запись: {}", e.getMessage());
-            return new Warning(IMPOSSIBLE_TO_SAVE, null);
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
 
         return null;
@@ -89,18 +93,18 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
                     publicationNomenclatureNumber);
         } catch (Exception e) {
             if (e.getCause() instanceof SQLException sqlEx) {
-                if (sqlEx.getMessage().contains("duplicate key value")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Издание уже включает в себя данное произведение!");
+                if (sqlEx.getSQLState().equals(SqlState.DUPLICATE_KEY_VALUE.getCode())) {
+                    return new Warning(WarningType.SAVING_ERROR, "Издание уже включает в себя данное произведение!");
                 }
 
-                if (sqlEx.getMessage().contains("violates foreign key constraint")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Издание с таким номенклатурным номером не " +
+                if (sqlEx.getSQLState().equals(SqlState.FOREIGN_KEY_MISSING.getCode())) {
+                    return new Warning(WarningType.SAVING_ERROR, "Издание с таким номенклатурным номером не " +
                             "существует!");
                 }
             }
 
-            logger.error("Невозможно сохранить запись: {}", e.getMessage());
-            return new Warning(IMPOSSIBLE_TO_SAVE, null);
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
 
         return null;
@@ -114,8 +118,8 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
                     literaryWork.getId(),
                     publicationNomenclatureNumber);
         } catch (Exception e) {
-            logger.error("Невозможно сохранить запись: {}", e.getMessage());
-            return new Warning(IMPOSSIBLE_TO_SAVE, null);
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
 
         return null;

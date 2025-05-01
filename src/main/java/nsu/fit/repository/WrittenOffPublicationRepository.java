@@ -1,32 +1,53 @@
 package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nsu.fit.data.access.Publication;
 import nsu.fit.data.access.WrittenOffPublication;
-import nsu.fit.utils.Warning;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
+import nsu.fit.utils.warning.SqlState;
+import nsu.fit.utils.warning.TriggerExceptionMessage;
+import nsu.fit.utils.warning.Warning;
+import nsu.fit.utils.warning.WarningType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.util.List;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class WrittenOffPublicationRepository extends AbstractEntityRepository<WrittenOffPublication> {
-    private static final Logger logger = LoggerFactory.getLogger(WrittenOffPublicationRepository.class);
+
     private final JdbcTemplate jdbcTemplate;
 
-    public void markPublicationAsWrittenOff(Publication publication) {
+    public Warning markPublicationAsWrittenOff(Publication publication) {
         try {
             jdbcTemplate.update("INSERT INTO \"WrittenOffPublications\"(\"PublicationNomenclatureNumber\", " +
                             "\"WriteOffDate\") VALUES (?, CURRENT_DATE)",
                     publication.getId());
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            if (e.getCause() instanceof SQLException sqlEx) {
+                if (sqlEx.getSQLState().equals(SqlState.TRIGGER_EXCEPTION.getCode())) {
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.DATE_IN_THE_FUTURE.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Дата списания не может быть в будущем!");
+                    }
+
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.WRITTEN_OFF_PUBLICATION.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Издание уже списано!");
+                    }
+
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.OUT_OF_STOCK_PUBLICATION.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Издание не в наличии!");
+                    }
+                }
+            }
+
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
+
+        return null;
     }
 
     @Override
@@ -42,8 +63,13 @@ public class WrittenOffPublicationRepository extends AbstractEntityRepository<Wr
 
     @Override
     public Warning saveEntity(WrittenOffPublication entity) {
+        if (!entity.validateNumericFields()) {
+            return new Warning(WarningType.SAVING_ERROR, "\"Номенклатурный номер издания\" должен представлять собой " +
+                    "число!");
+        }
+
         if (!entity.checkEmptyFields()) {
-            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля не должны быть пустыми!");
+            return new Warning(WarningType.SAVING_ERROR, "Поля не должны быть пустыми!");
         }
 
         try {
@@ -62,31 +88,40 @@ public class WrittenOffPublicationRepository extends AbstractEntityRepository<Wr
                         entity.getWriteOffDate()
                 );
             }
-        } catch (DataAccessException e) {
-            if (e.getCause() instanceof SQLException sqlEx && "P0001".equals(sqlEx.getSQLState())) {
-                if (sqlEx.getMessage().contains("publication is out of stock")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Издание не в наличии!");
+        } catch (Exception e) {
+            if (e.getCause() instanceof SQLException sqlEx) {
+                if (sqlEx.getSQLState().equals(SqlState.TRIGGER_EXCEPTION.getCode())) {
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.DATE_IN_THE_FUTURE.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Дата списания не может быть в будущем!");
+                    }
+
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.WRITTEN_OFF_PUBLICATION.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Издание уже списано!");
+                    }
+
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.OUT_OF_STOCK_PUBLICATION.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Издание не в наличии!");
+                    }
+
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.NOMENCLATURE_NUMBER_CHANGING_ATTEMPT.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Поле \"Номенклатурный номер издания\" не " +
+                                "может быть изменено.");
+                    }
                 }
 
-                if (sqlEx.getMessage().contains("publication is already been written off")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Издание уже списано!");
+                if (sqlEx.getSQLState().equals(SqlState.FOREIGN_KEY_MISSING.getCode())) {
+                    return new Warning(WarningType.SAVING_ERROR, "Издание с таким номенклатурным номером не " +
+                            "существует!");
                 }
 
-                if (sqlEx.getMessage().contains("field PublicationNomenclatureNumber cannot be changed")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Поле \"Номенклатурный номер издания\" не " +
-                            "может быть изменено.");
+                if (sqlEx.getSQLState().equals(SqlState.INVALID_DATE.getCode()) ||
+                        sqlEx.getSQLState().equals(SqlState.INVALID_DATE_FORMAT.getCode())) {
+                    return new Warning(WarningType.SAVING_ERROR, "Дата списания должна быть в формате YYYY-MM-DD!");
                 }
-
-                if (sqlEx.getMessage().contains("write off date cannot be in the future")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Дата списания не может быть в будущем!");
-                }
-            } else if (e.getCause() instanceof SQLException sqlEx && sqlEx.getMessage()
-                    .contains("date/time field value out of range")) {
-                return new Warning(IMPOSSIBLE_TO_SAVE, "Введенная Вами дата не существует!");
-            } else {
-                logger.error("Невозможно сохранить запись: {}", e.getMessage());
-                return new Warning(IMPOSSIBLE_TO_SAVE, null);
             }
+
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
 
         return null;

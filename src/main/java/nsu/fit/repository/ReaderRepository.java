@@ -1,23 +1,28 @@
 package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nsu.fit.data.access.Librarian;
 import nsu.fit.data.access.Library;
 import nsu.fit.data.access.LiteraryWork;
 import nsu.fit.data.access.Publication;
 import nsu.fit.data.access.Reader;
 import nsu.fit.utils.ColumnTranslation;
-import nsu.fit.utils.Warning;
-import org.springframework.dao.DataIntegrityViolationException;
+import nsu.fit.utils.warning.SqlState;
+import nsu.fit.utils.warning.Warning;
+import nsu.fit.utils.warning.WarningType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class ReaderRepository extends AbstractEntityRepository<Reader> {
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -39,7 +44,7 @@ public class ReaderRepository extends AbstractEntityRepository<Reader> {
     @Override
     public Warning saveEntity(Reader entity) {
         if (!entity.checkEmptyFields()) {
-            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля не должны быть пустыми!");
+            return new Warning(WarningType.SAVING_ERROR, "Поля не должны быть пустыми!");
         }
 
         try {
@@ -62,8 +67,20 @@ public class ReaderRepository extends AbstractEntityRepository<Reader> {
                         entity.getBirthDay()
                 );
             }
-        } catch (DataIntegrityViolationException e) {
-            return new Warning(IMPOSSIBLE_TO_SAVE, "Возраст читателя должен быть не меньше 12 лет!");
+        } catch (Exception e) {
+            if (e.getCause() instanceof SQLException sqlEx) {
+                if (sqlEx.getSQLState().equals(SqlState.CONSTRAINT_VIOLATION.getCode())) {
+                    return new Warning(WarningType.SAVING_ERROR, "Возраст читателя должен быть не меньше 12 лет!");
+                }
+
+                if (sqlEx.getSQLState().equals(SqlState.INVALID_DATE.getCode()) ||
+                        sqlEx.getSQLState().equals(SqlState.INVALID_DATE_FORMAT.getCode())) {
+                    return new Warning(WarningType.SAVING_ERROR, "Дата рождения должна быть в формате YYYY-MM-DD!");
+                }
+            }
+
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
 
         return null;

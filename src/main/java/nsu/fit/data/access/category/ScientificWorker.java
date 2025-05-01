@@ -24,4 +24,11 @@ public class ScientificWorker extends AbstractCategoryEntity {
         return libraryCardNumber > 0 && organizationName != null && !organizationName.trim().isEmpty() &&
                 scientificTopic != null && !scientificTopic.trim().isEmpty();
     }
+
+    @Override
+    public boolean validateNumericFields() {
+        return libraryCardNumber != null;
+    }
+
+
 }

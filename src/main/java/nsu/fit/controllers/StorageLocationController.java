@@ -107,8 +107,8 @@ public class StorageLocationController extends AbstractEntityController<StorageL
 
     @Override
     protected boolean confirmDeletion(StorageLocation entity) {
-        return notificationService.showConfirmationWindow("Вы действительно хотите удалить место хранения с id " +
-                entity.getId() + "?");
+        return notificationService.showConfirmationWindow(String.format(
+                "Вы действительно хотите удалить место хранения с ID = %d?", entity.getId()));
     }
 
     @Override

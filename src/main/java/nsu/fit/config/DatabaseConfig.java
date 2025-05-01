@@ -1,4 +1,4 @@
-package nsu.fit;
+package nsu.fit.config;
 
 import org.apache.commons.dbcp2.cpdsadapter.DriverAdapterCPDS;
 import org.apache.commons.dbcp2.datasources.PerUserPoolDataSource;

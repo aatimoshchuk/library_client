@@ -11,7 +11,6 @@ import nsu.fit.annotations.HiddenField;
 
 @Setter
 @Getter
-@NoArgsConstructor
 public class Publication extends AbstractEntity {
 
     @DisplayName("Номенклатурный номер")
@@ -74,9 +73,18 @@ public class Publication extends AbstractEntity {
         this.daysForReturn = daysForReturn;
     }
 
+    public Publication() {
+        this.state = PublicationState.AVAILABLE;
+    }
+
     @Override
     public boolean checkEmptyFields() {
         return title != null && !title.isEmpty() && publisher != null && !publisher.isEmpty() && receiptDate != null &&
                 !receiptDate.isEmpty() && state != null && daysForReturn > 0;
     }
-}
+
+    @Override
+    public boolean validateNumericFields() {
+        return storageLocationID != null && daysForReturn != null;
+    }
+ }

@@ -10,21 +10,27 @@ import nsu.fit.annotations.FieldOrder;
 @Getter
 @NoArgsConstructor
 public class Reader extends AbstractEntity {
+
     @DisplayName("Номер читательского билета")
     @FieldOrder(1)
     private int id;
+
     @DisplayName("Фамилия")
     @FieldOrder(2)
     private String surname;
+
     @DisplayName("Имя")
     @FieldOrder(3)
     private String name;
+
     @DisplayName("Отчество")
     @FieldOrder(4)
     private String patronymic;
+
     @DisplayName("Дата рождения")
     @FieldOrder(5)
     private String birthDay;
+
     @DisplayName("Категория")
     @FieldOrder(6)
     private String category;

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class LiteraryWork extends AbstractEntity {
+
     private String title;
     private String author;
     private Integer writingYear;

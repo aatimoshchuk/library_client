@@ -1,4 +1,4 @@
-package nsu.fit.controllers.category_controllers;
+package nsu.fit.controllers.category;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -6,7 +6,7 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import nsu.fit.data.access.Reader;
 import nsu.fit.data.access.category.Pensioner;
-import nsu.fit.repository.category_repository.PensionerRepository;
+import nsu.fit.repository.category.PensionerRepository;
 import nsu.fit.repository.ReaderRepository;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.ObjectToMapConverter;
@@ -14,6 +14,7 @@ import nsu.fit.utils.TableColumnConfigurator;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -47,7 +48,7 @@ public class PensionersController extends AbstractCategoryController<Pensioner, 
 
     @Override
     protected List<Pensioner> getEntities() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -59,7 +60,7 @@ public class PensionersController extends AbstractCategoryController<Pensioner, 
     protected boolean confirmDeletion(Pensioner entity) {
         Reader reader = readerRepository.findOne(entity.getLibraryCardNumber());
 
-        return notificationService.showConfirmationWindow("Вы действительно хотите удалить " + reader.getSurname() +
-                " " + reader.getName() + " " + reader.getPatronymic() + " из числа пенсионеров?");
+        return notificationService.showConfirmationWindow(String.format("Вы действительно хотите удалить %s %s %s из " +
+                "числа пенсионеров?", reader.getSurname(), reader.getName(), reader.getPatronymic()));
     }
 }

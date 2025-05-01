@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @FxmlView("permission-dialog.fxml")
 @RequiredArgsConstructor
 public class PublicationPermissionDialogController {
+
     private final PublicationPermissionRepository publicationPermissionRepository;
     private final List<CheckBox> checkBoxes = new ArrayList<>();
     private final UserService userService;

@@ -23,7 +23,13 @@ public class Schoolchild extends AbstractCategoryEntity {
 
     @Override
     public boolean checkEmptyFields() {
-        return libraryCardNumber > 0 && grade > 0 && educationalInstitutionName != null &&
-                !educationalInstitutionName.trim().isEmpty() && extensionDate != null && !extensionDate.trim().isEmpty();
+        return libraryCardNumber != null && libraryCardNumber > 0 && grade != null && grade > 0 &&
+                educationalInstitutionName != null && !educationalInstitutionName.trim().isEmpty() &&
+                extensionDate != null && !extensionDate.trim().isEmpty();
+    }
+
+    @Override
+    public boolean validateNumericFields() {
+        return libraryCardNumber != null && grade != null;
     }
 }

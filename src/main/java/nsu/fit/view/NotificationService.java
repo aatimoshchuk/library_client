@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import net.rgielen.fxweaver.core.FxWeaver;
 import nsu.fit.controllers.ResultViewController;
-import nsu.fit.utils.Warning;
+import nsu.fit.utils.warning.Warning;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class NotificationService {
     public void showWarning(Warning warning) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Предупреждение");
-        alert.setHeaderText(warning.getTitle());
+        alert.setHeaderText(warning.getType().toString());
         alert.setContentText(warning.getMessage());
 
         autoSizeAlert(alert);

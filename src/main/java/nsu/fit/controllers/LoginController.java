@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 @FxmlView("login.fxml")
 @RequiredArgsConstructor
 public class LoginController {
+
     private final UserService userService;
     private final FxWeaver fxWeaver;
 
@@ -26,6 +27,7 @@ public class LoginController {
     private TextField usernameField;
     @FXML
     private PasswordField passwordField;
+
     @FXML
     private Label errorLabel;
 

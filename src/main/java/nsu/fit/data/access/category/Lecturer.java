@@ -21,7 +21,12 @@ public class Lecturer extends AbstractCategoryEntity {
 
     @Override
     public boolean checkEmptyFields() {
-        return libraryCardNumber > 0 && educationalInstitutionName != null &&
+        return libraryCardNumber != null && libraryCardNumber > 0 && educationalInstitutionName != null &&
                 !educationalInstitutionName.trim().isEmpty();
+    }
+
+    @Override
+    public boolean validateNumericFields() {
+        return libraryCardNumber != null;
     }
 }

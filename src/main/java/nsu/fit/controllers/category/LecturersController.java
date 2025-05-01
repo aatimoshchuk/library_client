@@ -1,4 +1,4 @@
-package nsu.fit.controllers.category_controllers;
+package nsu.fit.controllers.category;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -7,7 +7,7 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import nsu.fit.data.access.Reader;
 import nsu.fit.data.access.category.Lecturer;
-import nsu.fit.repository.category_repository.LecturerRepository;
+import nsu.fit.repository.category.LecturerRepository;
 import nsu.fit.repository.ReaderRepository;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.ObjectToMapConverter;
@@ -68,9 +68,13 @@ public class LecturersController extends AbstractCategoryController<Lecturer, Le
 
     @Override
     protected boolean confirmDeletion(Lecturer entity) {
+        if (entity.getId() == 0) {
+            return true;
+        }
+
         Reader reader = readerRepository.findOne(entity.getLibraryCardNumber());
 
-        return notificationService.showConfirmationWindow("Вы действительно хотите удалить " + reader.getSurname() +
-                " " + reader.getName() + " " + reader.getPatronymic() + " из числа преподавателей?");
+        return notificationService.showConfirmationWindow(String.format("Вы действительно хотите удалить %s %s %s " +
+                "из числа преподавателей?", reader.getSurname(), reader.getName(), reader.getPatronymic()));
     }
 }

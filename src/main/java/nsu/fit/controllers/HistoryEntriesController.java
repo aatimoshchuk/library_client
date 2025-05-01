@@ -17,7 +17,8 @@ import nsu.fit.service.UserRole;
 import nsu.fit.service.UserService;
 import nsu.fit.utils.ObjectToMapConverter;
 import nsu.fit.utils.TableColumnConfigurator;
-import nsu.fit.utils.Warning;
+import nsu.fit.utils.warning.Warning;
+import nsu.fit.utils.warning.WarningType;
 import nsu.fit.view.NotificationService;
 import org.springframework.stereotype.Component;
 
@@ -51,6 +52,7 @@ public class HistoryEntriesController extends AbstractEntityController<HistoryEn
     private Button getLibraryCardButton;
     @FXML
     private Button getLibrarianInfoButton;
+
     public HistoryEntriesController(FxWeaver fxWeaver, HistoryEntryRepository entityRepository, UserService userService, NotificationService notificationService, TableColumnConfigurator tableColumnConfigurator, ReaderRepository readerRepository, PublicationRepository publicationRepository, LibrarianRepository librarianRepository, ObjectToMapConverter objectToMapConverter) {
         super(fxWeaver, entityRepository, userService, notificationService, tableColumnConfigurator);
         this.readerRepository = readerRepository;
@@ -61,12 +63,17 @@ public class HistoryEntriesController extends AbstractEntityController<HistoryEn
 
     public void markPublicationAsReturned(HistoryEntry historyEntry) {
         int numberOfDaysOverdue = entityRepository.getNumberOfDaysOverdue(historyEntry.getPublicationNomenclatureNumber());
-        entityRepository.markPublicationAsReturned(historyEntry.getPublicationNomenclatureNumber());
+        Warning warning = entityRepository.markPublicationAsReturned(historyEntry.getPublicationNomenclatureNumber());
+
+        if (warning != null) {
+            notificationService.showWarning(warning);
+            return;
+        }
 
         if (numberOfDaysOverdue > 0) {
-            notificationService.showWarning(new Warning(
-                    "Срок возврата издания истек " + numberOfDaysOverdue + " дней назад!",
-                    "Издание было успешно возвращено."));
+            notificationService.showWarning(new Warning(WarningType.WARNING,
+                    String.format("Срок возврата издания истек %d дней назад! Издание было успешно возвращено.",
+                            numberOfDaysOverdue)));
         } else {
             notificationService.showNotification("Издание было успешно возвращено.");
         }
@@ -135,8 +142,10 @@ public class HistoryEntriesController extends AbstractEntityController<HistoryEn
 
     @Override
     protected boolean confirmDeletion(HistoryEntry entity) {
-        return notificationService.showConfirmationWindow("Вы действительно хотите удалить запись о выдаче издания " +
-                entity.getPublicationNomenclatureNumber() + " читателю " + entity.getLibraryCardNumber() + "?");
+        return notificationService.showConfirmationWindow(String.format(
+                "Вы действительно хотите удалить запись о выдаче издания %d читателю %d?",
+                entity.getPublicationNomenclatureNumber(),
+                entity.getLibraryCardNumber()));
     }
 
     @Override

@@ -19,6 +19,12 @@ public class Pensioner extends AbstractCategoryEntity {
 
     @Override
     public boolean checkEmptyFields() {
-        return libraryCardNumber > 0 && pensionCertificateNumber != null && !pensionCertificateNumber.trim().isEmpty();
+        return libraryCardNumber != null && libraryCardNumber > 0 && pensionCertificateNumber != null &&
+                !pensionCertificateNumber.trim().isEmpty();
+    }
+
+    @Override
+    public boolean validateNumericFields() {
+        return libraryCardNumber != null;
     }
 }

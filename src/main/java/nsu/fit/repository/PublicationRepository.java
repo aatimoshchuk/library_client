@@ -1,16 +1,17 @@
 package nsu.fit.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nsu.fit.data.access.Library;
 import nsu.fit.data.access.LiteraryWork;
 import nsu.fit.data.access.Publication;
 import nsu.fit.data.access.PublicationState;
 import nsu.fit.data.access.Reader;
 import nsu.fit.utils.ColumnTranslation;
-import nsu.fit.utils.Warning;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
+import nsu.fit.utils.warning.SqlState;
+import nsu.fit.utils.warning.TriggerExceptionMessage;
+import nsu.fit.utils.warning.Warning;
+import nsu.fit.utils.warning.WarningType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -18,10 +19,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class PublicationRepository extends AbstractEntityRepository<Publication> {
-    private static final Logger logger = LoggerFactory.getLogger(PublicationRepository.class);
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -85,8 +87,13 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
 
     @Override
     public Warning saveEntity(Publication entity) {
+        if (!entity.validateNumericFields()) {
+            return new Warning(WarningType.SAVING_ERROR, "\"ID места хранения\" и \"Срок возврата\" должны " +
+                    "представлять собой число!");
+        }
+
         if (!entity.checkEmptyFields()) {
-            return new Warning(IMPOSSIBLE_TO_SAVE, "Поля \"Название\", \"Издательство\", \"Дата поступления\", " +
+            return new Warning(WarningType.SAVING_ERROR, "Поля \"Название\", \"Издательство\", \"Дата поступления\", " +
                     "\"Разрешение на выдачу\" и \"Срок возврата\" не должны " +
                     "быть пустыми!");
         }
@@ -101,10 +108,13 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
                         entity.getTitle(),
                         entity.getPublisher(),
                         entity.getReceiptDate(),
-                        entity.getYearOfPrinting(),
-                        entity.getCategory(),
-                        entity.getAgeRestriction(),
-                        entity.getStorageLocationID(),
+                        (entity.getYearOfPrinting() != null && entity.getYearOfPrinting() == 0) ? null :
+                                entity.getYearOfPrinting(),
+                        (entity.getCategory() != null && entity.getCategory().isEmpty()) ? null : entity.getCategory() ,
+                        (entity.getAgeRestriction() != null && entity.getAgeRestriction() == 0) ? null :
+                                entity.getAgeRestriction(),
+                        (entity.getStorageLocationID() != null && entity.getStorageLocationID() == 0) ? null :
+                                entity.getStorageLocationID(),
                         entity.getState().toString(),
                         entity.getPermissionToIssue().get(),
                         entity.getDaysForReturn(),
@@ -118,24 +128,45 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
                         entity.getTitle(),
                         entity.getPublisher(),
                         entity.getReceiptDate(),
+                        (entity.getYearOfPrinting() != null && entity.getYearOfPrinting() == 0) ? null :
                         entity.getYearOfPrinting(),
-                        entity.getCategory(),
+                        (entity.getCategory() != null && entity.getCategory().isEmpty()) ? null : entity.getCategory() ,
+                        (entity.getAgeRestriction() != null && entity.getAgeRestriction() == 0) ? null :
                         entity.getAgeRestriction(),
+                        (entity.getStorageLocationID() != null && entity.getStorageLocationID() == 0) ? null :
                         entity.getStorageLocationID(),
                         entity.getState().toString(),
                         entity.getPermissionToIssue().get(),
                         entity.getDaysForReturn()
                 );
             }
-        } catch (DataAccessException e) {
-            if (e.getCause() instanceof SQLException sqlEx && "P0001".equals(sqlEx.getSQLState())) {
-                if (sqlEx.getMessage().contains("field StorageLocationID cannot be changed while publication is written off")) {
-                    return new Warning(IMPOSSIBLE_TO_SAVE, "Невозможно изменить место хранения списанного издания.");
-                }
-            }
         } catch (Exception e) {
-            logger.error("Невозможно сохранить запись: {}", e.getMessage());
-            return new Warning(IMPOSSIBLE_TO_SAVE, null);
+            if (e.getCause() instanceof SQLException sqlEx) {
+                if (sqlEx.getSQLState().equals(SqlState.FOREIGN_KEY_MISSING.getCode()) &&
+                        sqlEx.getMessage().contains("StorageLocationID")) {
+                    return new Warning(WarningType.SAVING_ERROR, "Место хранения с таким ID не существует!");
+                }
+
+                if (sqlEx.getSQLState().equals(SqlState.INVALID_DATE.getCode()) ||
+                        sqlEx.getSQLState().equals(SqlState.INVALID_DATE_FORMAT.getCode())) {
+                    return new Warning(WarningType.SAVING_ERROR, "Дата поступления должна быть в формате YYYY-MM-DD!");
+                }
+
+                if (sqlEx.getSQLState().equals(SqlState.TRIGGER_EXCEPTION.getCode())) {
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.WRITTEN_OFF_PUBLICATION_CHANGING_LOCATION.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Невозможно изменить место хранения списанного издания.");
+                    }
+
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.DATE_IN_THE_FUTURE.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Дата поступления не может быть в будущем.");
+                    }
+                }
+
+                System.out.println(sqlEx.getSQLState());
+            }
+
+            log.error("Невозможно сохранить запись: {}", e.getMessage());
+            return new Warning(WarningType.SAVING_ERROR, null);
         }
 
         return null;
