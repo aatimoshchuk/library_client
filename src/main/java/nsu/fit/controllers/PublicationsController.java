@@ -146,6 +146,10 @@ public class PublicationsController extends AbstractEntityController<Publication
     }
 
     public void getStorageLocationInfo(Publication publication) {
+        if (publication.getStorageLocationID() == null) {
+            notificationService.showNotification("Место хранения с таким ID не найдено.");
+            return;
+        }
         StorageLocation storageLocation = storageLocationRepository.findOne(publication.getStorageLocationID());
 
         if (storageLocation != null) {

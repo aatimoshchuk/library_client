@@ -12,6 +12,7 @@ import nsu.fit.utils.warning.SqlState;
 import nsu.fit.utils.warning.TriggerExceptionMessage;
 import nsu.fit.utils.warning.Warning;
 import nsu.fit.utils.warning.WarningType;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -46,22 +47,26 @@ public class PublicationRepository extends AbstractEntityRepository<Publication>
     }
 
     public Publication findOne(int publicationNomenclatureNumber) {
-        return jdbcTemplate.queryForObject(
-                "SELECT * FROM \"Publication\" WHERE \"NomenclatureNumber\" = ?",
-                (rs, rowNum) -> new Publication(
-                        rs.getInt("NomenclatureNumber"),
-                        rs.getString("Title"),
-                        rs.getString("Publisher"),
-                        rs.getDate("ReceiptDate").toString(),
-                        rs.getInt("YearOfPrinting"),
-                        rs.getString("Category"),
-                        rs.getInt("AgeRestriction"),
-                        rs.getInt("StorageLocationID"),
-                        PublicationState.fromRussianName(rs.getString("State")),
-                        rs.getBoolean("PermissionToIssue"),
-                        rs.getInt("DaysForReturn")),
-                publicationNomenclatureNumber
-        );
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM \"Publication\" WHERE \"NomenclatureNumber\" = ?",
+                    (rs, rowNum) -> new Publication(
+                            rs.getInt("NomenclatureNumber"),
+                            rs.getString("Title"),
+                            rs.getString("Publisher"),
+                            rs.getDate("ReceiptDate").toString(),
+                            rs.getInt("YearOfPrinting"),
+                            rs.getString("Category"),
+                            rs.getInt("AgeRestriction"),
+                            rs.getInt("StorageLocationID"),
+                            PublicationState.fromRussianName(rs.getString("State")),
+                            rs.getBoolean("PermissionToIssue"),
+                            rs.getInt("DaysForReturn")),
+                    publicationNomenclatureNumber
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public List<Publication> findEntities(int libraryID) {

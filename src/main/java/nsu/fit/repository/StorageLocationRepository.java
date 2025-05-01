@@ -6,6 +6,7 @@ import nsu.fit.data.access.StorageLocation;
 import nsu.fit.utils.warning.SqlState;
 import nsu.fit.utils.warning.Warning;
 import nsu.fit.utils.warning.WarningType;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -85,15 +86,19 @@ public class StorageLocationRepository extends AbstractEntityRepository<StorageL
     }
 
     public StorageLocation findOne(int storageLocationID) {
-        return jdbcTemplate.queryForObject(
-                "SELECT * FROM \"PublicationStorageLocation\" WHERE \"StorageLocationID\" = ?",
-                (rs, rowNum) -> new StorageLocation(
-                        rs.getInt("StorageLocationID"),
-                        rs.getInt("LibraryID"),
-                        rs.getInt("RoomNumber"),
-                        rs.getInt("ShelvingNumber"),
-                        rs.getInt("ShelfNumber")),
-                storageLocationID
-        );
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM \"PublicationStorageLocation\" WHERE \"StorageLocationID\" = ?",
+                    (rs, rowNum) -> new StorageLocation(
+                            rs.getInt("StorageLocationID"),
+                            rs.getInt("LibraryID"),
+                            rs.getInt("RoomNumber"),
+                            rs.getInt("ShelvingNumber"),
+                            rs.getInt("ShelfNumber")),
+                    storageLocationID
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }

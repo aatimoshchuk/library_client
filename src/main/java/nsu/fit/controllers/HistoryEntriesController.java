@@ -62,6 +62,11 @@ public class HistoryEntriesController extends AbstractEntityController<HistoryEn
     }
 
     public void markPublicationAsReturned(HistoryEntry historyEntry) {
+        if (historyEntry.getPublicationNomenclatureNumber() == null) {
+            notificationService.showNotification("Издание с таким номенклатурным номером не найдено.");
+            return;
+        }
+
         int numberOfDaysOverdue = entityRepository.getNumberOfDaysOverdue(historyEntry.getPublicationNomenclatureNumber());
         Warning warning = entityRepository.markPublicationAsReturned(historyEntry.getPublicationNomenclatureNumber());
 
@@ -83,6 +88,11 @@ public class HistoryEntriesController extends AbstractEntityController<HistoryEn
     }
 
     public void getPublicationInfo(HistoryEntry historyEntry) {
+        if (historyEntry.getPublicationNomenclatureNumber() == null) {
+            notificationService.showNotification("Издание с таким номенклатурным номером не найдено.");
+            return;
+        }
+
         Publication publication = publicationRepository.findOne(historyEntry.getPublicationNomenclatureNumber());
         if (publication != null) {
             notificationService.showResultInStringView(objectToMapConverter.convert(publication));
@@ -92,15 +102,25 @@ public class HistoryEntriesController extends AbstractEntityController<HistoryEn
     }
 
     public void getLibraryCard(HistoryEntry historyEntry) {
+        if (historyEntry.getLibraryCardNumber() == null) {
+            notificationService.showNotification("Читатель с таким номером читательского билета не найден.");
+            return;
+        }
+
         Reader reader = readerRepository.findOne(historyEntry.getLibraryCardNumber());
         if (reader != null) {
             notificationService.showResultInStringView(objectToMapConverter.convert(reader));
         } else {
-            notificationService.showNotification("Читатель с таким номер читательского билета не найден.");
+            notificationService.showNotification("Читатель с таким номером читательского билета не найден.");
         }
     }
 
     public void getLibrarianInfo(HistoryEntry historyEntry) {
+        if (historyEntry.getLibrarianID() == null) {
+            notificationService.showNotification("Библиотекарь с таким ID не найден.");
+            return;
+        }
+
         Librarian librarian = librarianRepository.findOne(historyEntry.getLibrarianID());
         if (librarian != null) {
             notificationService.showResultInStringView(objectToMapConverter.convert(librarian));

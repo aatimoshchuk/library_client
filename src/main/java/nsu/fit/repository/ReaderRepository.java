@@ -11,6 +11,7 @@ import nsu.fit.utils.ColumnTranslation;
 import nsu.fit.utils.warning.SqlState;
 import nsu.fit.utils.warning.Warning;
 import nsu.fit.utils.warning.WarningType;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -94,20 +95,24 @@ public class ReaderRepository extends AbstractEntityRepository<Reader> {
     }
 
     public Reader findOne(int libraryCardNumber) {
-        return jdbcTemplate.queryForObject(
-                "SELECT \"LibraryCardNumber\", \"Surname\", \"Reader\".\"Name\" AS \"ReaderName\", \"Patronymic\", " +
-                        "\"BirthDay\", \"ReaderCategory\".\"Name\" AS \"CategoryName\"" +
-                        "FROM \"Reader\" LEFT JOIN \"ReaderCategory\" ON \"Reader\".\"CategoryID\" = " +
-                        "\"ReaderCategory\".\"ID\"" + " WHERE \"LibraryCardNumber\" = ?",
-                (rs, rowNum) -> new Reader(
-                        rs.getInt("LibraryCardNumber"),
-                        rs.getString("Surname"),
-                        rs.getString("ReaderName"),
-                        rs.getString("Patronymic"),
-                        rs.getDate("BirthDay").toString(),
-                        rs.getString("CategoryName")),
-                libraryCardNumber
-        );
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT \"LibraryCardNumber\", \"Surname\", \"Reader\".\"Name\" AS \"ReaderName\", \"Patronymic\", " +
+                            "\"BirthDay\", \"ReaderCategory\".\"Name\" AS \"CategoryName\"" +
+                            "FROM \"Reader\" LEFT JOIN \"ReaderCategory\" ON \"Reader\".\"CategoryID\" = " +
+                            "\"ReaderCategory\".\"ID\"" + " WHERE \"LibraryCardNumber\" = ?",
+                    (rs, rowNum) -> new Reader(
+                            rs.getInt("LibraryCardNumber"),
+                            rs.getString("Surname"),
+                            rs.getString("ReaderName"),
+                            rs.getString("Patronymic"),
+                            rs.getDate("BirthDay").toString(),
+                            rs.getString("CategoryName")),
+                    libraryCardNumber
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public List<Reader> findEntities(int libraryID) {

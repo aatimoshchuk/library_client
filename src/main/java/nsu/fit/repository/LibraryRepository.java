@@ -8,6 +8,7 @@ import nsu.fit.utils.ColumnTranslation;
 import nsu.fit.utils.warning.SqlState;
 import nsu.fit.utils.warning.Warning;
 import nsu.fit.utils.warning.WarningType;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -34,14 +35,18 @@ public class LibraryRepository extends AbstractEntityRepository<Library> {
     }
 
     public Library findOne(int id) {
-        return jdbcTemplate.queryForObject(
-                "SELECT * FROM \"Library\" WHERE \"ID\" = ?",
-                (rs, rowNum) -> new Library(
-                        rs.getInt("ID"),
-                        rs.getString("Name"),
-                        rs.getString("Address")),
-                id
-        );
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM \"Library\" WHERE \"ID\" = ?",
+                    (rs, rowNum) -> new Library(
+                            rs.getInt("ID"),
+                            rs.getString("Name"),
+                            rs.getString("Address")),
+                    id
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
@@ -100,8 +105,15 @@ public class LibraryRepository extends AbstractEntityRepository<Library> {
                 }
 
                 if (sqlEx.getSQLState().equals(SqlState.FOREIGN_KEY_MISSING.getCode())) {
-                    return new Warning(WarningType.SAVING_ERROR, "Читатель с таким номер читательского билета не " +
-                            "существует!");
+                    if (sqlEx.getMessage().contains("ReaderLibraryCardNumber")) {
+                        return new Warning(WarningType.SAVING_ERROR, "Читатель с таким номер читательского билета не " +
+                                "существует!");
+                    }
+
+                    if (sqlEx.getMessage().contains("LibraryID")) {
+                        return new Warning(WarningType.SAVING_ERROR, "Библиотека с таким ID не существует! Чтобы " +
+                                "зарегистрировать читателя Вам необходимо создать библиотеку.");
+                    }
                 }
             }
 

@@ -120,7 +120,7 @@
             </font>
         </Text>
         <Rectangle fill="#d9d9d9" height="60.0" layoutY="678.0" opacity="0.28" stroke="#ffffff00" strokeType="INSIDE" width="293.0" />
-        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="137.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="692.0" prefWidth="1135.0" stylesheets="@style.css">
+        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="137.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="652.0" prefWidth="1135.0" stylesheets="@style.css">
             <columns>
                 <TableColumn fx:id="idColumn" maxWidth="227.0" minWidth="227.0" prefWidth="227.0" resizable="false" text="ID" />
                 <TableColumn fx:id="libraryIdColumn" maxWidth="227.0" minWidth="227.0" prefWidth="227.0" resizable="false" text="ID библиотеки" />
@@ -158,14 +158,12 @@
              </ImageView>
          </graphic>
          </Button>
-         <Button fx:id="getLibraryInfoButton" layoutX="260.5" layoutY="5.0" maxHeight="-Infinity" minHeight="-Infinity"
-                 mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="Информация о библиотеке" textFill="WHITE">
+         <Button fx:id="getLibraryInfoButton" layoutX="260.5" layoutY="5.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="Информация о библиотеке" textFill="WHITE">
             <font>
                <Font name="Hlebozavod Medium" size="11.0" />
             </font>
          </Button>
-         <Button fx:id="getPublicationsInStorageLocationButton" layoutX="699.0" layoutY="5.0" maxHeight="-Infinity"
-                 minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="Издания в данном месте хранения" textFill="WHITE">
+         <Button fx:id="getPublicationsInStorageLocationButton" layoutX="699.0" layoutY="5.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="Издания в данном месте хранения" textFill="WHITE">
             <font>
                <Font name="Hlebozavod Medium" size="11.0" />
             </font>

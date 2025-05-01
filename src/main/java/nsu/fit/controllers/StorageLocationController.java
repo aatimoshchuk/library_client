@@ -67,12 +67,17 @@ public class StorageLocationController extends AbstractEntityController<StorageL
     }
 
     public void getLibraryInfo(StorageLocation storageLocation) {
+        if (storageLocation.getLibraryID() == null) {
+            notificationService.showNotification("Библиотека с таким ID не найдена.");
+            return;
+        }
+
         Library library = libraryRepository.findOne(storageLocation.getLibraryID());
 
         if (library != null) {
             notificationService.showResultInStringView(objectToMapConverter.convert(library));
         } else {
-            notificationService.showNotification("Библиотека не найдена.");
+            notificationService.showNotification("Библиотека с таким ID не найдена.");
         }
     }
 

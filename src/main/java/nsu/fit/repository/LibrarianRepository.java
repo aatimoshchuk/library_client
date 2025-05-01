@@ -8,6 +8,7 @@ import nsu.fit.utils.ColumnTranslation;
 import nsu.fit.utils.warning.SqlState;
 import nsu.fit.utils.warning.Warning;
 import nsu.fit.utils.warning.WarningType;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -39,19 +40,23 @@ public class LibrarianRepository extends AbstractEntityRepository<Librarian> {
     }
 
     public Librarian findOne(int librarianID) {
-        return jdbcTemplate.queryForObject(
-                "SELECT * FROM \"Librarian\" WHERE \"LibrarianID\" = ?",
-                (rs, rowNum) -> new Librarian(
-                        rs.getInt("LibrarianID"),
-                        rs.getString("Surname"),
-                        rs.getString("Name"),
-                        rs.getString("Patronymic"),
-                        rs.getDate("BirthDay").toString(),
-                        rs.getString("PhoneNumber"),
-                        rs.getInt("LibraryID"),
-                        rs.getInt("RoomNumber")),
-                librarianID
-        );
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM \"Librarian\" WHERE \"LibrarianID\" = ?",
+                    (rs, rowNum) -> new Librarian(
+                            rs.getInt("LibrarianID"),
+                            rs.getString("Surname"),
+                            rs.getString("Name"),
+                            rs.getString("Patronymic"),
+                            rs.getDate("BirthDay").toString(),
+                            rs.getString("PhoneNumber"),
+                            rs.getInt("LibraryID"),
+                            rs.getInt("RoomNumber")),
+                    librarianID
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override

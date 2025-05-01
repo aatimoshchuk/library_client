@@ -78,6 +78,11 @@ public abstract class AbstractCategoryController<T extends AbstractCategoryEntit
     }
 
     public void getLibraryCard(T entity) {
+        if (entity.getLibraryCardNumber() == null) {
+            notificationService.showNotification("Читатель с таким номер читательского билета не найден.");
+            return;
+        }
+
         Reader reader = readerRepository.findOne(entity.getLibraryCardNumber());
         if (reader != null) {
             notificationService.showResultInStringView(objectToMapConverter.convert(reader));

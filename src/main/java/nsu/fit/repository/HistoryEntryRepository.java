@@ -132,6 +132,10 @@ public class HistoryEntryRepository extends AbstractEntityRepository<HistoryEntr
                         return new Warning(WarningType.SAVING_ERROR, "Читатель не соответствует ограничению по возрасту, " +
                                 "существующему для данного издания.");
                     }
+                    if (sqlEx.getMessage().contains(TriggerExceptionMessage.DATE_IN_THE_FUTURE.toString())) {
+                        return new Warning(WarningType.SAVING_ERROR, "Дата выдачи и дата возврата не могут быть в " +
+                                "будущем.");
+                    }
                 }
             }
 

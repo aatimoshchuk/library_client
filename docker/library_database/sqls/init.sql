@@ -352,6 +352,12 @@ DECLARE
     "NEW.AgeRestriction" int;
     "NEW.ReaderBirthDay" date;
 BEGIN
+    IF NEW."ReturnDate" IS NOT NULL AND NEW."ReturnDate" > CURRENT_DATE THEN RAISE EXCEPTION 'return date cannot be in the future';
+    END IF;
+
+    IF NEW."IssueDate" IS NOT NULL AND NEW."IssueDate" > CURRENT_DATE THEN RAISE EXCEPTION 'issue date cannot be in the future';
+    END IF;
+
     IF (SELECT "State" FROM "Publication" WHERE "NomenclatureNumber" = NEW."PublicationNomenclatureNumber") != 'В наличии'
     THEN RAISE EXCEPTION 'selected publication is not available';
     END IF;
@@ -417,6 +423,12 @@ CREATE TRIGGER "HistoryOfIssuePublicationsCheckInsert"
 CREATE FUNCTION HistoryOfIssuePublicationsCheckUpdate()
     RETURNS TRIGGER AS $$
 BEGIN
+    IF NEW."ReturnDate" IS NOT NULL AND NEW."ReturnDate" > CURRENT_DATE THEN RAISE EXCEPTION 'return date cannot be in the future';
+    END IF;
+
+    IF NEW."IssueDate" IS NOT NULL AND NEW."IssueDate" > CURRENT_DATE THEN RAISE EXCEPTION 'issue date cannot be in the future';
+    END IF;
+
     UPDATE "Publication" SET "State" = 'В наличии'
     WHERE "NomenclatureNumber" = NEW."PublicationNomenclatureNumber";
     RETURN NEW;

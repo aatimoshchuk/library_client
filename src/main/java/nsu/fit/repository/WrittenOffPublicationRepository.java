@@ -41,6 +41,11 @@ public class WrittenOffPublicationRepository extends AbstractEntityRepository<Wr
                         return new Warning(WarningType.SAVING_ERROR, "Издание не в наличии!");
                     }
                 }
+
+                if (sqlEx.getSQLState().equals(SqlState.FOREIGN_KEY_MISSING.getCode())) {
+                    return new Warning(WarningType.SAVING_ERROR, "Издание с таким номенклатурным номером не " +
+                            "существует! Вам необходимо создать издание, прежде чем списать его.");
+                }
             }
 
             log.error("Невозможно сохранить запись: {}", e.getMessage());

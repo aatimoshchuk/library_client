@@ -43,6 +43,11 @@ public class WrittenOffPublicationsController extends AbstractEntityController<W
     }
 
     public void getPublicationInfo(WrittenOffPublication writtenOffPublication) {
+        if (writtenOffPublication.getPublicationNomenclatureNumber() == null) {
+            notificationService.showNotification("Издание не найдено.");
+            return;
+        }
+
         Publication publication = publicationRepository.findOne(writtenOffPublication.getPublicationNomenclatureNumber());
         if (publication != null) {
             notificationService.showResultInStringView(objectToMapConverter.convert(publication));

@@ -121,7 +121,7 @@
             </font>
         </Text>
         <Button layoutY="678.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToStorageLocations" opacity="0.0" prefHeight="60.0" prefWidth="293.0" style="-fx-background-color: d9d9d9;" text="Button" textFill="#3d2727" />
-        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="530.0" prefWidth="1135.0" stylesheets="@style.css">
+        <TableView fx:id="entitiesTable" layoutX="308.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRowClick" prefHeight="517.0" prefWidth="1135.0" stylesheets="@style.css">
             <columns>
             <TableColumn fx:id="libraryCardNumberColumn" maxWidth="225.0" minWidth="225.0" prefWidth="225.0" resizable="false" text="Номер читательского билета" />
                 <TableColumn fx:id="surnameColumn" maxWidth="182.0" minWidth="182.0" prefWidth="182.0" resizable="false" text="Фамилия" />
@@ -228,10 +228,7 @@
                 <Font name="Advent Pro Regular" size="13.0" />
             </font>
         </TextField>
-        <Button fx:id="searchButton" layoutX="1400.0" layoutY="137.0" maxHeight="-Infinity" maxWidth="-Infinity"
-                minHeight="-Infinity" minWidth="-Infinity" onAction="#getReadersRegisteredInTheLibrary"
-                prefHeight="34.0" prefWidth="34.0"
-                style="-fx-background-color: transparent;">
+        <Button fx:id="searchButton" layoutX="1400.0" layoutY="137.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#getReadersRegisteredInTheLibrary" prefHeight="34.0" prefWidth="34.0" style="-fx-background-color: transparent;">
             <graphic>
                 <ImageView fx:id="searchIcon" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                     <image>

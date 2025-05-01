@@ -98,8 +98,15 @@ public class LiteraryWorkRepository extends AbstractEntityRepository<LiteraryWor
                 }
 
                 if (sqlEx.getSQLState().equals(SqlState.FOREIGN_KEY_MISSING.getCode())) {
-                    return new Warning(WarningType.SAVING_ERROR, "Издание с таким номенклатурным номером не " +
-                            "существует!");
+                    if (sqlEx.getMessage().contains("PublicationNomenclatureNumber")) {
+                        return new Warning(WarningType.SAVING_ERROR, "Издание с таким номенклатурным номером не " +
+                                "существует!");
+                    }
+
+                    if (sqlEx.getMessage().contains("LiteraryWorkID")) {
+                        return new Warning(WarningType.SAVING_ERROR, "Литературное произведение с таким ID не " +
+                                "существует! Чтобы добавить связь с изданием Вам необходимо создать произведение.");
+                    }
                 }
             }
 
