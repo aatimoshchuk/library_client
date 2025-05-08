@@ -170,7 +170,13 @@ public class HistoryEntriesController extends AbstractEntityController<HistoryEn
 
     @Override
     protected void setCustomButtonActions() {
-        markPublicationAsReturnedButton.setOnAction(e -> markPublicationAsReturned(selectedEntity));
+        if (selectedEntity.getReturnDate() == null || selectedEntity.getReturnDate().isEmpty()) {
+            markPublicationAsReturnedButton.setVisible(true);
+            markPublicationAsReturnedButton.setOnAction(e -> markPublicationAsReturned(selectedEntity));
+        } else {
+            markPublicationAsReturnedButton.setVisible(false);
+        }
+
         getPublicationInfoButton.setOnAction(e -> getPublicationInfo(selectedEntity));
         getLibraryCardButton.setOnAction(e -> getLibraryCard(selectedEntity));
         getLibrarianInfoButton.setOnAction(e -> getLibrarianInfo(selectedEntity));

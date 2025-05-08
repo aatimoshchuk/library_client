@@ -436,7 +436,7 @@ END
 $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER "HistoryOfIssuePublicationsCheckUpdate"
-    AFTER UPDATE OF "ReturnDate" ON "HistoryOfIssueOfPublications"
+    BEFORE UPDATE OF "ReturnDate" ON "HistoryOfIssueOfPublications"
     FOR EACH ROW EXECUTE FUNCTION HistoryOfIssuePublicationsCheckUpdate();
 
 -- Вставка записи в "Списанные издания"
