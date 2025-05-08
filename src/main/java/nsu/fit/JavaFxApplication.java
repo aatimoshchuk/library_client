@@ -30,12 +30,13 @@ public class JavaFxApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Font.loadFont(getClass().getResourceAsStream("/fonts/Hlebozavod-Medium.ttf"), 18);
+        Font.loadFont(getClass().getResourceAsStream("/fonts/AdventPro-VariableFont_wdth,wght.ttf"), 14);
 
         FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
         Parent root = fxWeaver.loadView(LoginController.class);
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setMaximized(true);
+        //stage.setMaximized(true);
         stage.show();
     }
 }
