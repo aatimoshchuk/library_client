@@ -140,6 +140,9 @@
                     </image>
                 </ImageView>
             </graphic>
+                <tooltip>
+                    <Tooltip text="Удалить запись" />
+                </tooltip>
             </Button>
             <Button fx:id="saveButton" layoutX="1048.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
             <graphic>
@@ -149,6 +152,9 @@
                     </image>
                 </ImageView>
             </graphic>
+                <tooltip>
+                    <Tooltip text="Сохранить запись" />
+                </tooltip>
             </Button>
          <Button fx:id="addButton" layoutX="1088.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
          <graphic>
@@ -158,6 +164,9 @@
                  </image>
              </ImageView>
          </graphic>
+             <tooltip>
+                 <Tooltip text="Добавить новую запись" />
+             </tooltip>
          </Button>
             <Button fx:id="getPublicationsWithLiteraryWorkButton" layoutX="700.0" layoutY="5.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="издания с данным произведением" textFill="WHITE">
                 <font>
@@ -205,6 +214,9 @@
                   </image>
                </ImageView>
             </graphic>
+             <tooltip>
+                 <Tooltip text="Создать связь с изданием" />
+             </tooltip>
          </Button>
          <TextField fx:id="publicationNomenclatureNumberField" layoutX="775.0" layoutY="31.0" prefHeight="24.0" prefWidth="37.0">
             <font>
@@ -219,6 +231,9 @@
                   </image>
                </ImageView>
             </graphic>
+             <tooltip>
+                 <Tooltip text="Разорвать связь с изданием" />
+             </tooltip>
          </Button>
         </AnchorPane>
       <Text fill="#6c6c6a" layoutX="308.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="произведения" textAlignment="CENTER" wrappingWidth="1135.0">

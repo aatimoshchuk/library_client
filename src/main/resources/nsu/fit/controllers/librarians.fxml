@@ -146,6 +146,9 @@
                     </image>
                 </ImageView>
             </graphic>
+                <tooltip>
+                    <Tooltip text="Удалить запись" />
+                </tooltip>
             </Button>
             <Button fx:id="saveButton" layoutX="1060.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
             <graphic>
@@ -155,6 +158,9 @@
                     </image>
                 </ImageView>
             </graphic>
+                <tooltip>
+                    <Tooltip text="Сохранить запись" />
+                </tooltip>
             </Button>
          <Button fx:id="addButton" layoutX="1020.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
          <graphic>
@@ -164,6 +170,9 @@
                  </image>
              </ImageView>
          </graphic>
+             <tooltip>
+                 <Tooltip text="Добавить новую запись" />
+             </tooltip>
          </Button>
             <Label layoutX="196.0" layoutY="8.0" text="начало периода:" textFill="WHITE">
             <font>

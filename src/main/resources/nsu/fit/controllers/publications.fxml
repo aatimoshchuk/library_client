@@ -146,6 +146,9 @@
                     </image>
                 </ImageView>
             </graphic>
+                <tooltip>
+                    <Tooltip text="Удалить запись" />
+                </tooltip>
             </Button>
             <Button fx:id="saveButton" layoutX="968.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
             <graphic>
@@ -155,6 +158,9 @@
                     </image>
                 </ImageView>
             </graphic>
+                <tooltip>
+                    <Tooltip text="Сохранить запись" />
+                </tooltip>
             </Button>
          <Button fx:id="addButton" layoutX="1008.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
          <graphic>
@@ -164,6 +170,9 @@
                  </image>
              </ImageView>
          </graphic>
+             <tooltip>
+                 <Tooltip text="Добавить новую запись" />
+             </tooltip>
          </Button>
          <Button fx:id="getReaderWithPublicationButton" layoutX="29.0" layoutY="4.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="читатель, на руках у которого находится данное издание" textFill="WHITE">
             <font>

@@ -141,6 +141,9 @@
                     </image>
                 </ImageView>
             </graphic>
+                <tooltip>
+                    <Tooltip text="Удалить запись" />
+                </tooltip>
             </Button>
             <Button fx:id="saveButton" layoutX="1048.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
             <graphic>
@@ -150,6 +153,9 @@
                     </image>
                 </ImageView>
             </graphic>
+                <tooltip>
+                    <Tooltip text="Сохранить запись" />
+                </tooltip>
             </Button>
          <Button fx:id="addButton" layoutX="1088.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;">
          <graphic>
@@ -159,6 +165,9 @@
                  </image>
              </ImageView>
          </graphic>
+             <tooltip>
+                 <Tooltip text="Добавить новую запись" />
+             </tooltip>
          </Button>
             <Button fx:id="getPublicationsThatIssuedFromLibraryWhereReaderIsNotRegisteredButton" layoutX="500.0" layoutY="5.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="не зарегистрирован" textFill="WHITE">
                 <font>
@@ -235,6 +244,10 @@
                         <Image url="@/img/search.png" />
                     </image>
                 </ImageView>
-            </graphic></Button>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Найти читателей, зарегистрированных в библиотеке" />
+            </tooltip>
+        </Button>
     </children>
 </AnchorPane>

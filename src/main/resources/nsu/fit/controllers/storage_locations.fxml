@@ -139,6 +139,9 @@
                     </image>
                 </ImageView>
             </graphic>
+                <tooltip>
+                    <Tooltip text="Удалить запись" />
+                </tooltip>
             </Button>
             <Button fx:id="saveButton" layoutX="1055.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
             <graphic>
@@ -148,6 +151,9 @@
                     </image>
                 </ImageView>
             </graphic>
+                <tooltip>
+                    <Tooltip text="Сохранить запись" />
+                </tooltip>
             </Button>
          <Button fx:id="addButton" layoutX="1015.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#addEntity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" visible="false">
          <graphic>
@@ -157,6 +163,9 @@
                  </image>
              </ImageView>
          </graphic>
+             <tooltip>
+                 <Tooltip text="Добавить новую запись" />
+             </tooltip>
          </Button>
          <Button fx:id="getLibraryInfoButton" layoutX="260.5" layoutY="5.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 3; -fx-border-width: 1;" text="Информация о библиотеке" textFill="WHITE">
             <font>
